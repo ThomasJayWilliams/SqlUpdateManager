@@ -7,7 +7,7 @@ namespace SUM.CLI.UI
 {
 	public class InputHandler : IInputHandler
 	{
-		public InputCommand ReadCommandInput() =>
+		public ActionDTO ReadCommandInput() =>
 			CommandConverter.Convert(Console.ReadLine());
 
 		public InputGate ReadGateInput() =>

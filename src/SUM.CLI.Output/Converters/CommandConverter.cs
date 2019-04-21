@@ -1,20 +1,27 @@
 ﻿using SUM.System;
+using SUM.System.IO;
 
 namespace SUM.CLI.UI.Converters
 {
 	public static class CommandConverter
 	{
-		public static InputCommand Convert(string data)
+		public static ActionDTO Convert(string data)
 		{
+			var dto = new ActionDTO();
+
 			switch (data)
 			{
 				case "exit":
 				case "quit":
-					return InputCommand.Exit;
+					dto.Action = InputAction.Exit;
+					break;
 
 				default:
-					return InputCommand.Unknown;
+					dto.Action = InputAction.Unknown;
+					break;
 			}
+
+			return dto;
 		}
 	}
 }

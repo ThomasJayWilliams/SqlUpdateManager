@@ -1,6 +1,6 @@
 ﻿namespace SUM.System
 {
-	public enum InputCommand
+	public enum InputAction
 	{
 		Unknown = 0,
 		Exit

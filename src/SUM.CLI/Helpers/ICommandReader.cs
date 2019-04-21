@@ -1,9 +1,9 @@
-﻿using SUM.System;
+﻿using SUM.System.IO;
 
 namespace SUM.CLI.Helpers
 {
 	public interface ICommandReader
 	{
-		InputCommand Read();
+		ActionDTO Read();
 	}
 }

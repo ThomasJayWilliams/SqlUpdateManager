@@ -2,7 +2,7 @@
 {
 	public interface IInputHandler
 	{
-		InputCommand ReadCommandInput();
+		ActionDTO ReadCommandInput();
 		InputGate ReadGateInput();
 	}
 }

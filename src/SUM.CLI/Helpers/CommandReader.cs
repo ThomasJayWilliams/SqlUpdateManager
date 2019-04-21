@@ -1,5 +1,5 @@
 ﻿using SUM.CLI.UI;
-using SUM.System;
+using SUM.System.IO;
 
 namespace SUM.CLI.Helpers
 {
@@ -13,7 +13,7 @@ namespace SUM.CLI.Helpers
 			this.handler = handler;
 		}
 
-		public InputCommand Read() =>
+		public ActionDTO Read() =>
 			handler.ReadCommandInput();
 	}
 }

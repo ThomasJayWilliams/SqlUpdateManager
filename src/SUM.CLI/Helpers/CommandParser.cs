@@ -4,16 +4,17 @@ using SUM.CLI.UI;
 using SUM.Gates;
 using SUM.Managers;
 using SUM.System;
+using SUM.System.IO;
 
 namespace SUM.CLI.Helpers
 {
 	public class CommandParser : ICommandParser
 	{
-		public ICommand Parse(InputCommand data)
+		public ICommand Parse(ActionDTO data)
 		{
-			switch (data)
+			switch (data.Action)
 			{
-				case InputCommand.Exit:
+				case InputAction.Exit:
 					// DI!!!
 					return new ShellExitCommand(
 						new ShellExitCommandManager(

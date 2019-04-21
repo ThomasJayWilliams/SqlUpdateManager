@@ -1,10 +1,10 @@
 ﻿using SUM.CLI.Core.Commands;
-using SUM.System;
+using SUM.System.IO;
 
 namespace SUM.CLI.Helpers
 {
 	public interface ICommandParser
 	{
-		ICommand Parse(InputCommand data);
+		ICommand Parse(ActionDTO data);
 	}
 }
