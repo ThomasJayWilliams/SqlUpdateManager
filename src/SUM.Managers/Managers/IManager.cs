@@ -1,7 +1,7 @@
-﻿namespace SUM.Managers.Managers
+﻿namespace SUM.Managers
 {
 	public interface IManager
 	{
-
+		void Execute();
 	}
 }

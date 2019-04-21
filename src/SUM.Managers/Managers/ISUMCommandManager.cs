@@ -1,4 +1,4 @@
-﻿namespace SUM.Managers.Managers
+﻿namespace SUM.Managers
 {
 	public interface ISUMCommandManager : IManager
 	{

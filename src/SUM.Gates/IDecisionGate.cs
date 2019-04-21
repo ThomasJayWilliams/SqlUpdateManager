@@ -1,4 +1,4 @@
-﻿namespace SUM.Managers.Gates
+﻿namespace SUM.Gates
 {
 	public interface IDecisionGate : IGate
 	{

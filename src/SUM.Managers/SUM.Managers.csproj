@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SUM.BusinessObjects\SUM.BusinessObjects.csproj" />
     <ProjectReference Include="..\SUM.CLI.Output\SUM.CLI.UI.csproj" />
+    <ProjectReference Include="..\SUM.Gates\SUM.Gates.csproj" />
     <ProjectReference Include="..\SUM.Logger\SUM.Logger.csproj" />
   </ItemGroup>
 
