@@ -1,5 +1,5 @@
-﻿using SUM.CLI.Core.Commands;
-using SUM.System.IO;
+﻿using SUM.CLI.Commands;
+using SUM.Core.IO;
 
 namespace SUM.CLI.Helpers
 {

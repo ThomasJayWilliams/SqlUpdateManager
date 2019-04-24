@@ -1,4 +1,4 @@
-﻿using SUM.System.IO;
+﻿using SUM.Core.IO;
 
 namespace SUM.CLI.Helpers
 {

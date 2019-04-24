@@ -1,10 +1,8 @@
-﻿using SUM.CLI.Core.Commands;
-using SUM.CLI.Core.Commands.ShellCommands;
+﻿using SUM.CLI.Commands;
 using SUM.CLI.UI;
-using SUM.Gates;
-using SUM.Managers;
-using SUM.System;
-using SUM.System.IO;
+using SUM.Core;
+using SUM.Core.IO;
+using SUM.Core.Managers;
 
 namespace SUM.CLI.Helpers
 {

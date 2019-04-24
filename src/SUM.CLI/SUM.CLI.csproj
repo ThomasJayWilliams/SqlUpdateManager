@@ -6,12 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SUM.BusinessObjects\SUM.BusinessObjects.csproj" />
-    <ProjectReference Include="..\SUM.CLI.Core\SUM.CLI.Core.csproj" />
-    <ProjectReference Include="..\SUM.CLI.Output\SUM.CLI.UI.csproj" />
-    <ProjectReference Include="..\SUM.Logger\SUM.Logger.csproj" />
-    <ProjectReference Include="..\SUM.Managers\SUM.Managers.csproj" />
-    <ProjectReference Include="..\SUM.System\SUM.System.csproj" />
+    <Compile Remove="libs\**" />
+    <EmbeddedResource Remove="libs\**" />
+    <None Remove="libs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SUM.Core">
+      <HintPath>libs\SUM.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
