@@ -1,24 +1,32 @@
 ﻿using SUM.Core;
+using SUM.Core.IO;
 
 namespace SUM.CLI
 {
 	public static class GateConverter
 	{
-		public static InputGate Convert(string data)
+		public static GateActionDTO Convert(string data)
 		{
+			var dto = new GateActionDTO();
+
 			switch (data)
 			{
 				case "yes":
 				case "y":
-					return InputGate.Accept;
+					dto.Action = InputGate.Accept;
+					break;
 
 				case "no":
 				case "n":
-					return InputGate.Cancell;
+					dto.Action = InputGate.Cancell;
+					break;
 
 				default:
-					return InputGate.Unknown;
+					dto.Action = InputGate.Unknown;
+					break;
 			}
+
+			return dto;
 		}
 	}
 }

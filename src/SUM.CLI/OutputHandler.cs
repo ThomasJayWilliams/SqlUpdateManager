@@ -1,11 +1,10 @@
-﻿using SUM.Core.IO;
-using System;
+﻿using System;
 
 namespace SUM.CLI.UI
 {
-	public class OutputHandler : IOutputHandler
+	public static class OutputHandler
 	{
-		public void Out(string data) =>
+		public static void Out(string data) =>
 			Console.WriteLine(data);
 	}
 }

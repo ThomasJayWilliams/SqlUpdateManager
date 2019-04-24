@@ -15,11 +15,7 @@ namespace SUM.CLI.Helpers
 				case InputAction.Exit:
 					// DI!!!
 					return new ShellExitCommand(
-						new ShellExitCommandManager(
-							new BinaryGate(
-								new InputHandler(),
-								new OutputHandler()),
-							new OutputHandler()));
+						new ExitCommandManager());
 
 				default:
 					return null;

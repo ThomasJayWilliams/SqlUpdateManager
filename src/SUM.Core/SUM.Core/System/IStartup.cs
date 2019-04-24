@@ -2,8 +2,7 @@
 {
 	public interface IStartup
 	{
-		IConfigurator Configurator { get; set; }
-
+		void Configure();
 		void RunApp();
 	}
 }

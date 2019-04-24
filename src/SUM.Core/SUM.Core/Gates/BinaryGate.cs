@@ -2,22 +2,13 @@
 
 namespace SUM.Core
 {
-	public class BinaryGate : IBinaryGate
+	public class BinaryGate : BaseGate, IBinaryGate
 	{
-		private readonly IInputHandler iHandler;
-		private readonly IOutputHandler oHandler;
-
-		public BinaryGate(IInputHandler iHandler, IOutputHandler oHandler)
-		{
-			this.iHandler = iHandler;
-			this.oHandler = oHandler;
-		}
-
 		public bool Request(string output)
 		{
-			oHandler.Out(output);
+			OnOutput(output);
 
-			if (iHandler.ReadGateInput() == InputGate.Accept)
+			if (OnInput().Action == InputGate.Accept)
 				return true;
 
 			return false;

@@ -4,10 +4,10 @@ namespace SUM.CLI.Commands
 {
 	public class ShellExitCommand : IShellCommand
 	{
-		private readonly IShellCommandManager manager;
+		private readonly IManager manager;
 
 		// Replace with Ninject injection
-		public ShellExitCommand(IShellCommandManager manager)
+		public ShellExitCommand(IManager manager)
 		{
 			this.manager = manager;
 		}

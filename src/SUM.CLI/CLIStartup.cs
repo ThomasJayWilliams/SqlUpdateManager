@@ -9,9 +9,7 @@ namespace SUM.CLI
 		private readonly ICommandReader reader;
 		private readonly ICommandParser parser;
 		private readonly ICommandRunner runner;
-
-		public IConfigurator Configurator { get; set; }
-
+		
 		public CLIStartup(ICommandParser parser, ICommandReader reader, ICommandRunner runner)
 		{
 			this.reader = reader;
@@ -22,8 +20,16 @@ namespace SUM.CLI
 		public static void Main(string[] args)
 		{
 			// Replace on Ninject injection
-			var start = new CLIStartup(new CommandParser(), new CommandReader(new InputHandler()), new CommandRunner());
+			var start = new CLIStartup(new CommandParser(), new CommandReader(), new CommandRunner());
+
+			start.Configure();
 			start.RunApp();
+		}
+
+		public void Configure()
+		{
+			BaseConfigurator.RegisterGateEvents(InputHandler.ReadGateInput, OutputHandler.Out);
+			BaseConfigurator.RegisterManagersEvents(OutputHandler.Out);
 		}
 
 		public void RunApp()
