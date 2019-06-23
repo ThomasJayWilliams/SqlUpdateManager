@@ -1,7 +1,13 @@
-# SQL Update Manager 1.0.0
-## CLI Documentation
+# SQL Update Manager 1.0.0, CLI Documentation
 SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the commands approach to manage SUM (SQL Update Manager).
-This application has two kinds of commands, which determines by the prefix:
+## [Intro](#intro)
+## [Getting started](#getting-started)
+## [Commands](#commands)
+* ### [sum connect](#sum-connect)
+* ### [sum server](#sum-server)
+* ### [sum database](#sum-database)
+## Intro
+The CLI has two kinds of commands, which determines by the prefix:
 * **environment** - has no prefix;
 * **sum** - has "sum" prefix before any command.
 ### Example:
@@ -87,9 +93,7 @@ sum connect "MyServer"
 sum status
 sum update
 ```
-## Documentation
 ## Commands
-***
 ## sum connect
 Connects to database server. After connection established all next operations will be performed over the connected server.
 ```shell
@@ -103,7 +107,6 @@ sum connect [server name]
 ### Parameters
 #### -s, --save
 Sets the current connection as a default. At the application start, the default connection will be used to permanently connect to the server.
-***
 ## sum server
 Manages database servers.
 ```shell
@@ -116,12 +119,11 @@ sum server add
 ```
 ### Parameters
 #### -c, --check
-Checks if the server is up before adding.
+Performs connection query to make sure data is valid and server is up.
 #### --retry-count [count]
 Sets retry count for the current server. The default is 0.
 #### --retry-delay [milliseconds]
 Sets delay between retries. The default is 0.
-***
 ## sum database
 Manages the server databases.
 ```shell
