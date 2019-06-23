@@ -3,83 +3,68 @@ SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the comm
 ## Contents
 * **[Intro](#intro)**
 * **[Getting started](#getting-started)**
-* **[Commands](#commands)**
+* **[SUM Commands](#sql-update-manager-commands)**
+  * **[sum help](#sum-help)**
   * **[sum connect](#sum-connect)**
-  * **[sum server](#sum-server)**
-  * **[sum database](#sum-database)**
+  * **[sum use](#sum-use)**
+  * **[sum config](#sum-config)**
+  * **[sum location](#sum-location)**
+  * **[sum update](#sum-update)**
+  * **[sum status](#sum-status)**
+  * **[sum diff](#sum-diff)**
 ## Intro
 The CLI has two kinds of commands, which determines by the prefix:
 * **environment** - has no prefix;
 * **sum** - has "sum" prefix before any command.
 ### Example:
 Environment command:
-```shell
+```
 echo -e "Hello world!"
 ```
 SUM command:
-```shell
+```
 sum help -s
 ```
 ### Note
 This approach helps to separate SUM commands from CLI commands.
 If you're familiar with Git bash, you'll notice that it uses the same approach: CLI commands run without any prefixes, Git commands run with "git" prefix.
+Almost every command has parameters, which affect command execution. There are two types of parameter names: single char and full name. Single char params can be applied as one:
+```
+// executes sum help command with -h, -f and -a parameters.
+sum help -hfa
+```
+Also, some parameters may have values:
+```
+sum command --param "some value"
+```
 ## Getting started
 ### Server configuration
-First of all, you need to configure the server connection. There are to two ways to do that:
-```shell
-sum server add
-Name: [server name]
-Location: [server address]
-User: admin
-Password: 
+First of all, you need to connect to the server.
 ```
-This command will save server credits. Further, you will be able to update procedures by 
-simply pointing the name of the server you've added.
-Second way:
-```shell
 sum connect
 Location: [server address]
 User: [user name]
 Password: [password]
 ```
-Or:
-```shell
-sum connect [server name]
-```
 This will connect your current session to the server you've set, and further all your actions will be performed over this server.
-For example:
-the following command shows server status - procedures that can be updated.
-```shell
-sum status
+### Databases configuration
+Before update any procedures you should first use the database from your server.
 ```
-With the first approach used you will have to pass the server name to the command:
-```shell
-sum status -s [server name]
+sum use [database name]
 ```
-### Note
-The second approach is better if you're working with a low number of servers. The first approach is preferable over the second if you're working will many servers. This approach allows working with any number of servers without performing a connection to them every time.
 ### Files configuration
 After the server configuration is done, you need to point the procedure files location, which contains .sql files. Each server contains its own locations, so you have to make sure you've added locations for each server.
-```shell
-sum connect [server name]
-sum location add [physical path]
 ```
-Or:
-```shell
-sum location add -s [server name] [physical path]
+sum connect [server name]
+sum use [database name]
+sum location add [physical path]
 ```
 ### Note
 As a default SUM will track files with .sql extension only.
-
-### Databases configuration
-Before update any procedures you should first add the database to your server.
-```shell
-sum database add [database name]
-```
 ### Updating
 SUM will start tracking procedures files after a specified location added.
 So, after you've added locations you can check its status and update procedures that have changed.
-```shell
+```
 sum update
 ```
 ### Note
@@ -88,57 +73,139 @@ What happened:
 2. Getting server status, which checks if procedure files have been changed;
 3. Updating server procedures.
 ### Go through
-```shell
-sum server add "MyServer"
-sum connect "MyServer"
+```
+sum connect
+sum use "MyDatabase"
+sum location add "C:/Procedures"
 sum status
 sum update
 ```
-## Commands
+The commands above added server to SUM, connected to it, added database, moved the scope to the specified database, added a location with procedure files, shown status and executed procedures update for the current database.
+## SQL Update Manager commands
+## Global parameters
+#### -h, --help
+Shows help information about specified commands.
+#### -v, --verbose
+Shows additional information during command execution.
+## sum help
+Shows short information about available SUM commands. Without any parameters shows only commands list.
+```
+sum help [params]
+```
+### Parameters
+#### -a, --all
+Shows all commands with complete information.
+### Example
+```
+sum help
+```
 ## sum connect
 Connects to database server. After connection established all next operations will be performed over the connected server.
-```shell
-sum connect [params] [params arguments] [argument]
 ```
-### Arguments
-Connect command has an optional argument - server name, that added before.
-```shell
-sum connect [server name]
+sum connect [params]
 ```
 ### Parameters
 #### -s, --save
 Sets the current connection as a default. At the application start, the default connection will be used to permanently connect to the server.
-## sum server
-Manages database servers.
-```shell
-sum server [params] [add][remove] [argument]
+### Example
+```
+sum server --check add "MyServer"
+sum connect --save "MyServer"
+```
+## sum use
+Same as connect, but for a database. Allows preform database-oriented commands without pointing database name. It can be run if connected to the server.
+```
+sum use [params] [database name]
 ```
 ### Arguments
-Command excepts only predefined arguments, that are add or remove.
-```shell
-sum server add
-```
+Commands accept database name, which located at the pointed server.
 ### Parameters
-#### -c, --check
-Performs connection query to make sure data is valid and server is up.
-#### --retry-count [count]
-Sets retry count for the current server. The default is 0.
-#### --retry-delay [milliseconds]
-Sets delay between retries. The default is 0.
-## sum database
-Manages the server databases.
-```shell
-sum database [params] [add][remove][show]
+#### -s, -save
+Sets the current database as a default for the current server.
+### Example
+```
+sum use -s "MyDatabase"
+```
+## sum config
+Allows configuring SUM application.
+```
+sum config [property] [value]
 ```
 ### Arguments
-Command excepts predefined arguments, that are add, remove and show and database name.
-```shell
-sum database add [database name]
+All configuration consists of properties and values. Command accepts property to edit and value. Each server and database can contain personal properties and values. If command ran without params changes will be applied over application.
+```
+sum config [params] [property] [value]
 ```
 ### Parameters
-#### -a, --all
-Performs set operation (add or remove) overall server databases.
-#### --system
-Performs set operation (add or remove) overall, including system server databases.
-#### -v, --verbose
-Shows additional info, like stored procedures.
+#### -s, --server
+Applies configuration over the current server. Need to be connected to the server.
+#### -d, -database
+Applies configuration over the current database. Need to be connected to the database.
+#### -l, --list
+Shows all available properties.
+### Example
+```
+sum config --server connectionType WindowsAuthentification
+sum config --database --list
+```
+## sum location
+Allows managing database procedures location. Has predefined arguments - add, remove, show. It can be run if using the database.
+```
+sum location [params] [add][remove][show] [physical path]
+```
+### Arguments
+Command accepts a physical path to procedures directory.
+### Parameters
+#### -t, --tree
+Performs command over all subdirectories in a specified directory.
+#### -n, --name [value]
+Sets an alias for a path.
+### Example
+```
+sum location -n "default" -t add "C:/MyProcedures"
+```
+## sum update
+Runs procedures update. It can be run if using a database.
+```
+sum update [params] [arguments]
+```
+### Arguments
+Command accepts location name to update procedures only from specified location and procedure names to update only specified procedures. Executed with no arguments will update procedures in all locations (including subdirectories). It can be run if using a database.
+```
+sum update myProcedur.sql myProcedure2.sql
+```
+### Parameters
+#### -i, --ignore
+As a default is during updating error appeared updating stops allowing you to choose what to do next. This parameter disables confirmation.
+#### -t, --test
+Runs a command in a test mode. Displays the output as if that was the real mode.
+### Example
+```
+sum update -i
+```
+## sum status
+Displays info about the state of current database procedures. It can be run if using a database.
+```
+sum status
+```
+### Example
+```
+sum status
+```
+## sum diff
+Displays the difference between an old procedure file(s) and new ones. It can be run if using a database.
+```
+sum diff [params] [arguments]
+```
+### Arguments
+Command accepts file names separated with space. Executed with no file names will show the difference for all files related to the database.
+```
+sum diff [file name] [file name] ...
+```
+### Parameters
+#### -f, --full
+As a default command shows only parts of the file that has been changed. This parameter shows the whole file with changed parts highlighted.
+### Example
+```
+sum diff --full
+```
