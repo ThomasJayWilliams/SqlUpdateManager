@@ -179,6 +179,8 @@ sum update myProcedur.sql myProcedure2.sql
 As a default is during updating error appeared updating stops allowing you to choose what to do next. This parameter disables confirmation.
 #### -t, --test
 Runs a command in a test mode. Displays the output as if that was the real mode.
+#### -d, --deploy
+Executes all procedures. Even those that didn't change.
 ### Example
 ```
 sum update -i
