@@ -12,6 +12,7 @@ SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the comm
   * **[sum update](#sum-update)**
   * **[sum status](#sum-status)**
   * **[sum diff](#sum-diff)**
+  * **[sum log](#sum-log)**
 ## Intro
 The CLI has two kinds of commands, which determines by the prefix:
 * **environment** - has no prefix;
