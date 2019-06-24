@@ -13,7 +13,7 @@ The following document contains different pointing words, such as **SHOULD**, **
    * **[Software](#software)**
    * **[Failures](#failures)**
    * **[Extensions](#extensions)**
-   * **[Unit tests]($unit-tests)**
+   * **[Unit tests](#unit-tests)**
    * **[Documentation](#documentation)**
 * ### Functionality requirements
 
