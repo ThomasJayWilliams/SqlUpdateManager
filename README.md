@@ -3,4 +3,4 @@ SQL Update Manager is open source tool used to automatically update your databas
 
 ## References
 ### [CLI Documentation](docs/DOCUMENTATION.md)
-### [CLI Examples](docs/EXAMPLES.md)
+### [Application requirements](docs/REQUIREMENTS.md)
