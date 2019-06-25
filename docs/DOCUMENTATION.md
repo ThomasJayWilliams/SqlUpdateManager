@@ -12,6 +12,7 @@ SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the comm
   * **[sum update](#sum-update)**
   * **[sum status](#sum-status)**
   * **[sum diff](#sum-diff)**
+  * **[sum log](#sum-log)**
 ## Intro
 The CLI has two kinds of commands, which determines by the prefix:
 * **environment** - has no prefix;
@@ -212,9 +213,9 @@ As a default command shows only parts of the file that has been changed. This pa
 sum diff --full
 ```
 ## sum log
-Displays information about performed actions, related to the SUM interface (logs for environment may be recieved by environment command). Has predefined arguments - event and data. Runned with no parameters will display only list of SUM commands executed or list of procedures executed.
+Displays information about performed actions, related to the SUM interface (logs for environment may be recieved by environment command). Has predefined arguments - event, error and data. Runned with no parameters will display only list of SUM commands executed or list of procedures executed.
 ```
-sum log [params] [event][data]
+sum log [params] [event][error][data]
 ```
 ### Parameters
 #### -d, --detailed
