@@ -244,18 +244,10 @@ namespace Core
             T Deserialize<T>(string json);
             string Serialize(object data);
         }
-
         class Crypter
         {
             string Encrypt(string data);
             string Decryot(string hash);
-        }
-
-        class ProcedureFileManager
-        {
-            string Path { get; set; }
-
-            ProcedureFileManager
         }
         class RegistrationFileManager
         {
@@ -282,7 +274,10 @@ namespace Core
 
     namespace Data
     {
-
+		class ProcedureExecutor
+		{
+			ExecutionResult Execute(Procedure procedure);
+		}
     }
 
     namespace Domains
@@ -296,7 +291,6 @@ namespace Core
 
             void NewVersion(Procedure procedure);
         }
-
         interface IData
         {
             string Name { get; set; }
@@ -322,7 +316,11 @@ namespace Core
             string Username { get; set; }
             string Password { get; set; }
         }
-
+		class ExecutionResult
+		{
+			bool IsSuccess { get; set; }
+			Exception Error { get; set; }
+		}
         enum DifferenceFormat
         {
             Compared = 0,
