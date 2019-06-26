@@ -8,7 +8,8 @@ SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the comm
   * **[sum connect](#sum-connect)**
   * **[sum use](#sum-use)**
   * **[sum config](#sum-config)**
-  * **[sum location](#sum-location)**
+  * **[sum register](#sum-register)**
+  * **[sum deregister](#sum-deregister)**
   * **[sum update](#sum-update)**
   * **[sum status](#sum-status)**
   * **[sum diff](#sum-diff)**
@@ -54,17 +55,17 @@ Before update any procedures you should first use the database from your server.
 sum use [database name]
 ```
 ### Files configuration
-After the server configuration is done, you need to point the procedure files location, which contains .sql files. Each server contains its own locations, so you have to make sure you've added locations for each server.
+After the server configuration is done, you need to point the procedure files location, which contains .sql files. Each server contains its own locations, so you have to make sure you've registered locations for each server.
 ```
 sum connect [server name]
 sum use [database name]
-sum location add [physical path]
+sum registr [physical path]
 ```
 ### Note
 As a default SUM will track files with .sql extension only.
 ### Updating
-SUM will start tracking procedures files after a specified location added.
-So, after you've added locations you can check its status and update procedures that have changed.
+SUM will start tracking procedures files after a specified location registered.
+So, after you've registered locations you can check its status and update procedures that have changed.
 ```
 sum update
 ```
@@ -77,11 +78,11 @@ What happened:
 ```
 sum connect
 sum use "MyDatabase"
-sum location add "C:/Procedures"
+sum register "C:/Procedures"
 sum status
 sum update
 ```
-The commands above added server to SUM, connected to it, added database, moved the scope to the specified database, added a location with procedure files, shown status and executed procedures update for the current database.
+The commands above added server to SUM, connected to it, added database, moved the scope to the specified database, registered directory with procedures files, shown status and executed procedures update for the current database.
 ## SQL Update Manager commands
 ## Global parameters
 #### -h, --help
@@ -149,10 +150,10 @@ Shows all available properties.
 sum config --server connectionType WindowsAuthentification
 sum config --database --list
 ```
-## sum location
-Allows managing database procedures location. Has predefined arguments - add, remove, show. It can be run if using the database.
+## sum register
+Allows to register database procedures to track. Registered procedure will be tracked. It can be run if using the database.
 ```
-sum location [params] [add][remove][show] [physical path]
+sum register [params] [physical path]
 ```
 ### Arguments
 Command accepts a physical path to procedures directory.
@@ -163,7 +164,21 @@ Performs command over all subdirectories in a specified directory.
 Sets an alias for a path.
 ### Example
 ```
-sum location -n "default" -t add "C:/MyProcedures"
+sum register -n "default" -t "C:/MyProcedures"
+```
+## sum deregister
+Allow to remove tracking procedure files. It can be run if using the database.
+```
+sum deregister [params] [physical path][registered alias]
+```
+### Arguments
+Command accpets a physical path procedures directory.
+### Parameters
+#### -t, --tree
+Perform command over all subdirectories in a specified directory.
+### Example
+```
+sum deregister -t "default"
 ```
 ## sum update
 Runs procedures update. It can be run if using a database.
@@ -171,7 +186,7 @@ Runs procedures update. It can be run if using a database.
 sum update [params] [arguments]
 ```
 ### Arguments
-Command accepts location name to update procedures only from specified location and procedure names to update only specified procedures. Executed with no arguments will update procedures in all locations (including subdirectories). It can be run if using a database.
+Command accepts procedure or directory name to update procedures only from specified location and procedure names to update only specified procedures. Executed with no arguments will update procedures in all locations (including subdirectories). It can be run if using a database.
 ```
 sum update myProcedur.sql myProcedure2.sql
 ```
