@@ -1,15 +1,8 @@
 namespace SUM.CLI
 {
-    /*
-        System -> Application;
-        System -> IO;
-        System -> Common;
-        Application -> Common;
-        Application -> IO;
-        StartUp -> ErrorHandlingMiddleware -> ApplicationMiddleware -> CommandParser -> ICommand
-    */
     namespace System
     {
+		using Common;
         // Contains request context, which is used by middleware.
         // Can contain data about request time and etc.
         class RequestContext
@@ -38,6 +31,7 @@ namespace SUM.CLI
             IMiddleware InitialMiddleware { get; set; }
             // Initiates appliction configuration - Session, etc.
             void Init();
+			void Configure(AppConfig configuration);
 
             static void Main(string[] args);
         }
