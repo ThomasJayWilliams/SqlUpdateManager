@@ -4,27 +4,31 @@ namespace SUM.CLI
         System -> Application;
         System -> IO;
         System -> Common;
-
         Application -> Common;
         Application -> IO;
-
-
         StartUp -> ErrorHandlingMiddleware -> ApplicationMiddleware -> CommandParser -> ICommand
     */
     namespace System
     {
+        // Contains request context, which is used by middleware.
+        // Can contain data about request time and etc.
         class RequestContext
         {
             // Contains input data.
             string Data { get; set; }
+
+			event RequestDelegate Next { get; set; }
         }
 
+        // Used as a reference on next item in request chain.
         delegate void RequestDelegate(RequestContext context);
 
+        // Represent sinteface for call chain items.
         interface IMiddleware
         {
             void OnInvoke(RequestContext context);
         }
+        class InitialMiddleware : IMiddleware { }
         class ErrorHandlingMiddleware : IMiddleware { }
         class ApplicationMiddleware : IMiddleware { }
 
@@ -37,22 +41,10 @@ namespace SUM.CLI
 
             static void Main(string[] args);
         }
-
-        static class CommandParser
-        {
-            IEnumerable<IArgument> ParseArguments(string data);
-            IEnumerable<IParameter> ParseParameters(string data);
-            ICommand ParseCommand(string data);
-
-            ICommand TryParse(string input);
-        }
     }
 
     namespace IO
     {
-        delegate void OutputDelegate(string data);
-        delegate string InputDelegate();
-
         static class InputHandler
         {
             string Read();
@@ -65,20 +57,30 @@ namespace SUM.CLI
 
     namespace Application
     {
-        interface IEnvCommand
+        static class CommandParser
         {
+            IEnumerable<IArgument> ParseArguments(string data);
+            IEnumerable<IParameter> ParseParameters(string data);
+            ICommand ParseCommand(string data);
+
+            ICommand TryParse(string input);
+        }
+
+        interface ICommand
+        {
+            string Name { get; set; }
             IEnumerable<IParameter> Parameters { get; set; }
             IEnumerable<IArgument> Arguments { get; set; }
 
             void Execute();
         }
-        interface ISUMCommand : ICommand { }
         interface IEnvCommand : ICommand { }
+        interface ISumCommand : ICommand { }
         class ExitCommand : IEnvCommand { }
-        class StatusCommand : ISUMCommand { }
-        ...
+        class StatusCommand : ISumCommand { }
+		// ...
 
-        interface IArgument
+		interface IArgument
         {
             string Data { get; set; }
         }
@@ -94,53 +96,55 @@ namespace SUM.CLI
 
         class ExitCommandValidator : FluentValidation.AbstractValidator<ExitCommand> { }
         class StatusCommandValidator : FluentValidation.AbstractValidator<StatusCommand> { }
-        ...
-    }
+		// ...
+	}
 
-    namespace Common
+	namespace Common
     {
-        abstract class SUMCLIException : Exception
+        abstract class SumCLIException : Exception
         {
             ErrorMessage Error { get; set; }
 
-            SUMCLIException(ErrorCodes code);
-            SUMCLIException(ErrorCodes code, string message);
+            SumCLIException(ErrorCodes code);
+            SumCLIException(ErrorCodes code, string message);
         }
-        class NotFoundException : SUMCLIException { }
-        ...
+        class NotFoundException : SumCLIException { }
+		// ...
 
-        enum ErrorCodes
+		enum ErrorCodes
         {
             NotFound = 0,
-            ...
-        }
+			// ...
+		}
 
-        class ErrorMessage
+		class ErrorMessage
         {
             ErrorCodes Code { get; set; }
             string Message { get; set; }
         }
 
-        static class Session
+        // Singleton.
+        class Session
         {
-            static string ServerLocation { get; set; }
-            ...
-        }
-        static class CommandNames
+            static string ConnectedServerLocation { get; set; }
+            static string ConnectedServerUsername { get; set; }
+			// ...
+		}
+		static class CommandNames
         {
-            const string SUM = "sum";
+            const string Sum = "sum";
 
             const string Exit = "exit";
-            const string Status = SUM + " status";
-            ...
-        }
-        static class DefaultErrorMessages
+            const string Status = Sum + " status";
+			// ...
+		}
+		static class DefaultErrorMessages
         {
-            const string SomethingNotFound = "Something not found.";
-            ...
-        }
+            const string SomethingNotFound = "Something is not found.";
+			// ...
+		}
 
-        static class Logger
+		static class Logger
         {
             void LogError(string data);
             void LogEvent(string data);
@@ -152,7 +156,36 @@ namespace SUM.CLI
             void Register<TInterface, TImplementation>();
             T GetService<T>();
         }
-    }
+
+        static class Locations
+        {
+            const string AppConfigLocation = "...";
+            const string AppCacheLocation = "...";
+        }
+
+        class ConfigurationManager<T>
+        {
+            string Path { get; set; }
+
+            ConfigurationManager(string path);
+
+            T LoadConfig();
+            void SaveConfig(T config);
+        }
+        class AppConfig
+        {
+            string SessionLifeTime { get; set; }
+			// ...
+		}
+		class AppCache
+        {
+            string ServerLocation { get; set; }
+            string ServerName { get; set; }
+            string ServerUsername { get; set; }
+            string ServerPassword { get; set; }
+			// ...
+		}
+	}
 }
 
 namespace Core
@@ -160,7 +193,7 @@ namespace Core
     /*
         One of main Core interfaces.
         Manages procedures data and their versions.
-        All data stores in single JSON file. Data in file is stored as hash table.
+        All data stores in single file. Data in file is stored as hash table.
         Each procedure has unique hash, which consists of: "server name"."database name"."procedure name".
         Procedure version represented as Int32 number.
         Examples:
@@ -171,104 +204,89 @@ namespace Core
     {
         class Tracker
         {
-            TrackingFileManager FileManager { get; set; }
-            RegistrationLoader Loader { set; set; }
-
-            Tracker(TrackingFileManager fileManager, RegistrationLoader loader);
-
+            Procedure GetRevision(string revHash);
+            Procedure GetHead(string sourceHash);
+            void Save(Procedure procedure);
+        }
+        class Comparer
+        {
+            Difference GetDifference(string sourceHash, string destinationHash,
+                DifferenceFormat format);
+        }
+        class Monitor
+        {
             bool IsChanged();
             IEnumerable<Procedure> GetChanged();
-            Procedure LoadVersion(string hash, int version);
-            Procedure LoadHead(string hash);
-            void SaveVersion(Procedure procedure);
-            Difference GetDifference(string sourceHash, string destinationHash,
-                int sourceVersion, int destinationVersion,
-                DifferenceFormat format);
-            Difference GetDifference(string hash, int sourceVersion,
-                Procedure destination);
-        }
-        class Difference
-        {
-            Procedure Older { get; set; }
-            Procedure Newer { get; set; }
-            string Comparasion { get; set; }
-        }
-        static class Compressor
-        {
-            string Compress(string data);
-            string Decompress(string data);
         }
     }
 
     /*
-        Used to registrate procedures for tracking.
-        All registrations contains in single JSON file.
+        Used to register procedures for tracking.
+        All registrations contains in single file.
     */
     namespace Registration
     {
-        class Registrator
+        class Register
         {
-            RegistrationFileManager FileManager { get; set; }
+            string Path { get; set; }
             Server[] Servers { get; set; }
 
-            Registrator(RegistrationFileManager fileManager);
+            Registrator(string path);
 
-            void RegistrateServers(Server[] data);
-            void RegistrateDatabases(Database[] data);
-            void RegistrateProcedures(Procedure[] data);
+            void RegisterServer(Server data);
+            void RegisterDatabase(Database data);
+            void RegisterProcedure(Procedure data);
 
+            void DeregisterServer(Server data);
+            void DeregisterDatabase(Database data);
+            void DeregisterProcedure(Procedure data);
+
+            Server GetServer(string hash);
+            Database GetDatabase(string hash);
+            Procedure GetProcedure(string hash);
+            IData Search(string hash);
+
+            void SaveChanges();
+        }
+    }
+
+    namespace Internal
+    {
+        internal class Crypter
+        {
+            string Encrypt(string data);
+            string Decrypt(string hash);
+        }
+        // Singleton.
+        internal class FileManager
+        {
+            string Load(string path);
             void Save(string path);
         }
-        class RegistrationLoader
+        internal class Compressor
         {
-            RegistrationFileManager FileManager { get; set; }
-
-            RegistrationLoader(RegistrationFileManager fileManager);
-
-            Server LoadServer(string hash);
-            Database LoadDatabase(string hash);
-            Procedure LoadProcedure(string hash);
-            Server[] LoadServers();
-            Database[] LoadDatabases();
-            Database[] LoadDatabases(string serverHash);
-            Procedure[] LoadProcedures();
-            Procedure[] LoadProcedures(string databaseHash);
-            IData Search(string hash);
+            string Compress(string data);
+            string Decompress(string data);
+        }
+        // Singleton.
+        internal class ConfigurationManager
+        {
+            ISerializer Tracking { get; set; }
+            ISerializer Register { get; set; }
         }
     }
 
     namespace Common
     {
-        class JsonSerializer
+        interface ISerializer
         {
-            T Deserialize<T>(string json);
+            T Deserialize<T>(string data);
             string Serialize(object data);
         }
-        class Crypter
+        class CoreConfiguration
         {
-            string Encrypt(string data);
-            string Decryot(string hash);
-        }
-        class RegistrationFileManager
-        {
-            JsonSerializer Serializer { get; set; }
-            string Path { get; set; }
-
-            RegistrationFileManager(string path, JsonSerializer serializer);
-
-            void Save(Server[] servers);
-            Server[] Load();
-        }
-        class TrackingFileManager
-        {
-            JsonSerializer Serializer { get; set; }
-            string Path { get; set; }
-
-            TrackingFileManager(string path, JsonSerializer serializer);
-
-            ProceduresList LoadProcedure(string hash);
-            IEnumerable<Procedure> LoadProcedures();
-            void Save(IEnumerable<Procedure> procedures);
+            void SetTrackingSerializer(ISerializer serializer);
+            void SetRegisterSerializer(ISerializer serializer);
         }
     }
 
@@ -276,21 +294,14 @@ namespace Core
     {
 		class ProcedureExecutor
 		{
+            // Wonder if this is possible
+            bool EstablishConnection(Server server);
 			ExecutionResult Execute(Procedure procedure);
 		}
     }
 
     namespace Domains
     {
-        // Linked list, contains all versions of single procedure.
-        class ProceduresList
-        {
-            Procedure Original { get; set; }
-            Node<Procedure> Next { get; set; }
-            Node<Procedure> Previous { get; set; }
-
-            void NewVersion(Procedure procedure);
-        }
         interface IData
         {
             string Name { get; set; }
@@ -300,14 +311,17 @@ namespace Core
         {
             Database[] Databases { get; set; }
             string Location { get; set; }
+            ServerType Type { get; set; }
             ServerUser[] Users { get; set; }
         }
         class Database : IData
         {
+            Server Server { get; set; }
             Procedure[] Procedures { get; set; }
         }
         class Procedure : IData
         {
+            Database Database { get; set; }
             string Data { get; set; }
             string Location { get; set; }
         }
@@ -321,11 +335,22 @@ namespace Core
 			bool IsSuccess { get; set; }
 			Exception Error { get; set; }
 		}
+        class Difference
+        {
+            string Comparasion { get; set; }
+            DifferenceFormat Format { get; set; }
+        }
         enum DifferenceFormat
         {
             Compared = 0,
             FullCompared,
-            ...
+            // ...
         }
-    }
+        enum ServerType
+        {
+            SqlServer = 0,
+            MySql,
+			// ...
+		}
+	}
 }
