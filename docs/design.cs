@@ -2,15 +2,21 @@ namespace SUM.CLI
 {
     namespace System
     {
+		// Dependencies.
 		using Common;
+		using IO;
+		using Application;
+
         // Contains request context, which is used by middleware.
         // Can contain data about request time and etc.
         class RequestContext
         {
             // Contains input data.
-            string Data { get; set; }
+            public string Data { get; set; }
 
-			event RequestDelegate Next { get; set; }
+			RequestContext(params RequestDelegate[] delegates) { }
+
+			public event RequestDelegate Next { get; private set; }
         }
 
         // Used as a reference on next item in request chain.
@@ -21,20 +27,36 @@ namespace SUM.CLI
         {
             void OnInvoke(RequestContext context);
         }
-        class InitialMiddleware : IMiddleware { }
-        class ErrorHandlingMiddleware : IMiddleware { }
-        class ApplicationMiddleware : IMiddleware { }
+        class InitialMiddleware : IMiddleware
+		{
+			public void OnInvoke(RequestDelegate context);
+		}
+        class ErrorHandlingMiddleware : IMiddleware
+		{
+			public void OnInvoke(RequestDelegate context);
+		}
+        class ApplicationMiddleware : IMiddleware
+		{
+			CommandParser Parser { get; set; }
+
+			public void OnInvoke(RequestContext context);
+		}
 
         class StartUp
         {
             // First middleware in queue.
             IMiddleware InitialMiddleware { get; set; }
             // Initiates appliction configuration - Session, etc.
-            void Init();
+            void Init(string[] args);
+			void ConfigureServices();
 			void Configure(AppConfig configuration);
-
-            static void Main(string[] args);
         }
+
+		class Program
+		{
+			// Entry point.
+			static void Main(string[] args);
+		}
     }
 
     namespace IO
@@ -51,13 +73,21 @@ namespace SUM.CLI
 
     namespace Application
     {
-        static class CommandParser
-        {
-            IEnumerable<IArgument> ParseArguments(string data);
-            IEnumerable<IParameter> ParseParameters(string data);
-            ICommand ParseCommand(string data);
+		// Dependencies.
+		using IO;
+		using Common;
+		using Core.Domains;
+		using Core.Registration;
+		using Core.Tracking;
+		using Core.Data;
+		using Core.Common;
 
-            ICommand TryParse(string input);
+        class CommandParser
+        {
+			private IEnumerable<IArgument> ParseArguments(string data);
+			private IEnumerable<IParameter> ParseParameters(string data);
+
+			ICommand ParseCommand(string data);
         }
 
         interface ICommand
@@ -145,7 +175,7 @@ namespace SUM.CLI
             void LogExecution(string data);
         }
 
-        static class ServiceContainer
+        class ServiceContainer
         {
             void Register<TInterface, TImplementation>();
             T GetService<T>();
@@ -196,6 +226,11 @@ namespace Core
     */
     namespace Tracking
     {
+		// Dependencies.
+		using Core.Domains;
+		using Core.Common;
+		using Core.Internal;
+
         class Tracker
         {
             Procedure GetRevision(string revHash);
@@ -220,6 +255,11 @@ namespace Core
     */
     namespace Registration
     {
+		// Registartion.
+		using Core.Domains;
+		using Core.Common;
+		using Core.Internal;
+
         class Register
         {
             string Path { get; set; }
@@ -246,6 +286,9 @@ namespace Core
 
     namespace Internal
     {
+		// Dependencies.
+		using Core.Common;
+
         internal class Crypter
         {
             string Encrypt(string data);
@@ -286,9 +329,12 @@ namespace Core
 
     namespace Data
     {
+		// Dependencies.
+		using Core.Domains;
+
 		class ProcedureExecutor
 		{
-            // Wonder if this is possible
+            // Wonder if this is possible.
             bool EstablishConnection(Server server);
 			ExecutionResult Execute(Procedure procedure);
 		}
