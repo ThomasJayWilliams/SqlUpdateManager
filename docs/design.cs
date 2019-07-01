@@ -286,9 +286,6 @@ namespace Core
 
     namespace Internal
     {
-		// Dependencies.
-		using Core.Common;
-
         internal class Crypter
         {
             string Encrypt(string data);
@@ -305,12 +302,6 @@ namespace Core
             string Compress(string data);
             string Decompress(string data);
         }
-        // Singleton.
-        internal class ConfigurationManager
-        {
-            ISerializer Tracking { get; set; }
-            ISerializer Register { get; set; }
-        }
     }
 
     namespace Common
@@ -324,6 +315,12 @@ namespace Core
         {
             void SetTrackingSerializer(ISerializer serializer);
             void SetRegisterSerializer(ISerializer serializer);
+        }
+        // Singleton.
+        internal class ConfigurationManager
+        {
+            ISerializer Tracking { get; set; }
+            ISerializer Register { get; set; }
         }
     }
 

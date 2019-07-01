@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLUpdateManager.CLI.Application\SQLUpdateManager.CLI.Application.csproj" />
     <ProjectReference Include="..\SQLUpdateManager.CLI.Common\SQLUpdateManager.CLI.Common.csproj" />
     <ProjectReference Include="..\SQLUpdateManager.CLI.IO\SQLUpdateManager.CLI.IO.csproj" />
   </ItemGroup>
