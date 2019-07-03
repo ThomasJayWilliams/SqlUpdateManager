@@ -3,6 +3,7 @@ using SQLUpdateManager.Core.Domains;
 using SQLUpdateManager.Core.Internal;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -19,8 +20,7 @@ namespace SQLUpdateManager.Core.Registration
         {
             _path = path ?? throw new ArgumentNullException("File path cannot be null or emnpty!");
             _serializer = serializer ?? throw new ArgumentNullException("Serializer canont be null!");
-
-            _servers = new List<Server>();
+            
             _servers = Load()
                 .ToList();
         }
@@ -33,9 +33,9 @@ namespace SQLUpdateManager.Core.Registration
             _servers.Add(data);
         }
 
-        public void RemoveServer(string hash)
+        public void RemoveServer(byte[] hash)
         {
-            if (string.IsNullOrEmpty(hash))
+            if (hash == null || hash.Length == 0)
                 throw new ArgumentNullException("Server hash cannot be null or empty!");
 
             if (_servers.FirstOrDefault(server => server.Hash == hash) == null)
@@ -60,9 +60,9 @@ namespace SQLUpdateManager.Core.Registration
             server.Users = data.Users;
         }
 
-        public Server GetServer(string hash)
+        public Server GetServer(byte[] hash)
         {
-            if (string.IsNullOrEmpty(hash))
+            if (hash == null || hash.Length == 0)
                 throw new ArgumentNullException("Server hash cannot be null or empty!");
 
             var server = _servers.FirstOrDefault(serv => serv.Hash == hash);
@@ -76,32 +76,23 @@ namespace SQLUpdateManager.Core.Registration
         public void SaveChanges()
         {
             foreach (var server in _servers)
-            {
-                foreach (var database in server.Databases)
-                    foreach (var procedure in database.Procedures)
-                        procedure.Data = Compressor.Compress(procedure.Data);
-
                 foreach (var user in server.Users)
                     user.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password));
-            }
 
             FileManager.Save(_path, _serializer.Serialize(_servers));
         }
 
         private IEnumerable<Server> Load()
         {
+            if (!File.Exists(_path))
+                return Enumerable.Empty<Server>();
+
             var data = _serializer
                 .Deserializer<IEnumerable<Server>>(FileManager.Load(_path));
 
             foreach (var server in data)
-            {
-                foreach (var database in server.Databases)
-                    foreach (var procedure in database.Procedures)
-                        procedure.Data = Compressor.Decompress(procedure.Data);
-
                 foreach (var user in server.Users)
                     user.Password = Encoding.UTF8.GetString(Convert.FromBase64String(user.Password));
-            }
 
             return data;
         }

@@ -1,15 +1,14 @@
 ﻿using SQLUpdateManager.Core.Internal;
-using System.Collections.Generic;
 
 namespace SQLUpdateManager.Core.Domains
 {
-    public class Database : IData
+    public class StorageProcedure : IData
     {
         public string Name { get; set; }
         public byte[] Hash
         {
-            get => Hasher.GetHash($"{Name}");
+            get => Hasher.GetHash($"{Name}{Location}");
         }
-        public IEnumerable<StorageProcedure> Procedures { get; set; }
+        public string Location { get; set; }
     }
 }
