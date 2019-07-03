@@ -2,12 +2,12 @@
 
 namespace SQLUpdateManager.Core.Internal
 {
-    public static class FileManager
+	internal static class FileManager
     {
-		public static string Load(string path) =>
+		internal static string Load(string path) =>
 			File.ReadAllText(path);
 
-        public static void Save(string path, string data) =>
+		internal static void Save(string path, string data) =>
             File.WriteAllText(path, data);
     }
 }

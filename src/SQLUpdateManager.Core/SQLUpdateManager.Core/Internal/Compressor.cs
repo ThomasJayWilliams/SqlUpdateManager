@@ -4,15 +4,15 @@ using System.Text;
 
 namespace SQLUpdateManager.Core.Internal
 {
-    public static class Compressor
+    internal static class Compressor
     {
-        public static string Compress(string data)
+		internal static string Compress(string data)
         {
             var coder = new Coder(new Coder.Tree());
             return Encoding.UTF8.GetString(coder.Encode(data));
         }
 
-        public static string Decompress(string data)
+		internal static string Decompress(string data)
         {
             var coder = new Coder(new Coder.Tree());
             coder.Decode(
@@ -22,16 +22,16 @@ namespace SQLUpdateManager.Core.Internal
         }
     }
 
-    public class Coder
+	internal class Coder
     {
-        public Coder(Tree tree)
+		internal Coder(Tree tree)
         {
             _Tree = tree;
         }
 
         private Tree _Tree = null;
 
-        public uint Encode(byte[] input, out byte[] output)
+		internal uint Encode(byte[] input, out byte[] output)
         {
             var ret = new List<byte>();
 
@@ -92,19 +92,19 @@ namespace SQLUpdateManager.Core.Internal
             }
         }
 
-        public uint Encode(string input, out byte[] output) =>
+		internal uint Encode(string input, out byte[] output) =>
             Encode(Encoding.UTF8.GetBytes(input), out output);
 
-        public byte[] Encode(byte[] buffer)
+		internal byte[] Encode(byte[] buffer)
         {
             Encode(buffer, out var result);
             return result;
         }
 
-        public byte[] Encode(string buffer) =>
+		internal byte[] Encode(string buffer) =>
             Encode(Encoding.UTF8.GetBytes(buffer));
 
-        public uint Decode(byte[] input, out byte[] output, int inputOffset = 0, uint bitlength = 0)
+		internal uint Decode(byte[] input, out byte[] output, int inputOffset = 0, uint bitlength = 0)
         {
             var ret = new List<byte>();
 
@@ -229,24 +229,24 @@ namespace SQLUpdateManager.Core.Internal
             }
         }
 
-        public class Tree
+		internal class Tree
         {
-            public Tree() { }
+			internal Tree() { }
 
-            public Tree(Dictionary<byte, Dictionary<uint, byte>> lookup)
+			internal Tree(Dictionary<byte, Dictionary<uint, byte>> lookup)
             {
                 Init(lookup);
             }
 
-            public bool Padding = false;
+			internal bool Padding = false;
 
-            public Dictionary<byte, Dictionary<uint, ReverseLookupEntry>> ReverseLookup { private set; get; }
+			internal Dictionary<byte, Dictionary<uint, ReverseLookupEntry>> ReverseLookup { private set; get; }
 
-            public ForwardLookupEntry[] ForwardLookup { private set; get; }
+			internal ForwardLookupEntry[] ForwardLookup { private set; get; }
 
-            public byte MinBitLen { private set; get; }
+			internal byte MinBitLen { private set; get; }
 
-            public byte MaxBitLen { private set; get; }
+			internal byte MaxBitLen { private set; get; }
 
             private void Init(Dictionary<byte, Dictionary<uint, byte>> lookup)
             {
@@ -311,7 +311,7 @@ namespace SQLUpdateManager.Core.Internal
                 }
             }
 
-            public void BuildDictionary(byte[] sample)
+			internal void BuildDictionary(byte[] sample)
             {
                 var freq = new Dictionary<byte, uint>();
                 foreach (var b in sample)
@@ -399,16 +399,16 @@ namespace SQLUpdateManager.Core.Internal
                 Init(lookup);
             }
 
-            public void BuildDictionary(string sample) =>
+			internal void BuildDictionary(string sample) =>
                 BuildDictionary(Encoding.UTF8.GetBytes(sample));
 
-            public class ReverseLookupEntry
+			internal class ReverseLookupEntry
             {
                 public byte Value;
                 public bool Collides;
             }
 
-            public struct ForwardLookupEntry
+			internal struct ForwardLookupEntry
             {
                 public uint Value;
                 public byte BitLength;
