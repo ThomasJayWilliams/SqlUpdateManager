@@ -264,22 +264,15 @@ namespace Core
         class Register
         {
             string Path { get; set; }
-            Server[] Servers { get; set; }
+            IEnumerable<Server> Servers { get; set; }
+            ISerializer Serializer { get; set; }
 
-            Registrator(string path);
+            Register(ISerializer serializer, string path);
 
-            void RegisterServer(Server data);
-            void RegisterDatabase(Database data);
-            void RegisterProcedure(Procedure data);
-
-            void DeregisterServer(Server data);
-            void DeregisterDatabase(Database data);
-            void DeregisterProcedure(Procedure data);
-
+            void AddServer(Server data);
+            void RemoveServer(string hash);
+            void UdpateServer(Server data);
             Server GetServer(string hash);
-            Database GetDatabase(string hash);
-            Procedure GetProcedure(string hash);
-            IData Search(string hash);
 
             void SaveChanges();
         }
@@ -287,10 +280,9 @@ namespace Core
 
     namespace Internal
     {
-        internal class Crypter
+        internal class Hasher
         {
-            string Encrypt(string data);
-            string Decrypt(string hash);
+            string GetHash(string data);
         }
         // Singleton.
         internal class FileManager
@@ -311,17 +303,6 @@ namespace Core
         {
             T Deserialize<T>(string data);
             string Serialize(object data);
-        }
-        class CoreConfiguration
-        {
-            void SetTrackingSerializer(ISerializer serializer);
-            void SetRegisterSerializer(ISerializer serializer);
-        }
-        // Singleton.
-        internal class ConfigurationManager
-        {
-            ISerializer Tracking { get; set; }
-            ISerializer Register { get; set; }
         }
     }
 
