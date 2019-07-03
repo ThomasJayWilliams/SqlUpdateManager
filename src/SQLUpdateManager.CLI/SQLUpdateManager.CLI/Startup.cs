@@ -4,11 +4,6 @@ namespace SQLUpdateManager.CLI
 {
 	public class Startup
 	{
-		public void Init(string[] args)
-		{
-
-		}
-
 		public void ConfigureServices()
 		{
 

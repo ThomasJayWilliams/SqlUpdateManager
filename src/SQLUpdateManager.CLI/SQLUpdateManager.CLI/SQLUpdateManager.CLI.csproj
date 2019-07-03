@@ -6,9 +6,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="NinjectModules\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SQLUpdateManager.CLI.Application\SQLUpdateManager.CLI.Application.csproj" />
     <ProjectReference Include="..\SQLUpdateManager.CLI.Common\SQLUpdateManager.CLI.Common.csproj" />
     <ProjectReference Include="..\SQLUpdateManager.CLI.IO\SQLUpdateManager.CLI.IO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SQLUpdateManager.Core.Common">
+      <HintPath>..\libs\SQLUpdateManager.Core.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLUpdateManager.Core.Data">
+      <HintPath>..\libs\SQLUpdateManager.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLUpdateManager.Core.Domains">
+      <HintPath>..\libs\SQLUpdateManager.Core.Domains.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLUpdateManager.Core.Internal">
+      <HintPath>..\libs\SQLUpdateManager.Core.Internal.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLUpdateManager.Core.Registration">
+      <HintPath>..\libs\SQLUpdateManager.Core.Registration.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLUpdateManager.Core.Tracking">
+      <HintPath>..\libs\SQLUpdateManager.Core.Tracking.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

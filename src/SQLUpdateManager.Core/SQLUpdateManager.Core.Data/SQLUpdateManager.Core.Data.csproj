@@ -8,6 +8,10 @@
     <OutputPath></OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\SQLUpdateManager\src\SQLUpdateManager.CLI\libs\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\SQLUpdateManager.Core.Domains\SQLUpdateManager.Core.Domains.csproj" />
   </ItemGroup>
