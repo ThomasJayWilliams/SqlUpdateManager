@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Data", "SQLUpdateManager.Core.Data\SQLUpdateManager.Core.Data.csproj", "{8F9E7AF8-F361-4B7C-B278-070EAA79838C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCLI", "TestCLI\TestCLI.csproj", "{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
