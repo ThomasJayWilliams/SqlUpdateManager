@@ -1,10 +1,16 @@
-﻿namespace SQLUpdateManager.CLI
+﻿using SQLUpdateManager.CLI.Common;
+
+namespace SQLUpdateManager.CLI
 {
 	public class Program
 	{
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
-
+			var app = new Startup();
+			app.Init(args);
+			app.ConfigureServices();
+			app.Configure(new AppConfig());
+			app.RunApp();
 		}
 	}
 }

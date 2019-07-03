@@ -50,6 +50,7 @@ namespace SUM.CLI
             void Init(string[] args);
 			void ConfigureServices();
 			void Configure(AppConfig configuration);
+            void RunApp();
         }
 
 		class Program
