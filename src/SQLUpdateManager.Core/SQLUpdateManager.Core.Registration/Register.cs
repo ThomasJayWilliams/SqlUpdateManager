@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace SQLUpdateManager.Core.Registration
 {
-    public class Register
+	public class Register
     {
         private readonly string _path;
         private readonly ISerializer _serializer;
@@ -29,6 +28,8 @@ namespace SQLUpdateManager.Core.Registration
         {
             if (data == null)
                 throw new ArgumentNullException("Server cannot be null!");
+			if (_servers.Select(server => server.Hash).Any(hash => hash == data.Hash))
+				throw new DuplicateException("Specified server already exists!", CoreErrorCodes.ServerAlreadyExists);
 
             _servers.Add(data);
         }
@@ -57,7 +58,6 @@ namespace SQLUpdateManager.Core.Registration
             server.Databases = data.Databases;
             server.Name = data.Name;
             server.Type = data.Type;
-            server.Users = data.Users;
         }
 
         public Server GetServer(byte[] hash)
@@ -73,26 +73,21 @@ namespace SQLUpdateManager.Core.Registration
             return server;
         }
 
-        public void SaveChanges()
-        {
-            foreach (var server in _servers)
-                foreach (var user in server.Users)
-                    user.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password));
-
+        public void SaveChanges() =>
             FileManager.Save(_path, _serializer.Serialize(_servers));
-        }
 
         private IEnumerable<Server> Load()
         {
             if (!File.Exists(_path))
                 return Enumerable.Empty<Server>();
 
-            var data = _serializer
-                .Deserializer<IEnumerable<Server>>(FileManager.Load(_path));
+			var str = FileManager.Load(_path);
 
-            foreach (var server in data)
-                foreach (var user in server.Users)
-                    user.Password = Encoding.UTF8.GetString(Convert.FromBase64String(user.Password));
+			if (string.IsNullOrEmpty(str))
+				return Enumerable.Empty<Server>();
+
+            var data = _serializer
+                .Deserializer<IEnumerable<Server>>(str);
 
             return data;
         }

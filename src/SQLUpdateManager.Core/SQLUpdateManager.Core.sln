@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Tracking", "SQLUpdateManager.Core.Tracking\SQLUpdateManager.Core.Tracking.csproj", "{27F1DE46-C05C-451B-8956-8A842B6C3355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Tracking", "SQLUpdateManager.Core.Tracking\SQLUpdateManager.Core.Tracking.csproj", "{27F1DE46-C05C-451B-8956-8A842B6C3355}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Registration", "SQLUpdateManager.Core.Registration\SQLUpdateManager.Core.Registration.csproj", "{87A7F72E-745F-45C6-B302-B1783CEB58BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Registration", "SQLUpdateManager.Core.Registration\SQLUpdateManager.Core.Registration.csproj", "{87A7F72E-745F-45C6-B302-B1783CEB58BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Internal", "SQLUpdateManager.Core.Internal\SQLUpdateManager.Core.Internal.csproj", "{AAF69B56-70D1-4230-98E9-C1BF3EBA2075}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Internal", "SQLUpdateManager.Core.Internal\SQLUpdateManager.Core.Internal.csproj", "{AAF69B56-70D1-4230-98E9-C1BF3EBA2075}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Domains", "SQLUpdateManager.Core.Domains\SQLUpdateManager.Core.Domains.csproj", "{2ED6F635-959C-494D-A84C-625DD46CCF93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Domains", "SQLUpdateManager.Core.Domains\SQLUpdateManager.Core.Domains.csproj", "{2ED6F635-959C-494D-A84C-625DD46CCF93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Common", "SQLUpdateManager.Core.Common\SQLUpdateManager.Core.Common.csproj", "{DC7411EF-FE79-4716-B6D3-210CB5556A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Common", "SQLUpdateManager.Core.Common\SQLUpdateManager.Core.Common.csproj", "{DC7411EF-FE79-4716-B6D3-210CB5556A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core.Data", "SQLUpdateManager.Core.Data\SQLUpdateManager.Core.Data.csproj", "{8F9E7AF8-F361-4B7C-B278-070EAA79838C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.Core.Data", "SQLUpdateManager.Core.Data\SQLUpdateManager.Core.Data.csproj", "{8F9E7AF8-F361-4B7C-B278-070EAA79838C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCLI", "TestCLI\TestCLI.csproj", "{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F9E7AF8-F361-4B7C-B278-070EAA79838C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E062B7-8FBD-4398-91E6-56ADCD9B69E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

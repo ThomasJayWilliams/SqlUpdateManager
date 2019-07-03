@@ -1,5 +1,6 @@
 ﻿using SQLUpdateManager.Core.Internal;
 using System.Collections.Generic;
+using System;
 
 namespace SQLUpdateManager.Core.Domains
 {
@@ -10,6 +11,11 @@ namespace SQLUpdateManager.Core.Domains
         {
             get => Hasher.GetHash($"{Name}");
         }
-        public IEnumerable<StorageProcedure> Procedures { get; set; }
+        public IEnumerable<Procedure> Procedures { get; set; }
+
+		public Database(params Procedure[] procedures)
+		{
+			Procedures = procedures ?? throw new ArgumentNullException("Cannot create database with no stored procedures!");
+		}
     }
 }
