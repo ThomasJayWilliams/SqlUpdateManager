@@ -334,12 +334,16 @@ namespace Core
 		{
             // Wonder if this is possible.
             bool EstablishConnection(Server server);
-			ExecutionResult Execute(Procedure procedure);
+			ExecutionResultMessage Execute(Procedure procedure);
 		}
     }
 
     namespace Domains
     {
+        interface IMessage
+        {
+
+        }
         interface IData
         {
             string Name { get; set; }
@@ -368,7 +372,7 @@ namespace Core
             string Username { get; set; }
             string Password { get; set; }
         }
-		class ExecutionResult
+		class ExecutionResultMessage : IMessage
 		{
 			bool IsSuccess { get; set; }
 			Exception Error { get; set; }
