@@ -5,15 +5,11 @@ namespace SQLUpdateManager.CLI.Common
 {
 	public class Session
 	{
-		private readonly Session _instance = new Session();
-		private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
-		public Session Current
-		{
-			get => _instance;
-		}
+        public static Session Current { get; } = new Session();
 
-		private Session() { }
+        private Session() { }
 
 		public T GetValue<T>(string key)
 		{
@@ -46,5 +42,17 @@ namespace SQLUpdateManager.CLI.Common
 
 			_values.Add(key, data);
 		}
+
+        public DateTime ApplicationStartTime
+        {
+            get => GetValue<DateTime>("ApplicationStart");
+            set => AddValue("ApplicationStart", value);
+        }
+
+        public int SessionLifeTime
+        {
+            get => GetValue<int>("SessionLifeTime");
+            set => AddValue("SessionLifeTime", value);
+        }
 	}
 }

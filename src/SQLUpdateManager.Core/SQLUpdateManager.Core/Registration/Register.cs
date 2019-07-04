@@ -87,7 +87,7 @@ namespace SQLUpdateManager.Core.Registration
 				return Enumerable.Empty<Server>();
 
             var data = _serializer
-                .Deserializer<IEnumerable<Server>>(str);
+                .Deserialize<IEnumerable<Server>>(str);
 
             return data;
         }
