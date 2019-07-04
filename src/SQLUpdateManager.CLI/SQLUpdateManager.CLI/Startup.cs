@@ -11,7 +11,8 @@ namespace SQLUpdateManager.CLI
 		public IKernel ConfigureServices() =>
             new StandardKernel(
                 new MiscModule(),
-                new IOModule());
+                new IOModule(),
+                new CommandsModule());
 
 		public void Configure()
 		{
@@ -36,18 +37,17 @@ namespace SQLUpdateManager.CLI
         {
             Configure();
             var kernel = ConfigureServices();
-            var chain = InitMiddlewares(kernel);
-
             var prefixLine = kernel.Get<IPrefixLine>();
 
             while (true)
             {
+                var chain = InitMiddlewares(kernel);
+
                 prefixLine.PrintPrefix();
 
                 var input = InputHandler.ReadLine();
-
-                chain.Context.InputCommand = input;
-                chain.Begin();
+                
+                chain.Begin(input);
             }
 		}
 

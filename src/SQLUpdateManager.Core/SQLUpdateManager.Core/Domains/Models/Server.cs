@@ -13,10 +13,5 @@ namespace SQLUpdateManager.Core.Domains
         }
         public IEnumerable<Database> Databases { get; set; }
         public ServerType Type { get; set; }
-
-		public Server(params Database[] databases)
-		{
-			Databases = databases ?? throw new ArgumentNullException("Cannot create server with no databases!");
-		}
     }
 }

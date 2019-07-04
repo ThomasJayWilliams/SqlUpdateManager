@@ -12,10 +12,5 @@ namespace SQLUpdateManager.Core.Domains
             get => Hasher.GetHash($"{Name}");
         }
         public IEnumerable<Procedure> Procedures { get; set; }
-
-		public Database(params Procedure[] procedures)
-		{
-			Procedures = procedures ?? throw new ArgumentNullException("Cannot create database with no stored procedures!");
-		}
     }
 }

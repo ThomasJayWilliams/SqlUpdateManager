@@ -1,4 +1,5 @@
 ﻿using Ninject.Modules;
+using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.Core.Common;
 
 namespace SQLUpdateManager.CLI
@@ -21,6 +22,14 @@ namespace SQLUpdateManager.CLI
         public override void Load()
         {
             Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
+        }
+    }
+
+    public class CommandsModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<ICommand>().To<ConnectCommand>().InTransientScope();
         }
     }
 }

@@ -9,4 +9,10 @@
     <ProjectReference Include="..\SQLUpdateManager.CLI.IO\SQLUpdateManager.CLI.IO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="SQLUpdateManager.Core">
+      <HintPath>..\libs\SQLUpdateManager.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

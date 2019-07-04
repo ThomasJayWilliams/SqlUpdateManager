@@ -29,7 +29,7 @@ namespace SQLUpdateManager.Core.Registration
             if (data == null)
                 throw new ArgumentNullException("Server cannot be null!");
 			if (_servers.Select(server => server.Hash).Any(hash => hash == data.Hash))
-				throw new DuplicateException("Specified server already exists!", CoreErrorCodes.ServerAlreadyExists);
+				throw new DuplicateException("Specified server already exists!");
 
             _servers.Add(data);
         }

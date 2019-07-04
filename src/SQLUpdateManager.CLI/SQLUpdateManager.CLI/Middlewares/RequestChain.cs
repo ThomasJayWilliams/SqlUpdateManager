@@ -30,8 +30,11 @@ namespace SQLUpdateManager.CLI
             _context = new RequestContext(queue);
         }
 
-        public void Begin() =>
+        public void Begin(string command)
+        {
+            _context.InputCommand = command;
             _context.Next();
+        }
 
     }
 }

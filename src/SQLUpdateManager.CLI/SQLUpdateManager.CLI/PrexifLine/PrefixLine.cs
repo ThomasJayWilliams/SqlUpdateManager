@@ -17,7 +17,7 @@ namespace SQLUpdateManager.CLI
                     Session.Current.ConnectedServer.Name.Length > 10 ?
                         Session.Current.ConnectedServer.Name.Substring(0, 10) :
                         Session.Current.ConnectedServer.Name,
-                    ConsoleColor.DarkYellow);
+                    ConsoleColor.Yellow);
 
                 if (Session.Current.UsedDatabase != null)
                 {
@@ -28,9 +28,14 @@ namespace SQLUpdateManager.CLI
                             Session.Current.UsedDatabase.Name,
                         ConsoleColor.Cyan);
                 }
+
+                else
+                    OutputHandler.PrintLine("");
             }
 
-            OutputHandler.PrintColoredLine(Constants.AppName, ConsoleColor.Green);
+            else
+                OutputHandler.PrintColoredLine(Constants.AppName, ConsoleColor.Green);
+
             OutputHandler.Print("$ ");
         }
     }

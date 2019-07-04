@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SQLUpdateManager.CLI.Common;
+using SQLUpdateManager.CLI.IO;
+using System;
 
 namespace SQLUpdateManager.CLI
 {
@@ -10,9 +12,14 @@ namespace SQLUpdateManager.CLI
             {
                 context.Next();
             }
-            catch (Exception)
+            catch (CLIException ex)
             {
-                // TODO: Catch all kinds of exceptions, then log it and print output got user.
+                OutputHandler.PrintColoredLine($"{Convert.ToInt32(ex.Code)} {ex.Code}", ConsoleColor.Red);
+                OutputHandler.PrintColoredLine($"{ex.Message}", ConsoleColor.Red);
+            }
+            catch (Exception ex)
+            {
+                OutputHandler.PrintColoredLine(ex.Message, ConsoleColor.Red);
             }
         }
     }
