@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLUpdateManager.Core.Domains;
+using System;
 using System.Collections.Generic;
 
 namespace SQLUpdateManager.CLI.Common
@@ -16,8 +17,8 @@ namespace SQLUpdateManager.CLI.Common
 			if (string.IsNullOrEmpty(key))
 				throw new ArgumentNullException("Key cannot be null or empty!");
 
-			if (_values.TryGetValue(key, out var result))
-				throw new ArgumentException("Value does not exist!");
+            if (!_values.TryGetValue(key, out var result))
+                return default(T);
 
 			T temp;
 
@@ -53,6 +54,18 @@ namespace SQLUpdateManager.CLI.Common
         {
             get => GetValue<int>("SessionLifeTime");
             set => AddValue("SessionLifeTime", value);
+        }
+
+        public Server ConnectedServer
+        {
+            get => GetValue<Server>("ConnectedServer");
+            set => AddValue("ConnectedServer", value);
+        }
+
+        public Database UsedDatabase
+        {
+            get => GetValue<Database>("UsedDatabase");
+            set => AddValue("UsedDatabase", value);
         }
 	}
 }

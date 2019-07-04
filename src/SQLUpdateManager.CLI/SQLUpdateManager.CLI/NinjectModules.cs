@@ -11,6 +11,16 @@ namespace SQLUpdateManager.CLI
             Bind<IMiddleware>().To<ApplicationMiddleware>().InTransientScope();
 
             Bind<ISerializer>().To<JsonSerializer>().InTransientScope();
+
+            Bind<ICommandParser>().To<CommandParser>().InTransientScope();
+        }
+    }
+
+    public class IOModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
         }
     }
 }

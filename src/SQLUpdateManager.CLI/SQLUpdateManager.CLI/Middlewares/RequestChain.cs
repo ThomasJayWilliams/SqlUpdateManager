@@ -7,6 +7,11 @@ namespace SQLUpdateManager.CLI
     {
         private readonly RequestContext _context;
 
+        public RequestContext Context
+        {
+            get => _context;
+        }
+
         public RequestChain(params IMiddleware[] middlewares)
         {
             if (middlewares == null || middlewares.Length == 0)

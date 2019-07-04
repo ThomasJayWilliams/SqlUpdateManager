@@ -1,5 +1,6 @@
 ﻿using Ninject;
 using SQLUpdateManager.CLI.Common;
+using SQLUpdateManager.CLI.IO;
 using System;
 using System.IO;
 
@@ -8,7 +9,9 @@ namespace SQLUpdateManager.CLI
 	public class Startup
 	{
 		public IKernel ConfigureServices() =>
-            new StandardKernel(new MiscModule());
+            new StandardKernel(
+                new MiscModule(),
+                new IOModule());
 
 		public void Configure()
 		{
@@ -30,13 +33,22 @@ namespace SQLUpdateManager.CLI
 		}
 
 		public void RunApp()
-		{
-            var kernel = ConfigureServices();
+        {
             Configure();
+            var kernel = ConfigureServices();
             var chain = InitMiddlewares(kernel);
 
+            var prefixLine = kernel.Get<IPrefixLine>();
+
             while (true)
+            {
+                prefixLine.PrintPrefix();
+
+                var input = InputHandler.ReadLine();
+
+                chain.Context.InputCommand = input;
                 chain.Begin();
+            }
 		}
 
         private RequestChain InitMiddlewares(IKernel provider) =>

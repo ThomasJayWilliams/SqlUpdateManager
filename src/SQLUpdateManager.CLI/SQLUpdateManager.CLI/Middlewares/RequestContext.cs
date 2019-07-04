@@ -4,6 +4,8 @@ namespace SQLUpdateManager.CLI
 {
     public class RequestContext
     {
+        public string InputCommand { get; set; }
+
         private Queue<IMiddleware> _callChain;
 
         public RequestContext(Queue<IMiddleware> middlewares)

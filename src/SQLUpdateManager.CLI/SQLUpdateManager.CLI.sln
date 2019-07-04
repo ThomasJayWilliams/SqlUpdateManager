@@ -11,16 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.CLI", "SQL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLUpdateManager.CLI.IO", "SQLUpdateManager.CLI.IO\SQLUpdateManager.CLI.IO.csproj", "{92AA8A2C-DAD7-4956-B2D7-7E6A5A1CA913}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{87B101AA-62DB-4D56-9DBD-EFCB2C8DFDE6}"
-	ProjectSection(SolutionItems) = preProject
-		libs\SQLUpdateManager.Core.Common.dll = libs\SQLUpdateManager.Core.Common.dll
-		libs\SQLUpdateManager.Core.Data.dll = libs\SQLUpdateManager.Core.Data.dll
-		libs\SQLUpdateManager.Core.Domains.dll = libs\SQLUpdateManager.Core.Domains.dll
-		libs\SQLUpdateManager.Core.Internal.dll = libs\SQLUpdateManager.Core.Internal.dll
-		libs\SQLUpdateManager.Core.Registration.dll = libs\SQLUpdateManager.Core.Registration.dll
-		libs\SQLUpdateManager.Core.Tracking.dll = libs\SQLUpdateManager.Core.Tracking.dll
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
