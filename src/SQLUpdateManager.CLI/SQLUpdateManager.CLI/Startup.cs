@@ -42,9 +42,7 @@ namespace SQLUpdateManager.CLI
             while (true)
             {
                 var chain = InitMiddlewares(kernel);
-
                 prefixLine.PrintPrefix();
-
                 var input = InputHandler.ReadLine();
                 
                 chain.Begin(input);

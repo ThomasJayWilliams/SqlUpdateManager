@@ -7,6 +7,7 @@ namespace SQLUpdateManager.CLI.Application
         string Name { get; }
         IArgument Argument { get; set; }
         IEnumerable<IParameter> Parameters { get; set; }
+        bool HasArgument { get; }
 
         void Execute();
 	}

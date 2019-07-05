@@ -34,12 +34,15 @@ namespace SQLUpdateManager.CLI.Common
 			return temp;
 		}
 
-		public void AddValue(string key, object data)
+		public void SetValue(string key, object data)
 		{
 			if (string.IsNullOrEmpty(key))
 				throw new ArgumentNullException("Key cannot be null or empty!");
 			if (data == null)
 				throw new ArgumentNullException("Value cannot be null!");
+
+            if (_values.ContainsKey(key))
+                _values.Remove(key);
 
 			_values.Add(key, data);
 		}
@@ -47,25 +50,25 @@ namespace SQLUpdateManager.CLI.Common
         public DateTime ApplicationStartTime
         {
             get => GetValue<DateTime>("ApplicationStart");
-            set => AddValue("ApplicationStart", value);
+            set => SetValue("ApplicationStart", value);
         }
 
         public int SessionLifeTime
         {
             get => GetValue<int>("SessionLifeTime");
-            set => AddValue("SessionLifeTime", value);
+            set => SetValue("SessionLifeTime", value);
         }
 
-        public Server ConnectedServer
+        public DataServer ConnectedServer
         {
-            get => GetValue<Server>("ConnectedServer");
-            set => AddValue("ConnectedServer", value);
+            get => GetValue<DataServer>("ConnectedServer");
+            set => SetValue("ConnectedServer", value);
         }
 
         public Database UsedDatabase
         {
             get => GetValue<Database>("UsedDatabase");
-            set => AddValue("UsedDatabase", value);
+            set => SetValue("UsedDatabase", value);
         }
 	}
 }

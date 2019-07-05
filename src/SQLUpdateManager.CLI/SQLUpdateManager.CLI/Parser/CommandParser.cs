@@ -3,6 +3,7 @@ using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.CLI.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SQLUpdateManager.CLI
 {
@@ -18,42 +19,30 @@ namespace SQLUpdateManager.CLI
 
         public ICommand Parse(string input)
         {
-            try
-            {
-                ParseCommand(input);
-                ParseParameters(input);
-                ParseArguments(input);
+            ParseCommand(input);
+            ParseParameters(input);
+            ParseArguments(input);
 
-                if (_command == null)
-                    throw new Exception();
+            if (_command == null)
+                throw new Exception();
 
-                return _command;
-            }
-            catch (Exception)
-            {
-                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Error appeared while parsing command!");
-            }
+            return _command;
         }
 
         private void ParseCommand(string input)
         {
             var nodes = input.Split(' ');
 
-            if (nodes[0] == Constants.SumCommandPrefix)
+            switch (nodes[0])
             {
-                switch (nodes[1])
-                {
-                    case Constants.SumConnect:
-                        _command = _serviceProvider.Get<ConnectCommand>();
-                        break;
-                    default:
-                        throw new Exception();
-                }
-            }
-
-            else
-            {
-
+                case Constants.Connect:
+                    _command = _serviceProvider.Get<ConnectCommand>();
+                    break;
+                case Constants.Use:
+                    _command = _serviceProvider.Get<UseCommand>();
+                    break;
+                default:
+                    throw new InvalidCommandException(ErrorCodes.InvalidCommand, "The command cannot be parsed!");
             }
         }
 
@@ -62,23 +51,38 @@ namespace SQLUpdateManager.CLI
             var nodes = input.Split(' ');
             var tempList = new List<IParameter>();
 
-            if (_command is ISUMCommand)
+            foreach (var node in nodes)
             {
-                foreach (var node in nodes)
+                if (node.StartsWith("--"))
                 {
-                    if (node.StartsWith("--"))
+                    switch (node)
                     {
-                        switch (node)
+                        case Constants.DSaveParameter:
+                            tempList.Add(_serviceProvider.Get<SaveParameter>());
+                            break;
+                        default:
+                            throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The command parameters cannot be parsed!");
+                    }
+                }
+
+                else if (node.StartsWith('-'))
+                {
+                    foreach (var letter in node)
+                    {
+                        switch (letter)
                         {
-                            case Constants.DoubleHyphenPrefix + Constants.SaveParameter:
+                            case Constants.SSaveParameter:
                                 tempList.Add(_serviceProvider.Get<SaveParameter>());
                                 break;
                             default:
-                                throw new Exception();
+                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The command parameters cannot be parsed!");
                         }
                     }
                 }
             }
+
+            if (tempList.Distinct().Count() < tempList.Count())
+                throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The same parameter cannot be passed mroe than one time!");
 
             _command.Parameters = tempList;
         }
@@ -86,11 +90,15 @@ namespace SQLUpdateManager.CLI
         private void ParseArguments(string input)
         {
             var nodes = input.Split(' ');
-            var argument = _serviceProvider.Get<Argument>();
+            var arg = _serviceProvider.Get<Argument>();
+            arg.Value = nodes[nodes.Length - 1];
 
-            argument.Value = nodes[nodes.Length - 1];
+            if (_command.HasArgument && nodes.Length < 2)
+                throw new InvalidCommandException(ErrorCodes.InvalidArgument, "Thie command requires argument!");
+            else if (!_command.HasArgument && nodes.Length > _command.Parameters.Count() + 1)
+                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Error parsing command!");
 
-            _command.Argument = argument;
+            _command.Argument = arg;
         }
     }
 }

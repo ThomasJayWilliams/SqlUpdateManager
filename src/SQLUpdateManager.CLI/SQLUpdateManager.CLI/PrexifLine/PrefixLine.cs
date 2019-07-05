@@ -14,8 +14,8 @@ namespace SQLUpdateManager.CLI
 
                 OutputHandler.Print(" ");
                 OutputHandler.PrintColored(
-                    Session.Current.ConnectedServer.Name.Length > 10 ?
-                        Session.Current.ConnectedServer.Name.Substring(0, 10) :
+                    Session.Current.ConnectedServer.Name.Length > 25 ?
+                        $"{Session.Current.ConnectedServer.Name.Substring(0, 25)}..." :
                         Session.Current.ConnectedServer.Name,
                     ConsoleColor.Yellow);
 
@@ -23,8 +23,8 @@ namespace SQLUpdateManager.CLI
                 {
                     OutputHandler.Print(" ");
                     OutputHandler.PrintColoredLine(
-                        Session.Current.UsedDatabase.Name.Length > 10 ?
-                            Session.Current.UsedDatabase.Name.Substring(0, 10) :
+                        Session.Current.UsedDatabase.Name.Length > 25 ?
+                            $"({Session.Current.UsedDatabase.Name.Substring(0, 25)}...)" :
                             Session.Current.UsedDatabase.Name,
                         ConsoleColor.Cyan);
                 }
