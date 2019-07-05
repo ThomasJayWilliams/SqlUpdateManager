@@ -91,12 +91,9 @@ namespace SQLUpdateManager.CLI
         {
             var nodes = input.Split(' ');
             var arg = _serviceProvider.Get<Argument>();
-            arg.Value = nodes[nodes.Length - 1];
 
-            if (_command.HasArgument && nodes.Length < 2)
-                throw new InvalidCommandException(ErrorCodes.InvalidArgument, "Thie command requires argument!");
-            else if (!_command.HasArgument && nodes.Length > _command.Parameters.Count() + 1)
-                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Error parsing command!");
+            if (nodes.Length > 1)
+                arg.Value = nodes[nodes.Length - 1];
 
             _command.Argument = arg;
         }

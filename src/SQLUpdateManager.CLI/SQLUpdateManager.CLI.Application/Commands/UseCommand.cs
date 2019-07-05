@@ -1,20 +1,15 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Domains;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SQLUpdateManager.CLI.Application
 {
     public class UseCommand : ICommand
     {
         public string Name { get => "use"; }
-
         public IArgument Argument { get; set; }
         public IEnumerable<IParameter> Parameters { get; set; }
-
-        public bool HasArgument { get => false; }
 
         public void Execute()
         {

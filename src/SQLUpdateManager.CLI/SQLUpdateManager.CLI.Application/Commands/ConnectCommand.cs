@@ -10,7 +10,6 @@ namespace SQLUpdateManager.CLI.Application
 		public IArgument Argument { get; set; }
 		public IEnumerable<IParameter> Parameters { get; set; }
         public string Name { get => "connect"; }
-        public bool HasArgument { get => false; }
 
         public void Execute()
 		{
