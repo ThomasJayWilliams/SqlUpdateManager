@@ -14,10 +14,11 @@ namespace SQLUpdateManager.CLI
             _serviceProvider = ConfigureServices();
         }
 
-		public IKernel ConfigureServices() =>
+        public IKernel ConfigureServices() =>
             new StandardKernel(
                 new MiscModule(),
                 new IOModule(),
+                new CoreModule(),
                 new CommandsModule());
 
 		public void Configure()

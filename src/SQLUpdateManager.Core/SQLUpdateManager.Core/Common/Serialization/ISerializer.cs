@@ -4,5 +4,6 @@
     {
         T Deserialize<T>(string data);
         string Serialize(object data);
+        string Path { get; }
     }
 }

@@ -4,9 +4,11 @@
     {
         public const string AppName = "SQLUpdateManager";
         public const string ConfigPath = "config.cfg";
+        public const string RegisterPath = "register.json";
 
         public const string ConnectCommand = "connect";
         public const string UseCommand = "use";
+        public const string RegisterCommand = "register";
         public const string LogsCommand = "logs";
 
         public const string SaveParameter = "save";

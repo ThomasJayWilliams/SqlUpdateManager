@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.Core.Common;
+using SQLUpdateManager.Core.Registration;
 
 namespace SQLUpdateManager.CLI
 {
@@ -26,11 +27,21 @@ namespace SQLUpdateManager.CLI
         }
     }
 
+    public class CoreModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<Register>().ToSelf().InTransientScope();
+        }
+    }
+
     public class CommandsModule : NinjectModule
     {
         public override void Load()
         {
             Bind<ICommand>().To<ConnectCommand>().InTransientScope();
+            Bind<ICommand>().To<UseCommand>().InTransientScope();
+            Bind<ICommand>().To<RegisterCommand>().InTransientScope();
         }
     }
 }

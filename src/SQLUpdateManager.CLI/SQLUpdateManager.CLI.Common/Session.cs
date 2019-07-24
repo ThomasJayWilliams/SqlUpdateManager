@@ -7,6 +7,7 @@ namespace SQLUpdateManager.CLI.Common
 	{
         private DataServer _server;
         private Database _database;
+
         private readonly DateTime _appStart;
 
         public static Session Current { get; } = new Session();
@@ -24,23 +25,13 @@ namespace SQLUpdateManager.CLI.Common
         public DataServer ConnectedServer
         {
             get => _server;
-            set
-            {
-                if (_server != null)
-                    throw new InvalidOperationException("Currently another server is being used.");
-                _server = value;
-            }
+            set => _server = value;
         }
 
         public Database UsedDatabase
         {
             get => _database;
-            set
-            {
-                if (_database != null)
-                    throw new InvalidOperationException("Currently another database is being used.");
-                _database = value;
-            }
+            set => _database = value;
         }
 	}
 }

@@ -14,8 +14,8 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                OutputHandler.PrintColoredLine($"{Convert.ToInt32(ex.Code)} {ex.Code}", ConsoleColor.Red);
-                OutputHandler.PrintColoredLine($"{ex.Message}", ConsoleColor.Red);
+                OutputHandler.PrintColoredLine($"Error occurred during execution. Code: {Convert.ToInt32(ex.Code)}", ConsoleColor.Red);
+                OutputHandler.PrintColoredLine($"Message: {ex.Message}", ConsoleColor.Red);
             }
             catch (Exception ex)
             {

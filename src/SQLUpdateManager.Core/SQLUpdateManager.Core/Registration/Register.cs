@@ -10,15 +10,13 @@ namespace SQLUpdateManager.Core.Registration
 {
 	public class Register
     {
-        private readonly string _path;
         private readonly ISerializer _serializer;
 
         private List<Server> _servers;
 
-        public Register(ISerializer serializer, string path)
+        public Register(ISerializer serializer)
         {
-            _path = path ?? throw new ArgumentNullException("File path cannot be null or emnpty!");
-            _serializer = serializer ?? throw new ArgumentNullException("Serializer canont be null!");
+            _serializer = serializer ?? throw new ArgumentNullException("Serializer cannot be null!");
             
             _servers = Load()
                 .ToList();
@@ -74,14 +72,14 @@ namespace SQLUpdateManager.Core.Registration
         }
 
         public void SaveChanges() =>
-            FileManager.Save(_path, _serializer.Serialize(_servers));
+            FileManager.Save(_serializer.Path, _serializer.Serialize(_servers));
 
         private IEnumerable<Server> Load()
         {
-            if (!File.Exists(_path))
+            if (!File.Exists(_serializer.Path))
                 return Enumerable.Empty<Server>();
 
-			var str = FileManager.Load(_path);
+			var str = FileManager.Load(_serializer.Path);
 
 			if (string.IsNullOrEmpty(str))
 				return Enumerable.Empty<Server>();
