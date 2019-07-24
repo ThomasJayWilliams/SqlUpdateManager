@@ -1,5 +1,4 @@
-﻿using Ninject;
-using SQLUpdateManager.CLI.Application;
+﻿using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.CLI.Common;
 using System;
 using System.Collections.Generic;
@@ -9,93 +8,81 @@ namespace SQLUpdateManager.CLI
 {
     public class CommandParser : ICommandParser
     {
-        private readonly IKernel _serviceProvider;
+        private readonly IDataObjectsFactory _objectsFactory;
         private ICommand _command;
 
-        public CommandParser(IKernel serviceProvider)
+        public CommandParser(IDataObjectsFactory objectsFactory)
         {
-            _serviceProvider = serviceProvider;
+            _objectsFactory = objectsFactory;
         }
 
         public ICommand Parse(string input)
         {
-            ParseCommand(input);
-            ParseParameters(input);
-            ParseArguments(input);
+            var nodes = input.Split(' ').ToList();
+
+            if (nodes.Count < 1)
+                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Command cannot be parsed.");
+
+            ParseCommand(nodes);
+            ParseParameters(nodes);
 
             if (_command == null)
-                throw new Exception();
+                throw new InvalidCommandException(ErrorCodes.InvalidCommand,
+                    $"Error parsing command. Use {Constants.LogsCommand} --{Constants.ErrorLogParameter} to see error logs.");
+
+            if (_command.RequiresArgument)
+                _command.Argument = nodes.LastOrDefault();
 
             return _command;
         }
 
-        private void ParseCommand(string input)
+        private void ParseCommand(List<string> input)
         {
-            var nodes = input.Split(' ');
-
-            switch (nodes[0])
-            {
-                case Constants.Connect:
-                    _command = _serviceProvider.Get<ConnectCommand>();
-                    break;
-                case Constants.Use:
-                    _command = _serviceProvider.Get<UseCommand>();
-                    break;
-                default:
-                    throw new InvalidCommandException(ErrorCodes.InvalidCommand, "The command cannot be parsed!");
-            }
+            var command = input.FirstOrDefault();
+            _command = _objectsFactory.GetCommand(command);
+            input.RemoveAt(0);
         }
-
-        private void ParseParameters(string input)
+        
+        private void ParseParameters(List<string> input)
         {
-            var nodes = input.Split(' ');
-            var tempList = new List<IParameter>();
-
-            foreach (var node in nodes)
+            if (_command.HasParameters && input != null && input.Count > 0)
             {
-                if (node.StartsWith("--"))
-                {
-                    switch (node)
-                    {
-                        case Constants.DSaveParameter:
-                            tempList.Add(_serviceProvider.Get<SaveParameter>());
-                            break;
-                        default:
-                            throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The command parameters cannot be parsed!");
-                    }
-                }
+                var list = new List<IParameter>();
 
-                else if (node.StartsWith('-'))
+                foreach (var node in input)
                 {
-                    foreach (var letter in node)
+                    if (node.StartsWith(Constants.DParameterPrefix))
                     {
-                        switch (letter)
+                        IParameter param;
+
+                        if (node.Contains("="))
                         {
-                            case Constants.SSaveParameter:
-                                tempList.Add(_serviceProvider.Get<SaveParameter>());
-                                break;
-                            default:
-                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The command parameters cannot be parsed!");
+                            param = _objectsFactory.GetParameter(node.Substring(Constants.DParameterPrefix.Length, node.IndexOf("=") - 2));
+
+                            if (param.RequiresArgument)
+                                param.Argument = node.Substring(node.IndexOf("="));
+
+                            else
+                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter does not accept arguments!");
                         }
+
+                        else
+                        {
+                            param = _objectsFactory.GetParameter(node.Substring(Constants.DParameterPrefix.Length));
+
+                            if (param.RequiresArgument)
+                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter requires argument!");
+                        }
+
+                        list.Add(param);
                     }
+
+                    else if (node.StartsWith("-"))
+                        list.AddRange(node.Skip(1).Select(c => _objectsFactory.GetParameter(c.ToString())));
                 }
+
+                _command.Parameters = list;
             }
-
-            if (tempList.Distinct().Count() < tempList.Count())
-                throw new InvalidCommandException(ErrorCodes.InvalidParameter, "The same parameter cannot be passed mroe than one time!");
-
-            _command.Parameters = tempList;
-        }
-
-        private void ParseArguments(string input)
-        {
-            var nodes = input.Split(' ');
-            var arg = _serviceProvider.Get<Argument>();
-
-            if (nodes.Length > 1)
-                arg.Value = nodes[nodes.Length - 1];
-
-            _command.Argument = arg;
         }
     }
 }

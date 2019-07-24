@@ -21,7 +21,7 @@ namespace SQLUpdateManager.CLI
 
                 if (Session.Current.UsedDatabase != null)
                 {
-                    OutputHandler.Print(" ");
+                    OutputHandler.Print("/");
                     OutputHandler.PrintColoredLine(
                         Session.Current.UsedDatabase.Name.Length > 25 ?
                             $"({Session.Current.UsedDatabase.Name.Substring(0, 25)}...)" :

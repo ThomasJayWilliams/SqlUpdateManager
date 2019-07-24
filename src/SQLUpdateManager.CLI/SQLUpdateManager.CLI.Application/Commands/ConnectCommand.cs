@@ -7,7 +7,9 @@ namespace SQLUpdateManager.CLI.Application
 {
 	public class ConnectCommand : ICommand
 	{
-		public IArgument Argument { get; set; }
+		public string Argument { get; set; }
+        public bool HasParameters { get => true; }
+        public bool RequiresArgument { get => false; }
 		public IEnumerable<IParameter> Parameters { get; set; }
         public string Name { get => "connect"; }
 

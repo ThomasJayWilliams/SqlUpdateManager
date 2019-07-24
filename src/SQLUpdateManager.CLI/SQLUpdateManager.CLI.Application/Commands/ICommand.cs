@@ -5,7 +5,9 @@ namespace SQLUpdateManager.CLI.Application
 	public interface ICommand
 	{
         string Name { get; }
-        IArgument Argument { get; set; }
+        string Argument { get; set; }
+        bool HasParameters { get; }
+        bool RequiresArgument { get; }
         IEnumerable<IParameter> Parameters { get; set; }
 
         void Execute();

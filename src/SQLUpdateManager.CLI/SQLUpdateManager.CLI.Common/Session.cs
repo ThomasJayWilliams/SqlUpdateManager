@@ -1,74 +1,46 @@
 ﻿using SQLUpdateManager.Core.Domains;
 using System;
-using System.Collections.Generic;
 
 namespace SQLUpdateManager.CLI.Common
 {
-	public class Session
+    public class Session
 	{
-        private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
+        private DataServer _server;
+        private Database _database;
+        private readonly DateTime _appStart;
 
         public static Session Current { get; } = new Session();
 
-        private Session() { }
-
-		public T GetValue<T>(string key)
-		{
-			if (string.IsNullOrEmpty(key))
-				throw new ArgumentNullException("Key cannot be null or empty!");
-
-            if (!_values.TryGetValue(key, out var result))
-                return default(T);
-
-			T temp;
-
-			try
-			{
-				temp = (T)result;
-			}
-			catch(Exception ex)
-			{
-				throw new InvalidCastException("Invalid value type!", ex);
-			}
-
-			return temp;
-		}
-
-		public void SetValue(string key, object data)
-		{
-			if (string.IsNullOrEmpty(key))
-				throw new ArgumentNullException("Key cannot be null or empty!");
-			if (data == null)
-				throw new ArgumentNullException("Value cannot be null!");
-
-            if (_values.ContainsKey(key))
-                _values.Remove(key);
-
-			_values.Add(key, data);
-		}
+        private Session()
+        {
+            _appStart = DateTime.UtcNow;
+        }
 
         public DateTime ApplicationStartTime
         {
-            get => GetValue<DateTime>("ApplicationStart");
-            set => SetValue("ApplicationStart", value);
-        }
-
-        public int SessionLifeTime
-        {
-            get => GetValue<int>("SessionLifeTime");
-            set => SetValue("SessionLifeTime", value);
+            get => _appStart;
         }
 
         public DataServer ConnectedServer
         {
-            get => GetValue<DataServer>("ConnectedServer");
-            set => SetValue("ConnectedServer", value);
+            get => _server;
+            set
+            {
+                if (_server != null)
+                    throw new InvalidOperationException("Currently another server is being used.");
+                _server = value;
+            }
         }
 
         public Database UsedDatabase
         {
-            get => GetValue<Database>("UsedDatabase");
-            set => SetValue("UsedDatabase", value);
+            get => _database;
+            set
+            {
+                if (_database != null)
+                    throw new InvalidOperationException("Currently another database is being used.");
+                _database = value;
+            }
         }
 	}
 }

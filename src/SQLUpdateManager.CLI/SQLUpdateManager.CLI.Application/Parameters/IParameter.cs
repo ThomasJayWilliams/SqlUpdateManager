@@ -2,10 +2,8 @@
 {
 	public interface IParameter
 	{
-		IArgument Argument { get; set; }
-        bool HasArgument { get; }
+		string Argument { get; set; }
+        bool RequiresArgument { get; }
 		string Name { get; }
-        string Single { get; }
-        string Double { get; }
 	}
 }
