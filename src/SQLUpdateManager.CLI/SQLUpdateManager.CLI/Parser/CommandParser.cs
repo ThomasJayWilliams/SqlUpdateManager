@@ -27,7 +27,7 @@ namespace SQLUpdateManager.CLI
 
             if (_command == null)
                 throw new InvalidCommandException(ErrorCodes.InvalidCommand,
-                    $"Error parsing command. Use {Constants.LogsCommand} --{Constants.ErrorLogParameter} to see error logs.");
+                    $"Error parsing command. Check {Constants.ErrorLogPath} for error log.");
 
             if (_command.RequiresArgument)
                 _command.Argument = nodes.LastOrDefault();

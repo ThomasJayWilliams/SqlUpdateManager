@@ -1,9 +1,10 @@
 ﻿using Ninject;
 using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using System.IO;
+using System.Text;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace SQLUpdateManager.CLI
 {
@@ -64,19 +65,22 @@ namespace SQLUpdateManager.CLI
         private void ConfigureLogger()
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}", theme: SystemConsoleTheme.Colored)
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == Serilog.Events.LogEventLevel.Error)
-                        .WriteTo.File(Constants.ErrorLogPath))
+                        .WriteTo.File(Constants.ErrorLogPath, shared: true, encoding: Encoding.UTF8)
+                        .WriteTo.Console(outputTemplate: "{Level} {Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == Serilog.Events.LogEventLevel.Information)
-                        .WriteTo.File(Constants.InfoLogPath))
+                        .WriteTo.File(Constants.InfoLogPath, shared: true, encoding: Encoding.UTF8)
+                        .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
                 .CreateLogger();
         }
 
-        private RequestChain InitMiddlewares() =>
-            new RequestChain(
+        private RequestChain InitMiddlewares()
+        {
+            return new RequestChain(
                 _serviceProvider.Get<ErrorHanlingMiddleware>(),
                 _serviceProvider.Get<ApplicationMiddleware>());
+        }
 	}
 }

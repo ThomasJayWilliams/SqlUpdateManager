@@ -14,7 +14,7 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                Log.Logger.Error(ex, $"{ex.Code}: {ex.Message}");
+                Log.Logger.Error($"{ex.Code}: {ex.Message}");
             }
             catch (Exception ex)
             {
