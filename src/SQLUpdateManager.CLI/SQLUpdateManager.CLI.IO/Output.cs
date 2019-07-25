@@ -2,7 +2,7 @@
 
 namespace SQLUpdateManager.CLI.IO
 {
-    public static class OutputHandler
+    public static class Output
     {
         public static void Print(string data) =>
             Console.Write(data);

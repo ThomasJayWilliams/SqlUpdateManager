@@ -20,7 +20,7 @@ namespace SQLUpdateManager.CLI
             var nodes = input.Split(' ').ToList();
 
             if (nodes.Count < 1)
-                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Command cannot be parsed.");
+                throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Could not parse the command.");
 
             ParseCommand(nodes);
             ParseParameters(nodes);

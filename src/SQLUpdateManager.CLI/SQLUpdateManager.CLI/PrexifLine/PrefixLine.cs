@@ -10,10 +10,10 @@ namespace SQLUpdateManager.CLI
         {
             if (Session.Current.ConnectedServer != null)
             {
-                OutputHandler.PrintColored(Constants.AppName, ConsoleColor.Green);
+                Output.PrintColored(Constants.AppName, ConsoleColor.Green);
 
-                OutputHandler.Print(" ");
-                OutputHandler.PrintColored(
+                Output.Print(" ");
+                Output.PrintColored(
                     Session.Current.ConnectedServer.Name.Length > 25 ?
                         $"{Session.Current.ConnectedServer.Name.Substring(0, 25)}..." :
                         Session.Current.ConnectedServer.Name,
@@ -21,8 +21,8 @@ namespace SQLUpdateManager.CLI
 
                 if (Session.Current.UsedDatabase != null)
                 {
-                    OutputHandler.Print("/");
-                    OutputHandler.PrintColoredLine(
+                    Output.Print("/");
+                    Output.PrintColoredLine(
                         Session.Current.UsedDatabase.Name.Length > 25 ?
                             $"({Session.Current.UsedDatabase.Name.Substring(0, 25)}...)" :
                             Session.Current.UsedDatabase.Name,
@@ -30,13 +30,13 @@ namespace SQLUpdateManager.CLI
                 }
 
                 else
-                    OutputHandler.PrintEmptyLine();
+                    Output.PrintEmptyLine();
             }
 
             else
-                OutputHandler.PrintColoredLine(Constants.AppName, ConsoleColor.Green);
+                Output.PrintColoredLine(Constants.AppName, ConsoleColor.Green);
 
-            OutputHandler.Print("$ ");
+            Output.Print("$ ");
         }
     }
 }

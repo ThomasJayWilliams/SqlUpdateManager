@@ -34,11 +34,11 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (Session.Current.ConnectedServer != null)
             {
-                OutputHandler.Print(
+                Output.Print(
                     $"You are currently connected to the {Session.Current.ConnectedServer.Name} server." +
                     $"Before execution of this command you will be disconnected from this server. Continue?(y/n)");
 
-                if (InputHandler.ReadLine() != "y")
+                if (Input.ReadLine() != "y")
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Invalid input. Aborting.");
 
                 Session.Current.ConnectedServer = null;
@@ -50,31 +50,31 @@ namespace SQLUpdateManager.CLI.Application
         private void Connect()
         {
             var server = new DataServer();
-            OutputHandler.Print("Server name: ");
-            server.Name = InputHandler.ReadLine();
+            Output.Print("Server name: ");
+            server.Name = Input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Name))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server name cannot be whitespace or empty!");
 
-            OutputHandler.Print("Server address: ");
-            server.Location = InputHandler.ReadLine();
+            Output.Print("Server address: ");
+            server.Location = Input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Location))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server address cannot be whitespace or empty!");
 
-            OutputHandler.Print("Server user name: ");
-            server.Username = InputHandler.ReadLine();
+            Output.Print("Server user name: ");
+            server.Username = Input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Username))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server user name cannot be whitespace or empty!");
 
-            OutputHandler.Print("Server user password: ");
-            server.Username = InputHandler.ReadPassword();
+            Output.Print("Server user password: ");
+            server.Username = Input.ReadPassword();
 
             if (string.IsNullOrWhiteSpace(server.Username))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server user password cannot be whitespace or empty!");
 
-            OutputHandler.PrintLine("");
+            Output.PrintLine("");
 
             Session.Current.ConnectedServer = server;
         }

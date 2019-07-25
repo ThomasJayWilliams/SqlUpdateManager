@@ -38,17 +38,17 @@ namespace SQLUpdateManager.CLI.Application
 
                 if (entries != null && entries.Any())
                 {
-                    OutputHandler.PrintLine("Current session values:");
+                    Output.PrintLine("Current session values:");
 
                     foreach (var entry in entries)
                     {
-                        OutputHandler.PrintColored($"{entry.Name}: ", ConsoleColor.Cyan);
-                        OutputHandler.PrintLine(entry.Value);
+                        Output.PrintColored($"{entry.Name}: ", ConsoleColor.Cyan);
+                        Output.PrintLine(entry.Value);
                     }
                 }
 
                 else
-                    OutputHandler.PrintColoredLine("Current session is empty.", ConsoleColor.Red);
+                    Output.PrintColoredLine("Current session is empty.", ConsoleColor.Red);
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace SQLUpdateManager.CLI.IO
 {
-    public static class InputHandler
+    public static class Input
     {
         public static string ReadLine() =>
             Console.ReadLine();

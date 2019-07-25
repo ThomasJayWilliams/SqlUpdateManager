@@ -1,5 +1,4 @@
-﻿using SQLUpdateManager.CLI.IO;
-using SQLUpdateManager.Core.Common;
+﻿using SQLUpdateManager.Core.Common;
 
 namespace SQLUpdateManager.CLI
 {

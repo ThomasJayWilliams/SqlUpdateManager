@@ -35,22 +35,22 @@ namespace SQLUpdateManager.CLI
 
             Log.Information("Starting application...");
 
-            OutputHandler.PrintLine(Constants.ASCIIArt);
+            Output.PrintLine(Constants.ASCIIArt);
 
             Configure();
 
-            OutputHandler.PrintEmptyLine();
+            Output.PrintEmptyLine();
             var prefixLine = _serviceProvider.Get<IPrefixLine>();
 
             while (true)
             {
                 var chain = InitMiddlewares();
                 prefixLine.PrintPrefix();
-                var input = InputHandler.ReadLine();
+                var input = Input.ReadLine();
                 
                 chain.Begin(input);
 
-                OutputHandler.PrintEmptyLine();
+                Output.PrintEmptyLine();
             }
         }
 
@@ -64,9 +64,13 @@ namespace SQLUpdateManager.CLI
         private void ConfigureLogger()
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(Serilog.Events.LogEventLevel.Information, outputTemplate: "{Message:lj}{NewLine}", theme: SystemConsoleTheme.Colored)
-                .WriteTo.File(Constants.ErrorLogPath, Serilog.Events.LogEventLevel.Error)
-                .WriteTo.File(Constants.InfoLogPath, Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}", theme: SystemConsoleTheme.Colored)
+                .WriteTo.Logger(log =>
+                    log.Filter.ByIncludingOnly(logger => logger.Level == Serilog.Events.LogEventLevel.Error)
+                        .WriteTo.File(Constants.ErrorLogPath))
+                .WriteTo.Logger(log =>
+                    log.Filter.ByIncludingOnly(logger => logger.Level == Serilog.Events.LogEventLevel.Information)
+                        .WriteTo.File(Constants.InfoLogPath))
                 .CreateLogger();
         }
 
