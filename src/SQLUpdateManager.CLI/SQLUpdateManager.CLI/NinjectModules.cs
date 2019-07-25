@@ -6,7 +6,7 @@ using SQLUpdateManager.Core.Registration;
 
 namespace SQLUpdateManager.CLI
 {
-    public class MiscModule : NinjectModule
+    public class CLIModule : NinjectModule
     {
         public override void Load()
         {
@@ -16,18 +16,18 @@ namespace SQLUpdateManager.CLI
             Bind<ISerializer>().To<JsonSerializer>().InTransientScope();
 
             Bind<ICommandParser>().To<CommandParser>().InTransientScope();
+            Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
 
             Bind<IDataObjectsFactory>().To<DataObjectsFactory>().InTransientScope();
-
-            Bind<IFileManager>().To<FileManager>().InTransientScope();
         }
     }
 
-    public class IOModule : NinjectModule
+    public class CommonModule : NinjectModule
     {
         public override void Load()
         {
-            Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
+            Bind<IFileManager>().To<FileManager>().InTransientScope();
+            Bind<IDataManager>().To<DataManager>().InTransientScope();
         }
     }
 
@@ -39,7 +39,7 @@ namespace SQLUpdateManager.CLI
         }
     }
 
-    public class CommandsModule : NinjectModule
+    public class ApplicationModule : NinjectModule
     {
         public override void Load()
         {

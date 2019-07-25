@@ -11,6 +11,8 @@
 
         UnacceptableParameter,
 
+        InvalidEncodingConfiguration,
+
         ServerIsNotConnected = 200
     }
 }

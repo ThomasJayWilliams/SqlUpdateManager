@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace SQLUpdateManager.CLI.Common
 {
@@ -27,7 +26,7 @@ namespace SQLUpdateManager.CLI.Common
 
             using (var file = File.OpenWrite(path))
             {
-                var bytes = Encoding.UTF8.GetBytes(content);
+                var bytes = Session.Current.Encoding.GetBytes(content);
                 file.Write(bytes, 0, bytes.Length);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using SQLUpdateManager.Core.Domains;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SQLUpdateManager.CLI.Common
 {
@@ -14,6 +15,9 @@ namespace SQLUpdateManager.CLI.Common
 	{
         private DataServer _server;
         private Database _database;
+        private Encoding _encoding;
+        private bool _fatal;
+
         private Dictionary<string, SessionEntry> _entries = new Dictionary<string, SessionEntry>();
 
         private readonly DateTime _appStartLocal;
@@ -42,6 +46,27 @@ namespace SQLUpdateManager.CLI.Common
         public DateTime ApplicationStartTimeUtc
         {
             get => _appStartUtc;
+        }
+
+        public bool Fatal
+        {
+            get => _fatal;
+            set => _fatal = value;
+        }
+
+        public Encoding Encoding
+        {
+            get => _encoding;
+            set
+            {
+                _encoding = value;
+
+                if (value == null)
+                    _entries.Remove("encoding");
+                else
+                    _entries.Add("encoding",
+                        new SessionEntry { Name = "Current encoding", Value = value.EncodingName });
+            }
         }
 
         public DataServer ConnectedServer

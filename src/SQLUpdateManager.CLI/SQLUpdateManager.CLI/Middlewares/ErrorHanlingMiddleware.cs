@@ -14,11 +14,11 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                Log.Logger.Error($"{ex.Code}: {ex.Message}");
+                Log.Error($"{ex.Code}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, ex.Message);
+                Log.Fatal(ex, ex.Message);
             }
         }
     }

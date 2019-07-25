@@ -4,7 +4,7 @@ namespace SQLUpdateManager.CLI
 {
     public class AppConfig
     {
-        [JsonProperty("file_encoding")]
+        [JsonProperty("fileEncoding")]
         public string FileEncoding { get; set; }
     }
 }
