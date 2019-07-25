@@ -18,7 +18,7 @@ namespace SQLUpdateManager.CLI
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, ex.Message);
+                Log.Error(ex, ex.Message);
             }
         }
     }

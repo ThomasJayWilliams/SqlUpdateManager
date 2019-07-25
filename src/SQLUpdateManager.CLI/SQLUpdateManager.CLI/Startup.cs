@@ -29,7 +29,7 @@ namespace SQLUpdateManager.CLI
 
             else
             {
-                var dataManager = _serviceProvider.Get<IDataManager>();
+                var dataManager = _serviceProvider.Get<IDataRepository>();
                 var encoding = GetEncoding(dataManager.GetData<AppConfig>(Constants.ConfigPath).FileEncoding);
                 Session.Current.Encoding = encoding;
             }

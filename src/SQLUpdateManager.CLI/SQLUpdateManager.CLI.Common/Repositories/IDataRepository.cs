@@ -1,6 +1,6 @@
 ﻿namespace SQLUpdateManager.CLI.Common
 {
-    public interface IDataManager
+    public interface IDataRepository
     {
         TModel GetData<TModel>(string path);
         string GetRawData(string path);

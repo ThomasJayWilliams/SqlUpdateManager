@@ -26,8 +26,8 @@ namespace SQLUpdateManager.CLI
     {
         public override void Load()
         {
-            Bind<IFileManager>().To<FileManager>().InTransientScope();
-            Bind<IDataManager>().To<DataManager>().InTransientScope();
+            Bind<IDataRepository>().To<DataRepository>().InTransientScope();
+            Bind<IConfigurationManager>().To<ConfigurationManager>().InTransientScope();
         }
     }
 
