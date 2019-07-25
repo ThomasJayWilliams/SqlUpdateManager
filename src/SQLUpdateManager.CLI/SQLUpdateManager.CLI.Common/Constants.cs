@@ -10,6 +10,7 @@
         public const string UseCommand = "use";
         public const string RegisterCommand = "register";
         public const string LogsCommand = "logs";
+        public const string StateCommand = "state";
 
         public const string SaveParameter = "save";
 

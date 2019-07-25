@@ -1,6 +1,5 @@
 ﻿using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.CLI.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,7 +44,7 @@ namespace SQLUpdateManager.CLI
         
         private void ParseParameters(List<string> input)
         {
-            if (_command.HasParameters && input != null && input.Count > 0)
+            if (input != null && input.Count > 0)
             {
                 var list = new List<IParameter>();
 
@@ -81,7 +80,8 @@ namespace SQLUpdateManager.CLI
                         list.AddRange(node.Skip(1).Select(c => _objectsFactory.GetParameter(c.ToString())));
                 }
 
-                _command.Parameters = list;
+                if (list.Any())
+                    _command.AddParameters(list);
             }
         }
     }

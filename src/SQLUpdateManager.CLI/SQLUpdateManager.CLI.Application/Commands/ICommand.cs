@@ -6,10 +6,13 @@ namespace SQLUpdateManager.CLI.Application
 	{
         string Name { get; }
         string Argument { get; set; }
-        bool HasParameters { get; }
+        bool RequiresParameters { get; }
         bool RequiresArgument { get; }
-        IEnumerable<IParameter> Parameters { get; set; }
+        IEnumerable<IParameter> Parameters { get; }
 
         void Execute();
+
+        void AddParameters(params IParameter[] parameters);
+        void AddParameters(IEnumerable<IParameter> parameters);
 	}
 }

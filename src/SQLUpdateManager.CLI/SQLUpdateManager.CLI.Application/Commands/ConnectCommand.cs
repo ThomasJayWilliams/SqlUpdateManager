@@ -1,19 +1,16 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Domains;
-using System.Collections.Generic;
 
 namespace SQLUpdateManager.CLI.Application
 {
-    public class ConnectCommand : ICommand
+    public class ConnectCommand : BaseCommand
     {
-        public string Argument { get; set; }
-        public bool HasParameters { get => true; }
-        public bool RequiresArgument { get => false; }
-        public IEnumerable<IParameter> Parameters { get; set; }
-        public string Name { get => "connect"; }
+        public override bool RequiresParameters { get => false; }
+        public override bool RequiresArgument { get => false; }
+        public override string Name { get => Constants.ConnectCommand; }
 
-        public void Execute()
+        public override void Execute()
         {
             if (Session.Current.ConnectedServer != null)
             {

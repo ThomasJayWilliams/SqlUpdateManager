@@ -1,18 +1,15 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.Core.Domains;
-using System.Collections.Generic;
 
 namespace SQLUpdateManager.CLI.Application
 {
-    public class UseCommand : ICommand
+    public class UseCommand : BaseCommand
     {
-        public string Name { get => Constants.UseCommand; }
-        public string Argument { get; set; }
-        public bool HasParameters { get => true; }
-        public bool RequiresArgument { get => true; }
-        public IEnumerable<IParameter> Parameters { get; set; }
+        public override string Name { get => Constants.UseCommand; }
+        public override bool RequiresParameters { get => false; }
+        public override bool RequiresArgument { get => true; }
 
-        public void Execute()
+        public override void Execute()
         {
             if (Session.Current.ConnectedServer == null)
                 throw new InvalidStateException(ErrorCodes.ServerIsNotConnected, "To use database you must be connected to the server! Use 'connect --help' to get help.");
