@@ -1,4 +1,5 @@
-﻿using SQLUpdateManager.Core.Common;
+﻿using SQLUpdateManager.CLI.IO;
+using SQLUpdateManager.Core.Common;
 
 namespace SQLUpdateManager.CLI
 {
@@ -17,6 +18,9 @@ namespace SQLUpdateManager.CLI
         {
             var command = _parser.Parse(context.InputCommand);
             command.Execute();
+
+            OutputHandler.PrintLine("");
+
             context.Next();
         }
     }

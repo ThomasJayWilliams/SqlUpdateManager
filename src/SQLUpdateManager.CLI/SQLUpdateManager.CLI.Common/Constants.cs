@@ -14,6 +14,9 @@
 
         public const string SaveParameter = "save";
 
+        public const string ShowParameter = "show";
+        public const string SShowParameter = "s";
+
         public const string ErrorLogParameter = "error";
         public const string SErrorLogParameters = "e";
 

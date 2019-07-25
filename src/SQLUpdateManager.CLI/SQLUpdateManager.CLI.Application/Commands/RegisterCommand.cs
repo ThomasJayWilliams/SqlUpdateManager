@@ -1,5 +1,7 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.Core.Registration;
+using System;
+using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
 {
@@ -14,6 +16,14 @@ namespace SQLUpdateManager.CLI.Application
         public RegisterCommand(Register register)
         {
             _register = register;
+        }
+
+        public override void AddParameters(params IParameter[] parameters)
+        {
+            if (parameters == null || !parameters.Any())
+                throw new ArgumentNullException("Parameters cannot be null or empty!");
+
+            _parameters.AddRange(parameters);
         }
 
         public override void Execute()

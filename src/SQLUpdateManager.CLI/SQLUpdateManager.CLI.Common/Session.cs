@@ -4,26 +4,34 @@ using System.Collections.Generic;
 
 namespace SQLUpdateManager.CLI.Common
 {
+    public class SessionEntry
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+
     public class Session
 	{
         private DataServer _server;
         private Database _database;
-        private Dictionary<string, string> _entries = new Dictionary<string, string>();
+        private Dictionary<string, SessionEntry> _entries = new Dictionary<string, SessionEntry>();
 
         private readonly DateTime _appStartLocal;
         private readonly DateTime _appStartUtc;
 
         public static Session Current { get; } = new Session();
 
-        public IEnumerable<string> Entries { get => _entries.Values; }
+        public IEnumerable<SessionEntry> Entries { get => _entries.Values; }
 
         private Session()
         {
             _appStartUtc = DateTime.UtcNow;
-            _entries.Add("appStartUtc", $"Application started at {_appStartUtc.ToString()} by UTC time.");
+            _entries.Add("appUtcStart",
+                new SessionEntry { Name = "Application start UTC time", Value = _appStartUtc.ToString() });
 
             _appStartLocal = DateTime.Now;
-            _entries.Add("appStartLocal", $"Application started at {_appStartLocal.ToString()} by local time.");
+            _entries.Add("appLocalStart",
+                new SessionEntry { Name = "Application start local time", Value = _appStartLocal.ToString() });
         }
 
         public DateTime ApplicationStartTimeLocal
@@ -46,7 +54,8 @@ namespace SQLUpdateManager.CLI.Common
                 if (value == null)
                     _entries.Remove("server");
                 else
-                    _entries.Add("server", $"Connected server: {value.Name} {value.Location}. User: {value.Username}");
+                    _entries.Add("server",
+                        new SessionEntry { Name = "Current connected DBMS server", Value = $"{value.Name} {value.Location} {value.Username}" });
             }
         }
 
@@ -60,7 +69,8 @@ namespace SQLUpdateManager.CLI.Common
                 if (value == null)
                     _entries.Remove("database");
                 else
-                    _entries.Add("database", $"Database in use: {value.Name}");
+                    _entries.Add("database",
+                        new SessionEntry { Name = "Database in use", Value = value.Name });
             }
         }
 	}

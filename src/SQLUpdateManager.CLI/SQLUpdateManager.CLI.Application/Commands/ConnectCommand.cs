@@ -1,14 +1,35 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Domains;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
 {
     public class ConnectCommand : BaseCommand
     {
+        private SaveParameter _saveParameters;
+
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => false; }
         public override string Name { get => Constants.ConnectCommand; }
+
+        public override void AddParameters(params IParameter[] parameters)
+        {
+            if (parameters == null || !parameters.Any())
+                throw new ArgumentNullException("Parameters cannot be null or empty!");
+
+            foreach (var param in parameters)
+            {
+                if (param.Name == Constants.SaveParameter)
+                    _saveParameters = param as SaveParameter;
+                else
+                    throw new InvalidParameterException(ErrorCodes.UnacceptableParameter, $"{Name} command does not accept {param.Name} parameter.");
+            }
+
+            _parameters.AddRange(parameters);
+        }
 
         public override void Execute()
         {

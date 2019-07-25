@@ -62,7 +62,7 @@ namespace SQLUpdateManager.CLI
                                 param.Argument = node.Substring(node.IndexOf("="));
 
                             else
-                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter does not accept arguments!");
+                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter does not accept arguments.");
                         }
 
                         else
@@ -70,7 +70,7 @@ namespace SQLUpdateManager.CLI
                             param = _objectsFactory.GetParameter(node.Substring(Constants.DParameterPrefix.Length));
 
                             if (param.RequiresArgument)
-                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter requires argument!");
+                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter requires argument.");
                         }
 
                         list.Add(param);

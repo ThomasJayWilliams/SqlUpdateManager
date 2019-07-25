@@ -15,13 +15,7 @@ namespace SQLUpdateManager.CLI.Application
         public string Argument { get; set; }
         public IEnumerable<IParameter> Parameters { get => _parameters; }
 
-        public void AddParameters(params IParameter[] parameters)
-        {
-            if (parameters == null || !parameters.Any())
-                throw new ArgumentNullException("Parameter cannot be null!");
-
-            _parameters.AddRange(parameters);
-        }
+        public abstract void AddParameters(params IParameter[] parameters);
 
         public void AddParameters(IEnumerable<IParameter> parameters) =>
             AddParameters(parameters.ToArray());

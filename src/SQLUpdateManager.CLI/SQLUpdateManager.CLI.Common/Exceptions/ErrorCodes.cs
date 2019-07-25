@@ -9,6 +9,8 @@
         InvalidArgument,
         InvalidData,
 
+        UnacceptableParameter,
+
         ServerIsNotConnected = 200
     }
 }
