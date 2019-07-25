@@ -1,5 +1,5 @@
-﻿using SQLUpdateManager.CLI.Common;
-using SQLUpdateManager.CLI.IO;
+﻿using Serilog;
+using SQLUpdateManager.CLI.Common;
 using System;
 
 namespace SQLUpdateManager.CLI
@@ -14,12 +14,11 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                OutputHandler.PrintColoredLine($"Error occurred during execution. Code: {Convert.ToInt32(ex.Code)}", ConsoleColor.Red);
-                OutputHandler.PrintColoredLine($"Message: {ex.Message}", ConsoleColor.Red);
+                Log.Logger.Error(ex, $"{ex.Code}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                OutputHandler.PrintColoredLine(ex.Message, ConsoleColor.Red);
+                Log.Error(ex, ex.Message);
             }
         }
     }

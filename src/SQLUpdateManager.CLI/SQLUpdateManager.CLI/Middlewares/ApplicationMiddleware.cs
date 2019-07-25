@@ -18,9 +18,6 @@ namespace SQLUpdateManager.CLI
         {
             var command = _parser.Parse(context.InputCommand);
             command.Execute();
-
-            OutputHandler.PrintLine("");
-
             context.Next();
         }
     }

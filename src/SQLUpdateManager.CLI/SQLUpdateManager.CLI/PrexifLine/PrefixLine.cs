@@ -30,7 +30,7 @@ namespace SQLUpdateManager.CLI
                 }
 
                 else
-                    OutputHandler.PrintLine("");
+                    OutputHandler.PrintEmptyLine();
             }
 
             else

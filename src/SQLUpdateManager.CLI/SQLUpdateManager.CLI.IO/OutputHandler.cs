@@ -19,6 +19,9 @@ namespace SQLUpdateManager.CLI.IO
             Console.ForegroundColor = defaultColor;
         }
 
+        public static void PrintEmptyLine() =>
+            Console.WriteLine("");
+
         public static void PrintColoredLine(string data, ConsoleColor color)
         {
             var defaultColor = Console.ForegroundColor;

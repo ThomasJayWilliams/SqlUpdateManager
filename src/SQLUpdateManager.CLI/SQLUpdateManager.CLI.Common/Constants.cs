@@ -5,6 +5,10 @@
         public const string AppName = "SQLUpdateManager";
         public const string ConfigPath = "config.cfg";
         public const string RegisterPath = "register.json";
+        public const string ErrorLogPath = LogDir + "/errorLog.log";
+        public const string InfoLogPath = LogDir + "/infoLog.log";
+
+        public const string LogDir = "logs";
 
         public const string ConnectCommand = "connect";
         public const string UseCommand = "use";
@@ -22,5 +26,14 @@
 
         public const string DParameterPrefix = "--";
         public const string SParameterPrefix = "-";
+
+        public const string ASCIIArt = @"   _____  _    _  __  __ 
+  / ____|| |  | ||  \/  |
+ | (___  | |  | || \  / |
+  \___ \ | |  | || |\/| |
+  ____) || |__| || |  | |
+ |_____/  \____/ |_|  |_|
+                         
+                         ";
     }
 }

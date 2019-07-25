@@ -2,7 +2,6 @@
 using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Domains;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application

@@ -15,6 +15,7 @@ namespace SQLUpdateManager.CLI
             Bind<ISerializer>().To<JsonSerializer>().InTransientScope();
 
             Bind<ICommandParser>().To<CommandParser>().InTransientScope();
+
             Bind<IDataObjectsFactory>().To<DataObjectsFactory>().InTransientScope();
         }
     }
