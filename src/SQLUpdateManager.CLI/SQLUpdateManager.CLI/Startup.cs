@@ -6,7 +6,6 @@ using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using System;
 using System.IO;
-using System.Text;
 
 namespace SQLUpdateManager.CLI
 {
@@ -85,7 +84,7 @@ namespace SQLUpdateManager.CLI
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
-                        .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}", shared: true, encoding: Session.Current.Encoding)
+                        .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: Session.Current.Encoding)
                         .WriteTo.Console(outputTemplate: "{Level} {Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
