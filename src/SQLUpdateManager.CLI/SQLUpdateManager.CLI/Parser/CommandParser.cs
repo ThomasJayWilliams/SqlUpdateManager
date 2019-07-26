@@ -47,8 +47,9 @@ namespace SQLUpdateManager.CLI
             if (input != null && input.Count > 0)
             {
                 var list = new List<IParameter>();
+                var nodes = new List<string>(input);
 
-                foreach (var node in input)
+                foreach (var node in nodes)
                 {
                     if (node.StartsWith(Constants.DParameterPrefix))
                     {
@@ -74,10 +75,14 @@ namespace SQLUpdateManager.CLI
                         }
 
                         list.Add(param);
+                        input.Remove(node);
                     }
 
                     else if (node.StartsWith("-"))
+                    {
                         list.AddRange(node.Skip(1).Select(c => _objectsFactory.GetParameter(c.ToString())));
+                        input.Remove(node);
+                    }
                 }
 
                 if (list.Any())

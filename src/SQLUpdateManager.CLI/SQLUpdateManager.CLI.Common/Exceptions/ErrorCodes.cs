@@ -8,11 +8,11 @@
         InvalidParameter,
         InvalidArgument,
         InvalidData,
-
-        UnacceptableParameter,
-
         InvalidEncodingConfiguration,
         InvalidArgumentFormat,
+
+        UnacceptableParameter,
+        MissplacedArgument,
 
         CommandRequiresArgument,
 

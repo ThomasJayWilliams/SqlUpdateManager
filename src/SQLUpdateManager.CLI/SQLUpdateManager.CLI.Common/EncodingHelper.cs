@@ -18,7 +18,7 @@ namespace SQLUpdateManager.CLI.Common
                 return Encoding.UTF32;
             else
                 throw new InvalidConfigurationException(ErrorCodes.InvalidEncodingConfiguration,
-                    $"Invalid encoding configuration. {encodingName} could not be parsed.");
+                    $"Invalid encoding configuration. {encodingName} encoding does not exist.");
         }
     }
 }

@@ -85,7 +85,7 @@ namespace SQLUpdateManager.CLI
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
                         .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: Session.Current.Encoding)
-                        .WriteTo.Console(outputTemplate: "{Level} {Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
+                        .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
                         .WriteTo.File(Constants.InfoLogPath, shared: true, encoding: Session.Current.Encoding)

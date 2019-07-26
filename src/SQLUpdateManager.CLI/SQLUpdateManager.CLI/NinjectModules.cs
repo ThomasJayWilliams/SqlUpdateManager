@@ -46,6 +46,9 @@ namespace SQLUpdateManager.CLI
             Bind<ICommand>().To<ConnectCommand>().InTransientScope();
             Bind<ICommand>().To<UseCommand>().InTransientScope();
             Bind<ICommand>().To<RegisterCommand>().InTransientScope();
+            Bind<ICommand>().To<ConfigCommand>().InTransientScope();
+            Bind<ICommand>().To<ExitCommand>().InTransientScope();
+            Bind<ICommand>().To<StateCommand>().InTransientScope();
         }
     }
 }

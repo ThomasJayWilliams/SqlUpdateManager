@@ -39,6 +39,9 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null)
             {
+                if (!string.IsNullOrEmpty(Argument))
+                    throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{_listParameter.Name} parameter excludes argument input.");
+
                 var config = _configManager.GetConfig(Constants.ConfigPath);
                 foreach (var confValue in _configManager.GetStringConfig(Constants.ConfigPath))
                     Output.PrintLine(confValue);
@@ -67,7 +70,9 @@ namespace SQLUpdateManager.CLI.Application
                 if (string.IsNullOrEmpty(value))
                     throw new InvalidArgumentException(ErrorCodes.InvalidArgumentFormat, "Value cannot be empty.");
 
-                _configManager.UpdateConfig(category, property, value, Constants.ConfigPath);
+                var updatedCondig = _configManager.UpdateConfig(category, property, value, Constants.ConfigPath);
+
+                Session.Current.UpdateSession(updatedCondig);
             }
         }
 

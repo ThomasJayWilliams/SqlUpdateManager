@@ -25,8 +25,12 @@ namespace SQLUpdateManager.CLI
                     return _serviceProvider.Get<StateCommand>();
                 case Constants.ConfigCommand:
                     return _serviceProvider.Get<ConfigCommand>();
+                case Constants.RegisterCommand:
+                    return _serviceProvider.Get<RegisterCommand>();
+                case Constants.ExitCommand:
+                    return _serviceProvider.Get<ExitCommand>();
                 default:
-                    throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Cannot parse command.");
+                    throw new InvalidCommandException(ErrorCodes.InvalidCommand, $"Command {name} does not exist.");
             }
         }
 
@@ -43,7 +47,7 @@ namespace SQLUpdateManager.CLI
                     return _serviceProvider.Get<ListParameter>();
 
                 default:
-                    throw new InvalidCommandException(ErrorCodes.InvalidParameter, "Cannot parse command parameter.");
+                    throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"Parameter {name} does not exist.");
             }
         }
     }

@@ -24,15 +24,17 @@ namespace SQLUpdateManager.CLI.Common
             return _repository.GetData<AppConfig>(path);
         }
 
-        public void UpdateConfig(AppConfig config, string path)
+        public AppConfig UpdateConfig(AppConfig config, string path)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException($"File {path} does not exist.");
 
             _repository.WriteData(path, config);
+
+            return config;
         }
 
-        public void UpdateConfig(string category, string property, string value, string path)
+        public AppConfig UpdateConfig(string category, string property, string value, string path)
         {
             var config = _repository.GetData<AppConfig>(path);
             var categories = GetCategoryNames();
@@ -49,6 +51,8 @@ namespace SQLUpdateManager.CLI.Common
             UpdateInstance(config, category, property, value);
 
             _repository.WriteData(path, config);
+
+            return config;
         }
 
         public IEnumerable<string> GetStringConfig(string path)
@@ -84,7 +88,7 @@ namespace SQLUpdateManager.CLI.Common
         {
             if (category == GetAttributeValue<AppConfig, CoreConfig>(c => c.Core))
             {
-                if (property == GetAttributeValue<CoreConfig, string>(c => c.FileEncoding))
+                if (property == GetAttributeValue<CoreConfig, string>(c => c.FileEncoding) && EncodingHelper.GetEncoding(value) != null)
                     config.Core.FileEncoding = value;
             }
         }

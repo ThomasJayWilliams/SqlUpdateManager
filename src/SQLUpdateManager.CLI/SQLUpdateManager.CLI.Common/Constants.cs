@@ -18,6 +18,7 @@
         public const string StateCommand = "state";
         public const string HelpCommand = "help";
         public const string ConfigCommand = "config";
+        public const string ExitCommand = "exit";
 
         public const string SaveParameter = "save";
 
