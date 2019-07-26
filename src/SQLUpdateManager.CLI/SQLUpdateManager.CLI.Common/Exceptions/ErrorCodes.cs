@@ -4,7 +4,7 @@
     {
         Unknown = 0,
 
-        InvalidCommand = 100,
+        InvalidCommand,
         InvalidParameter,
         InvalidArgument,
         InvalidData,
@@ -12,7 +12,10 @@
         UnacceptableParameter,
 
         InvalidEncodingConfiguration,
+        InvalidArgumentFormat,
 
-        ServerIsNotConnected = 200
+        CommandRequiresArgument,
+
+        ServerIsNotConnected
     }
 }

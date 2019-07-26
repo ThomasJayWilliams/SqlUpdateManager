@@ -30,8 +30,7 @@ namespace SQLUpdateManager.CLI
             else
             {
                 var dataManager = _serviceProvider.Get<IDataRepository>();
-                var encoding = GetEncoding(dataManager.GetData<AppConfig>(Constants.ConfigPath).FileEncoding);
-                Session.Current.Encoding = encoding;
+                Session.Current.UpdateSession(dataManager.GetData<AppConfig>(Constants.ConfigPath));
             }
 
             Log.Information("Configuration finished.");
@@ -74,23 +73,6 @@ namespace SQLUpdateManager.CLI
             }
         }
 
-        private Encoding GetEncoding(string encodingName)
-        {
-            if (encodingName == Encoding.UTF8.EncodingName)
-                return Encoding.UTF8;
-            if (encodingName == Encoding.ASCII.EncodingName)
-                return Encoding.ASCII;
-            if (encodingName == Encoding.Unicode.EncodingName)
-                return Encoding.Unicode;
-            if (encodingName == Encoding.UTF7.EncodingName)
-                return Encoding.UTF7;
-            if (encodingName == Encoding.UTF32.EncodingName)
-                return Encoding.UTF32;
-            else
-                throw new InvalidConfigurationException(ErrorCodes.InvalidEncodingConfiguration,
-                    $"Invalid encoding configuration. {encodingName} could not be parsed.");
-        }
-
         private IKernel ConfigureServices() =>
             new StandardKernel(
                 new CLIModule(),
@@ -103,7 +85,7 @@ namespace SQLUpdateManager.CLI
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
-                        .WriteTo.File(Constants.ErrorLogPath, shared: true, encoding: Session.Current.Encoding)
+                        .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}", shared: true, encoding: Session.Current.Encoding)
                         .WriteTo.Console(outputTemplate: "{Level} {Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)

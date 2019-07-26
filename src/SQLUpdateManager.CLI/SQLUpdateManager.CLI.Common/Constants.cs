@@ -17,11 +17,15 @@
         public const string RegisterCommand = "register";
         public const string StateCommand = "state";
         public const string HelpCommand = "help";
+        public const string ConfigCommand = "config";
 
         public const string SaveParameter = "save";
 
-        public const string ShowParameter = "show";
-        public const string SShowParameter = "s";
+        public const string ListParameter = "list";
+        public const string SListParameters = "l";
+
+        public const string HelpParameter = "help";
+        public const string SHelpParameter = "h";
 
         public const string DParameterPrefix = "--";
         public const string SParameterPrefix = "-";

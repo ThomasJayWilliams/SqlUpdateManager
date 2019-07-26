@@ -98,5 +98,11 @@ namespace SQLUpdateManager.CLI.Common
                         new SessionEntry { Name = "Database in use", Value = value.Name });
             }
         }
+
+        public void UpdateSession(AppConfig config)
+        {
+            if (!string.IsNullOrEmpty(config.Core.FileEncoding))
+                Encoding = EncodingHelper.GetEncoding(config.Core.FileEncoding);
+        }
 	}
 }

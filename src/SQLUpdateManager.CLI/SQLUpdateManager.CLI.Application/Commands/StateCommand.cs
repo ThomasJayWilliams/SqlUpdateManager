@@ -7,7 +7,7 @@ namespace SQLUpdateManager.CLI.Application
 {
     public class StateCommand : BaseCommand
     {
-        private ShowParameter _showParameter;
+        private ListParameter _listParameter;
 
         public override string Name { get => Constants.StateCommand; }
 
@@ -21,8 +21,8 @@ namespace SQLUpdateManager.CLI.Application
 
             foreach (var param in parameters)
             {
-                if (param.Name == Constants.ShowParameter)
-                    _showParameter = param as ShowParameter;
+                if (param.Name == Constants.ListParameter)
+                    _listParameter = param as ListParameter;
                 else
                     throw new InvalidParameterException(ErrorCodes.UnacceptableParameter, $"{Name} command does not accept {param.Name} parameter.");
             }
@@ -32,7 +32,7 @@ namespace SQLUpdateManager.CLI.Application
 
         public override void Execute()
         {
-            if (_showParameter != null)
+            if (_listParameter != null)
             {
                 var entries = Session.Current.Entries;
 

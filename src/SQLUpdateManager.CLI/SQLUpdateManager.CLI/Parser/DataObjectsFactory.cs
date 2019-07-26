@@ -23,6 +23,8 @@ namespace SQLUpdateManager.CLI
                     return _serviceProvider.Get<ConnectCommand>();
                 case Constants.StateCommand:
                     return _serviceProvider.Get<StateCommand>();
+                case Constants.ConfigCommand:
+                    return _serviceProvider.Get<ConfigCommand>();
                 default:
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Cannot parse command.");
             }
@@ -35,10 +37,10 @@ namespace SQLUpdateManager.CLI
                 case Constants.SaveParameter:
                     return _serviceProvider.Get<SaveParameter>();
 
-                case Constants.ShowParameter:
-                    return _serviceProvider.Get<ShowParameter>();
-                case Constants.SShowParameter:
-                    return _serviceProvider.Get<ShowParameter>();
+                case Constants.ListParameter:
+                    return _serviceProvider.Get<ListParameter>();
+                case Constants.SListParameters:
+                    return _serviceProvider.Get<ListParameter>();
 
                 default:
                     throw new InvalidCommandException(ErrorCodes.InvalidParameter, "Cannot parse command parameter.");
