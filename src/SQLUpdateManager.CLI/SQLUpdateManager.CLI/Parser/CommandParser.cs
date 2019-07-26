@@ -29,7 +29,7 @@ namespace SQLUpdateManager.CLI
                 throw new InvalidCommandException(ErrorCodes.InvalidCommand,
                     $"Error parsing command. Check {Constants.ErrorLogPath} for error log.");
 
-            if (_command.RequiresArgument)
+            if (nodes.Any())
                 _command.Argument = nodes.LastOrDefault();
 
             return _command;

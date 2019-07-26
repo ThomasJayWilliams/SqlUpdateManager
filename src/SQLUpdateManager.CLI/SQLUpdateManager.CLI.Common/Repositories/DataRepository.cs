@@ -1,4 +1,5 @@
 ﻿using SQLUpdateManager.Core.Common;
+using SQLUpdateManager.Core.Internal;
 using System;
 using System.IO;
 
@@ -7,52 +8,45 @@ namespace SQLUpdateManager.CLI.Common
     public class DataRepository : IDataRepository
     {
         private readonly ISerializer _serializer;
+        private readonly IFileManager _fileManager;
 
-        public DataRepository(ISerializer serializer)
+        public DataRepository(ISerializer serializer, IFileManager fileManager)
         {
             _serializer = serializer;
+            _fileManager = fileManager;
         }
 
         public T GetData<T>(string path)
         {
-            if (!File.Exists(path))
+            if (!_fileManager.Exists(path))
                 throw new FileNotFoundException("Specified file could not be found.");
 
-            using (var stream = new StreamReader(path))
-            {
-                var raw = stream.ReadToEnd();
+            var raw = _fileManager.Load(path);
 
-                if (string.IsNullOrEmpty(raw))
-                    throw new NullReferenceException("File is empty.");
+            var data = _serializer.Deserialize<T>(raw);
 
-                var data = _serializer.Deserialize<T>(raw);
+            if (data == null)
+                throw new NullReferenceException("Raw data is invalid or empty.");
 
-                if (data == null)
-                    throw new NullReferenceException("Raw data is invalid or empty.");
-
-                return data;
-            }
+            return data;
         }
 
         public string GetRawData(string path)
         {
-            if (!File.Exists(path))
+            if (!_fileManager.Exists(path))
                 throw new FileNotFoundException("Specified file could not be found.");
 
-            using (var stream = new StreamReader(path))
-            {
-                var raw = stream.ReadToEnd();
+            var raw = _fileManager.Load(path);
 
-                if (string.IsNullOrEmpty(raw))
-                    throw new NullReferenceException("File is empty.");
+            if (raw == null)
+                throw new NullReferenceException("Raw data is invalid or empty.");
 
-                return raw;
-            }
+            return raw;
         }
 
         public void WriteData(string path, object data)
         {
-            if (!File.Exists(path))
+            if (!_fileManager.Exists(path))
                 throw new FileNotFoundException("Specified file could not be found.");
 
             var serialized = _serializer.Serialize(data);
@@ -60,23 +54,15 @@ namespace SQLUpdateManager.CLI.Common
             if (string.IsNullOrEmpty(serialized))
                 throw new NullReferenceException("Error serializing passed object.");
 
-            using (var file = new StreamWriter(path))
-            {
-                var bytes = Session.Current.Encoding.GetBytes(serialized);
-                file.Write(serialized);
-            }
+            _fileManager.Save(path, serialized);
         }
 
         public void WriteRawData(string path, string data)
         {
-            if (!File.Exists(path))
+            if (!_fileManager.Exists(path))
                 throw new FileNotFoundException("Specified file could not be found.");
 
-            using (var file = File.OpenWrite(path))
-            {
-                var bytes = Session.Current.Encoding.GetBytes(data);
-                file.Write(bytes, 0, bytes.Length);
-            }
+            _fileManager.Save(path, data);
         }
     }
 }

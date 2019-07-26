@@ -2,6 +2,7 @@
 using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.Core.Common;
+using SQLUpdateManager.Core.Internal;
 using SQLUpdateManager.Core.Registration;
 
 namespace SQLUpdateManager.CLI
@@ -12,8 +13,6 @@ namespace SQLUpdateManager.CLI
         {
             Bind<IMiddleware>().To<ErrorHanlingMiddleware>().InTransientScope();
             Bind<IMiddleware>().To<ApplicationMiddleware>().InTransientScope();
-
-            Bind<ISerializer>().To<JsonSerializer>().InTransientScope();
 
             Bind<ICommandParser>().To<CommandParser>().InTransientScope();
             Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
@@ -28,6 +27,9 @@ namespace SQLUpdateManager.CLI
         {
             Bind<IDataRepository>().To<DataRepository>().InTransientScope();
             Bind<IConfigurationManager>().To<ConfigurationManager>().InTransientScope();
+
+            Bind<ISerializer>().To<JsonSerializer>().InTransientScope();
+            Bind<IFileManager>().To<FileManager>().InTransientScope();
         }
     }
 

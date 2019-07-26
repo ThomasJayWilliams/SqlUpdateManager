@@ -16,6 +16,9 @@
 
         CommandRequiresArgument,
 
-        ServerIsNotConnected
+        ProcedureIsAlreadyRegistered,
+
+        ServerIsNotConnected,
+        NoDatabaseInUse
     }
 }

@@ -10,7 +10,7 @@ using System.IO;
 namespace SQLUpdateManager.CLI
 {
     public class Startup
-	{
+    {
         private readonly IKernel _serviceProvider;
 
         public Startup()
@@ -19,7 +19,7 @@ namespace SQLUpdateManager.CLI
         }
 
         public void Configure()
-		{
+        {
             Log.Information("Configuration...");
 
             if (!File.Exists(Constants.ConfigPath))
@@ -32,10 +32,24 @@ namespace SQLUpdateManager.CLI
                 Session.Current.UpdateSession(dataManager.GetData<AppConfig>(Constants.ConfigPath));
             }
 
-            Log.Information("Configuration finished.");
-		}
+            if (!Directory.Exists(Constants.DataDir))
+            {
+                Log.Information($"{Constants.DataDir} directory not found.");
+                Directory.CreateDirectory(Constants.DataDir);
+                Log.Information($"{Constants.DataDir} directory created.");
+            }
 
-		public void RunApp()
+            if (!File.Exists(Constants.RegisterPath))
+            {
+                Log.Information($"{Constants.RegisterPath} file not found.");
+                using (var file = File.Create(Constants.RegisterPath)) { }
+                Log.Information($"{Constants.RegisterPath} file created.");
+            }
+
+            Log.Information("Configuration finished.");
+        }
+
+        public void RunApp()
         {
             var prefixLine = _serviceProvider.Get<IPrefixLine>();
 
@@ -65,7 +79,7 @@ namespace SQLUpdateManager.CLI
                 var chain = InitMiddlewares();
                 prefixLine.PrintPrefix();
                 var input = Input.ReadLine();
-                
+
                 chain.Begin(input);
 
                 Output.PrintEmptyLine();
@@ -99,5 +113,5 @@ namespace SQLUpdateManager.CLI
                 _serviceProvider.Get<ErrorHanlingMiddleware>(),
                 _serviceProvider.Get<ApplicationMiddleware>());
         }
-	}
+    }
 }

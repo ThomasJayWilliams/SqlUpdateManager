@@ -1,6 +1,5 @@
 ﻿using SQLUpdateManager.Core.Internal;
 using System.Collections.Generic;
-using System;
 
 namespace SQLUpdateManager.Core.Domains
 {

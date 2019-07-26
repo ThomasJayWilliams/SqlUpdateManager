@@ -32,6 +32,9 @@ namespace SQLUpdateManager.CLI.Application
 
         public override void Execute()
         {
+            if (!string.IsNullOrEmpty(Argument))
+                throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{Name} does not expect argument.");
+
             if (Session.Current.ConnectedServer != null)
             {
                 Output.Print(
@@ -42,6 +45,7 @@ namespace SQLUpdateManager.CLI.Application
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Invalid input. Aborting.");
 
                 Session.Current.ConnectedServer = null;
+                Session.Current.UsedDatabase = null;
             }
 
             Connect();
