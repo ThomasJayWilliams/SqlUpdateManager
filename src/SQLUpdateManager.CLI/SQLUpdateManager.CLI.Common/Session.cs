@@ -16,7 +16,6 @@ namespace SQLUpdateManager.CLI.Common
         private DataServer _server;
         private Database _database;
         private Encoding _encoding;
-        private bool _fatal;
 
         private Dictionary<string, SessionEntry> _entries = new Dictionary<string, SessionEntry>();
 
@@ -46,12 +45,6 @@ namespace SQLUpdateManager.CLI.Common
         public DateTime ApplicationStartTimeUtc
         {
             get => _appStartUtc;
-        }
-
-        public bool Fatal
-        {
-            get => _fatal;
-            set => _fatal = value;
         }
 
         public Encoding Encoding

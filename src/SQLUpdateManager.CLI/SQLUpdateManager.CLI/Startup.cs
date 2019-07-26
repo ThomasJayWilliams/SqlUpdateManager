@@ -51,10 +51,10 @@ namespace SQLUpdateManager.CLI
 
         public void RunApp()
         {
-            var prefixLine = _serviceProvider.Get<IPrefixLine>();
-
             try
             {
+                var prefixLine = _serviceProvider.Get<IPrefixLine>();
+
                 ConfigureLogger();
 
                 Log.Information("Starting application...");
@@ -64,25 +64,22 @@ namespace SQLUpdateManager.CLI
                 Configure();
 
                 Output.PrintEmptyLine();
+
+                while (true)
+                {
+                    var chain = InitMiddlewares();
+                    prefixLine.PrintPrefix();
+                    var input = Input.ReadLine();
+
+                    chain.Begin(input);
+
+                    Output.PrintEmptyLine();
+                }
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex, $"Fatal error appeared! {ex.Message}");
-                Session.Current.Fatal = true;
-            }
-
-            while (true)
-            {
-                if (Session.Current.Fatal)
-                    Environment.Exit(1);
-
-                var chain = InitMiddlewares();
-                prefixLine.PrintPrefix();
-                var input = Input.ReadLine();
-
-                chain.Begin(input);
-
-                Output.PrintEmptyLine();
+                Environment.Exit(1);
             }
         }
 
