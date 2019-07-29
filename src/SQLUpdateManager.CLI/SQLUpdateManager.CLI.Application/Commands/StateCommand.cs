@@ -1,6 +1,6 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
-using System;
+using System.Drawing;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
@@ -9,26 +9,33 @@ namespace SQLUpdateManager.CLI.Application
     {
         private IParameter _listParameter
         {
-            get => _parameters.FirstOrDefault(p => p.Name == Constants.ListParameter);
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
+
+        private readonly Session _session;
 
         protected override string[] AllowedParameters
         {
             get => new string[]
             {
-                Constants.ListParameter
+                CLIConstants.ListParameter
             };
         }
 
-        public override string Name { get => Constants.StateCommand; }
+        public override string Name { get => CLIConstants.StateCommand; }
         public override bool RequiresParameters { get => true; }
         public override bool RequiresArgument { get => false; }
+
+        public StateCommand(Session session)
+        {
+            _session = session;
+        }
 
         public override void Execute()
         {
             if (_listParameter != null)
             {
-                var entries = Session.Current.Entries;
+                var entries = _session.Entries;
 
                 if (entries != null && entries.Any())
                 {
@@ -36,13 +43,13 @@ namespace SQLUpdateManager.CLI.Application
 
                     foreach (var entry in entries)
                     {
-                        Output.PrintColored($"{entry.Name}: ", ConsoleColor.Cyan);
+                        Output.PrintColored($"{entry.Name}: ", Color.LightSkyBlue);
                         Output.PrintLine(entry.Value);
                     }
                 }
 
                 else
-                    Output.PrintColoredLine("Current session is empty.", ConsoleColor.Red);
+                    Output.PrintColoredLine("Current session is empty.", Color.LightCyan);
             }
         }
     }

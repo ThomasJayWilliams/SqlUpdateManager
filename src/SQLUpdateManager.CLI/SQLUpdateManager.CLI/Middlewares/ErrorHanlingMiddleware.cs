@@ -6,6 +6,13 @@ namespace SQLUpdateManager.CLI
 {
     public class ErrorHanlingMiddleware : IMiddleware
     {
+        private readonly ILogger _logger;
+
+        public ErrorHanlingMiddleware(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void Invoke(RequestContext context)
         {
             try
@@ -14,11 +21,11 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                SerilogLogger.LogError(ex, $"{ex.Code}: {ex.Message}");
+                _logger.LogError(ex, $"{ex.Code}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                SerilogLogger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
         }
     }

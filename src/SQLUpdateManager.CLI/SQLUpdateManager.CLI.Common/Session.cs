@@ -23,11 +23,9 @@ namespace SQLUpdateManager.CLI.Common
         private readonly DateTime _appStartLocal;
         private readonly DateTime _appStartUtc;
 
-        public static Session Current { get; } = new Session();
-
         public IEnumerable<SessionEntry> Entries { get => _entries.Values; }
 
-        private Session()
+        public Session()
         {
             _appStartUtc = DateTime.UtcNow;
             _entries.Add("appUtcStart",
@@ -74,7 +72,7 @@ namespace SQLUpdateManager.CLI.Common
                     _entries.Remove("theme");
                 else
                     _entries.Add("theme",
-                        new SessionEntry { Name = "Console color theme: ", Value = value.ThemeName });
+                        new SessionEntry { Name = "Console color theme", Value = value.ThemeName });
             }
         }
 

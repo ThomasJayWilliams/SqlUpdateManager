@@ -27,7 +27,7 @@ namespace SQLUpdateManager.CLI
 
             if (_command == null)
                 throw new InvalidCommandException(ErrorCodes.InvalidCommand,
-                    $"Error parsing command. Check {Constants.ErrorLogPath} for error log.");
+                    $"Error parsing command. Check {CLIConstants.ErrorLogPath} for error log.");
 
             if (nodes.Any())
                 _command.Argument = nodes.LastOrDefault();
@@ -51,13 +51,13 @@ namespace SQLUpdateManager.CLI
 
                 foreach (var node in nodes)
                 {
-                    if (node.StartsWith(Constants.DParameterPrefix))
+                    if (node.StartsWith(CLIConstants.DParameterPrefix))
                     {
                         IParameter param;
 
                         if (node.Contains("="))
                         {
-                            param = _objectsFactory.GetParameter(node.Substring(Constants.DParameterPrefix.Length, node.IndexOf("=") - 2));
+                            param = _objectsFactory.GetParameter(node.Substring(CLIConstants.DParameterPrefix.Length, node.IndexOf("=") - 2));
 
                             if (param.RequiresArgument)
                                 param.Argument = node.Substring(node.IndexOf("="));
@@ -68,7 +68,7 @@ namespace SQLUpdateManager.CLI
 
                         else
                         {
-                            param = _objectsFactory.GetParameter(node.Substring(Constants.DParameterPrefix.Length));
+                            param = _objectsFactory.GetParameter(node.Substring(CLIConstants.DParameterPrefix.Length));
 
                             if (param.RequiresArgument)
                                 throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter requires argument.");

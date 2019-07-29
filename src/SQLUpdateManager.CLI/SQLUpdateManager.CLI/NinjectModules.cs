@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using SQLUpdateManager.CLI.Application;
 using SQLUpdateManager.CLI.Common;
+using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Common;
 using SQLUpdateManager.Core.Internal;
 using SQLUpdateManager.Core.Registration;
@@ -15,9 +16,14 @@ namespace SQLUpdateManager.CLI
             Bind<IMiddleware>().To<ApplicationMiddleware>().InTransientScope();
 
             Bind<ICommandParser>().To<CommandParser>().InTransientScope();
-            Bind<IPrefixLine>().To<PrefixLine>().InSingletonScope();
 
             Bind<IDataObjectsFactory>().To<DataObjectsFactory>().InTransientScope();
+
+            Bind<IPrefix>().To<Prefix>().InTransientScope();
+            Bind<IConfiguration>().To<Configuration>().InTransientScope();
+            Bind<ILogger>().To<Logger>().InTransientScope();
+
+            Bind<Session>().ToSelf().InSingletonScope();
         }
     }
 

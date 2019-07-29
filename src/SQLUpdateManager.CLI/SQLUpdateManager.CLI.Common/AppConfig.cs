@@ -6,14 +6,14 @@ namespace SQLUpdateManager.CLI.Common
     {
         [JsonProperty("core")]
         public CoreConfig Core { get; set; }
-
-        [JsonProperty("colorTheme")]
-        public string Theme { get; set; }
     }
 
     public class CoreConfig
     {
         [JsonProperty("fileEncoding")]
         public string FileEncoding { get; set; }
+
+        [JsonProperty("colorTheme")]
+        public string Theme { get; set; }
     }
 }

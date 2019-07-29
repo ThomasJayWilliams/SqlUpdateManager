@@ -4,24 +4,31 @@ using SQLUpdateManager.CLI.Common;
 
 namespace SQLUpdateManager.CLI.IO
 {
-    public static class Configuration
+    public class Configuration : IConfiguration
     {
-        public static void ConfigureLogger()
+        private readonly Session _session;
+
+        public Configuration(Session session)
+        {
+            _session = session;
+        }
+
+        public void ConfigureLogger()
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
-                        .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: Session.Current.Encoding))
+                        .WriteTo.File(CLIConstants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: _session.Encoding))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
-                        .WriteTo.File(Constants.InfoLogPath, shared: true, encoding: Session.Current.Encoding))
+                        .WriteTo.File(CLIConstants.InfoLogPath, shared: true, encoding: _session.Encoding))
                 .CreateLogger();
         }
 
-        public static ConsoleTheme GetDefaultTheme() =>
+        public ConsoleTheme GetDefaultTheme() =>
             new ConsoleTheme
             {
-                ThemeName = Constants.DefaultThemeName,
+                ThemeName = CLIConstants.DefaultThemeName,
                 AppColor = new RGB(37, 105, 62),
                 ErrorColor = new RGB(192, 57, 37),
                 DatabaseColor = new RGB(243, 156, 18),

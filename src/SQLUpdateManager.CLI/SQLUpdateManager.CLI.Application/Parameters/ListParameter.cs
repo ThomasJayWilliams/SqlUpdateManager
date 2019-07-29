@@ -6,6 +6,6 @@ namespace SQLUpdateManager.CLI.Application
     {
         public string Argument { get; set; }
         public bool RequiresArgument { get => false; }
-        public string Name { get => Constants.ListParameter; }
+        public string Name { get => CLIConstants.ListParameter; }
     }
 }

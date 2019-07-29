@@ -11,56 +11,65 @@ namespace SQLUpdateManager.CLI
     public class Startup
     {
         private readonly IKernel _serviceProvider;
+        private readonly IConfiguration _configuration;
+        private readonly IPrefix _prefixLine;
+        private readonly ILogger _logger;
+
+        private readonly Session _session;
 
         public Startup()
         {
             _serviceProvider = ConfigureServices();
+
+            _session = _serviceProvider.Get<Session>();
+            _configuration = _serviceProvider.Get<IConfiguration>();
+            _prefixLine = _serviceProvider.Get<IPrefix>();
+            _logger = _serviceProvider.Get<ILogger>();
         }
 
         public void Configure()
         {
-            Configuration.ConfigureLogger();
+            _configuration.ConfigureLogger();
 
-            SerilogLogger.LogInfo("Starting application...");
+            _logger.LogInfo("Starting application...");
 
-            Output.PrintLine(Constants.ASCIIArt);
+            Output.PrintASCII(CLIConstants.ASCIIArt, CLIConstants.ASCIIColor);
 
-            SerilogLogger.LogInfo("Configuration...");
+            _logger.LogInfo("Configuration...");
 
-            if (!File.Exists(Constants.ConfigPath))
+            if (!File.Exists(CLIConstants.ConfigPath))
                 throw new FileNotFoundException(
-                    $"{Constants.ConfigPath} is missing. Application cannot be ran without configuration file. Please, re-install program.");
+                    $"{CLIConstants.ConfigPath} is missing. Application cannot be ran without configuration file. Please, re-install program.");
 
-            if (!File.Exists(Constants.ConsoleThemesPath))
+            if (!File.Exists(CLIConstants.ConsoleThemesPath))
             {
-                SerilogLogger.LogInfo("File with console themes is not found. Default theme will be loaded.");
-                ConfigureConsole(Constants.DefaultThemeName);
+                _logger.LogInfo("File with console themes is not found. Default theme will be loaded.");
+                ConfigureConsole(CLIConstants.DefaultThemeName);
             }
 
             else
             {
                 var dataManager = _serviceProvider.Get<IDataRepository>();
-                var config = dataManager.GetData<AppConfig>(Constants.ConfigPath);
+                var config = dataManager.GetData<AppConfig>(CLIConstants.ConfigPath);
 
-                Session.Current.UpdateSession(config);
-                ConfigureConsole(config.Theme);
+                _session.UpdateSession(config);
+                ConfigureConsole(config.Core.Theme);
             }
 
-            if (!Directory.Exists(Constants.DataDir))
+            if (!Directory.Exists(CLIConstants.DataDir))
             {
-                SerilogLogger.LogInfo($"{Constants.DataDir} directory not found.");
-                Directory.CreateDirectory(Constants.DataDir);
-                SerilogLogger.LogInfo($"{Constants.DataDir} directory created.");
+                _logger.LogInfo($"{CLIConstants.DataDir} directory not found.");
+                Directory.CreateDirectory(CLIConstants.DataDir);
+                _logger.LogInfo($"{CLIConstants.DataDir} directory created.");
             }
 
-            if (!File.Exists(Constants.RegisterPath))
+            if (!File.Exists(CLIConstants.RegisterPath))
             {
-                SerilogLogger.LogInfo($"{Constants.RegisterPath} file not found.");
-                using (var file = File.Create(Constants.RegisterPath)) { }
-                SerilogLogger.LogInfo($"{Constants.RegisterPath} file created.");
+                _logger.LogInfo($"{CLIConstants.RegisterPath} file not found.");
+                using (var file = File.Create(CLIConstants.RegisterPath)) { }
+                _logger.LogInfo($"{CLIConstants.RegisterPath} file created.");
             }
-
-            SerilogLogger.LogInfo("Configuration finished.");
+            
             Output.PrintEmptyLine();
         }
 
@@ -68,14 +77,14 @@ namespace SQLUpdateManager.CLI
         {
             try
             {
-                var prefixLine = _serviceProvider.Get<IPrefixLine>();
-
                 Configure();
 
                 while (true)
                 {
                     var chain = InitMiddlewares();
-                    prefixLine.PrintPrefix();
+
+                    _prefixLine.PrintPrefix();
+
                     var input = Input.ReadLine();
 
                     chain.Begin(input);
@@ -85,35 +94,37 @@ namespace SQLUpdateManager.CLI
             }
             catch (Exception ex)
             {
-                SerilogLogger.LogError(ex, $"Fatal error appeared! {ex.Message}");
+                _logger.LogError(ex, $"Fatal error appeared! {ex.Message}");
                 Environment.Exit(1);
             }
         }
 
         private void ConfigureConsole(string currentThemeName)
         {
-            if (currentThemeName != Constants.DefaultThemeName)
+            _logger.LogInfo("Console configuration...");
+
+            if (currentThemeName != CLIConstants.DefaultThemeName)
             {
                 var dataRepo = _serviceProvider.Get<IDataRepository>();
-                var themes = dataRepo.GetData<IEnumerable<ConsoleTheme>>(Constants.ConsoleThemesPath);
+                var themes = dataRepo.GetData<IEnumerable<ConsoleTheme>>(CLIConstants.ConsoleThemesPath);
 
                 var currentTheme = themes.FirstOrDefault(t => t.ThemeName == currentThemeName);
 
                 if (currentTheme == null)
                 {
-                    SerilogLogger.LogError($"{currentThemeName} theme is not found. Default theme will be loaded.");
-                    Session.Current.Theme = Configuration.GetDefaultTheme();
+                    _logger.LogInfo($"{currentThemeName} theme is not found. Default theme will be loaded.");
+                    _session.Theme = _configuration.GetDefaultTheme();
                 }
 
                 else
                 {
-                    Session.Current.Theme = currentTheme;
-                    SerilogLogger.LogInfo($"{currentThemeName} theme loaded.");
+                    _session.Theme = currentTheme;
+                    _logger.LogInfo($"{currentThemeName} theme loaded.");
                 }
             }
 
             else
-                Session.Current.Theme = Configuration.GetDefaultTheme();
+                _session.Theme = _configuration.GetDefaultTheme();
         }
 
         private IKernel ConfigureServices() =>

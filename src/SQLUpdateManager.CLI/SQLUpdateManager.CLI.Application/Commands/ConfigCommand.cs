@@ -8,24 +8,26 @@ namespace SQLUpdateManager.CLI.Application
     {
         private IParameter _listParameter
         {
-            get => _parameters.FirstOrDefault(p => p.Name == Constants.ListParameter);
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
         private readonly IConfigurationManager _configManager;
+        private readonly Session _session;
 
         protected override string[] AllowedParameters
         {
             get => new string[]
             {
-                Constants.ListParameter
+                CLIConstants.ListParameter
             };
         }
 
-        public override string Name { get => Constants.ConfigCommand; }
+        public override string Name { get => CLIConstants.ConfigCommand; }
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
 
-        public ConfigCommand(IConfigurationManager configManager)
+        public ConfigCommand(IConfigurationManager configManager, Session session)
         {
+            _session = session;
             _configManager = configManager;
         }
 
@@ -36,8 +38,8 @@ namespace SQLUpdateManager.CLI.Application
                 if (!string.IsNullOrEmpty(Argument))
                     throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{_listParameter.Name} parameter excludes argument input.");
 
-                var config = _configManager.GetConfig(Constants.ConfigPath);
-                foreach (var confValue in _configManager.GetStringConfig(Constants.ConfigPath))
+                var config = _configManager.GetConfig(CLIConstants.ConfigPath);
+                foreach (var confValue in _configManager.GetStringConfig(CLIConstants.ConfigPath))
                     Output.PrintLine(confValue);
             }
 
@@ -46,11 +48,11 @@ namespace SQLUpdateManager.CLI.Application
 
             else if (!Argument.Contains(".") || !Argument.Contains("="))
                 throw new InvalidArgumentException(ErrorCodes.InvalidArgumentFormat,
-                    $"{Name} command expects [category].[property]=[value]. Use {Name} command with {Constants.HelpParameter} to get detailed help.");
+                    $"{Name} command expects [category].[property]=[value]. Use {Name} command with {CLIConstants.HelpParameter} to get detailed help.");
 
             else
             {
-                var config = _configManager.GetConfig(Constants.ConfigPath);
+                var config = _configManager.GetConfig(CLIConstants.ConfigPath);
                 var category = GetCategory();
                 var property = GetProperty();
                 var value = GetValue();
@@ -64,9 +66,9 @@ namespace SQLUpdateManager.CLI.Application
                 if (string.IsNullOrEmpty(value))
                     throw new InvalidArgumentException(ErrorCodes.InvalidArgumentFormat, "Value cannot be empty.");
 
-                var updatedCondig = _configManager.UpdateConfig(category, property, value, Constants.ConfigPath);
+                var updatedCondig = _configManager.UpdateConfig(category, property, value, CLIConstants.ConfigPath);
 
-                Session.Current.UpdateSession(updatedCondig);
+                _session.UpdateSession(updatedCondig);
             }
         }
 

@@ -17,17 +17,17 @@ namespace SQLUpdateManager.CLI
         {
             switch (name)
             {
-                case Constants.UseCommand:
+                case CLIConstants.UseCommand:
                     return _serviceProvider.Get<UseCommand>();
-                case Constants.ConnectCommand:
+                case CLIConstants.ConnectCommand:
                     return _serviceProvider.Get<ConnectCommand>();
-                case Constants.StateCommand:
+                case CLIConstants.StateCommand:
                     return _serviceProvider.Get<StateCommand>();
-                case Constants.ConfigCommand:
+                case CLIConstants.ConfigCommand:
                     return _serviceProvider.Get<ConfigCommand>();
-                case Constants.RegisterCommand:
+                case CLIConstants.RegisterCommand:
                     return _serviceProvider.Get<RegisterCommand>();
-                case Constants.ExitCommand:
+                case CLIConstants.ExitCommand:
                     return _serviceProvider.Get<ExitCommand>();
                 default:
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, $"Command {name} does not exist.");
@@ -38,12 +38,12 @@ namespace SQLUpdateManager.CLI
         {
             switch (name)
             {
-                case Constants.SaveParameter:
+                case CLIConstants.SaveParameter:
                     return _serviceProvider.Get<SaveParameter>();
 
-                case Constants.ListParameter:
+                case CLIConstants.ListParameter:
                     return _serviceProvider.Get<ListParameter>();
-                case Constants.SListParameters:
+                case CLIConstants.SListParameters:
                     return _serviceProvider.Get<ListParameter>();
 
                 default:

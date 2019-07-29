@@ -5,6 +5,13 @@ namespace SQLUpdateManager.CLI.Common
 {
     public class FileManager : IFileManager
     {
+        private readonly Session _session;
+
+        public FileManager(Session session)
+        {
+            _session = session;
+        }
+
         public bool Exists(string path) =>
             File.Exists(path);
 
@@ -21,7 +28,7 @@ namespace SQLUpdateManager.CLI.Common
         {
             using (var file = new StreamWriter(path))
             {
-                var bytes = Session.Current.Encoding.GetBytes(content);
+                var bytes = _session.Encoding.GetBytes(content);
                 file.Write(content);
             }
         }

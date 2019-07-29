@@ -1,19 +1,20 @@
 ﻿namespace SQLUpdateManager.CLI.Common
 {
-    public static class Constants
+    public static class CLIConstants
     {
         public const string AppName = "SQLUpdateManager";
+        public const string AppNameShort = "sum";
         public const string DefaultThemeName = "default";
 
         public const string ConfigPath = "config.cfg";
         public const string RegisterPath = DataDir + "/register.json";
         public const string ErrorLogPath = LogDir + "/errorLog.log";
         public const string InfoLogPath = LogDir + "/infoLog.log";
-        public const string HelpPath = MetadataDir + "/helpdoc.dat";
-        public const string ConsoleThemesPath = MetadataDir + "/themes.json";
+        public const string HelpPath = AppDataDir + "/helpdoc.dat";
+        public const string ConsoleThemesPath = AppDataDir + "/themes.json";
 
         public const string LogDir = "logs";
-        public const string MetadataDir = "metadata";
+        public const string AppDataDir = "appdata";
         public const string DataDir = "data";
 
         public const string ConnectCommand = "connect";
@@ -35,12 +36,17 @@
         public const string DParameterPrefix = "--";
         public const string SParameterPrefix = "-";
 
-        public const string ASCIIArt = @"   _____  _    _  __  __ 
-  / ____|| |  | ||  \/  |
- | (___  | |  | || \  / |
-  \___ \ | |  | || |\/| |
-  ____) || |__| || |  | |
- |_____/  \____/ |_|  |_|                         
-                         ";
+        public const string PrefixSymbol = "$";
+
+        public static string[] ASCIIArt = new string[]
+            {
+                @"   _____  _    _  __  __ ",
+                @"  / ____|| |  | ||  \/  |",
+                @" | (___  | |  | || \  / |",
+                @"  \___ \ | |  | || |\/| |",
+                @"  ____) || |__| || |  | |",
+                @" |_____/  \____/ |_|  |_|"
+            };
+        public static RGB ASCIIColor = new RGB(255, 228, 117);
     }
 }

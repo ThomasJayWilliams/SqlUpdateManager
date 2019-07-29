@@ -1,54 +1,57 @@
-﻿using System;
+﻿using SQLUpdateManager.CLI.Common;
+using System;
+using System.Drawing;
+using static Colorful.Console;
 
 namespace SQLUpdateManager.CLI.IO
 {
     public static class Output
     {
         public static void Print(string data) =>
-            Console.Write(data);
+            Write(data);
 
         public static void PrintLine(string data) =>
-            Console.WriteLine(data);
+            WriteLine(data);
 
-        public static void PrintColored(string data, ConsoleColor color)
-        {
-            var defaultColor = Console.ForegroundColor;
+        public static void PrintColored(string data, Color color) =>
+            Write(data, color);
 
-            Console.ForegroundColor = color;
-            Console.Write(data);
-            Console.ForegroundColor = defaultColor;
-        }
+        public static void PrintColored(string data, RGB color) =>
+            Write(data, Color.FromArgb(color.R, color.G, color.B));
 
         public static void PrintEmptyLine() =>
-            Console.WriteLine("");
+            WriteLine();
 
-        public static void PrintColoredLine(string data, ConsoleColor color)
+        public static void PrintColoredLine(string data, Color color) =>
+            WriteLine(data, color);
+
+        public static void PrintColoredLine(string data, RGB color) =>
+            WriteLine(data, Color.FromArgb(color.R, color.G, color.B));
+
+        public static void PrintASCII(string[] art, RGB color)
         {
-            var defaultColor = Console.ForegroundColor;
+            if (art.Length > byte.MaxValue)
+                throw new ArgumentException("Provided ASCII art is too big to print.");
 
-            Console.ForegroundColor = color;
-            Console.WriteLine(data);
-            Console.ForegroundColor = defaultColor;
-        }
+            var colorCopy = new RGB(color.R, color.G, color.B);
 
-        public static void PrintError(string data)
-        {
+            checked
+            {
+                var rStep = (byte)(((colorCopy.R / 1.1) / art.Length));
+                var gStep = (byte)(((colorCopy.G / 1.1) / art.Length));
+                var bStep = (byte)(((colorCopy.B / 1.1) / art.Length));
 
-        }
+                foreach (var line in art)
+                {
+                    WriteLine(line, Color.FromArgb(colorCopy.R, colorCopy.G, colorCopy.B));
 
-        public static void PrintError(Exception ex, string message)
-        {
+                    colorCopy.R -= rStep;
+                    colorCopy.G -= gStep;
+                    colorCopy.B += bStep;
+                }
+            }
 
-        }
-
-        public static void PrintError(Exception ex)
-        {
-
-        }
-
-        public static void PrintInfo(string message)
-        {
-
+            WriteLine();
         }
     }
 }

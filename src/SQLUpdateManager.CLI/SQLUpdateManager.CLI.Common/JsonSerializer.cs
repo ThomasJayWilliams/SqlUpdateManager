@@ -5,7 +5,7 @@ namespace SQLUpdateManager.CLI.Common
 {
     public class JsonSerializer : ISerializer
     {
-        public string Path { get => Constants.RegisterPath; }
+        public string Path { get => CLIConstants.RegisterPath; }
 
         public T Deserialize<T>(string data) =>
             JsonConvert.DeserializeObject<T>(data);

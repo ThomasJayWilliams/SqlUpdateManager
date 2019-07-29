@@ -9,37 +9,43 @@ namespace SQLUpdateManager.CLI.Application
     {
         private IParameter _saveParameter
         {
-            get => _parameters.FirstOrDefault(p => p.Name == Constants.SaveParameter);
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.SaveParameter);
         }
+        private readonly Session _session;
 
         protected override string[] AllowedParameters
         {
             get => new string[]
             {
-                Constants.SaveParameter
+                CLIConstants.SaveParameter
             };
         }
 
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => false; }
-        public override string Name { get => Constants.ConnectCommand; }
+        public override string Name { get => CLIConstants.ConnectCommand; }
+
+        public ConnectCommand(Session session)
+        {
+            _session = session;
+        }
 
         public override void Execute()
         {
             if (!string.IsNullOrEmpty(Argument))
                 throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{Name} does not expect argument.");
 
-            if (Session.Current.ConnectedServer != null)
+            if (_session.ConnectedServer != null)
             {
                 Output.Print(
-                    $"You are currently connected to the {Session.Current.ConnectedServer.Name} server." +
+                    $"You are currently connected to the {_session.ConnectedServer.Name} server." +
                     $"Before execution of this command you will be disconnected from this server. Continue?(y/n)");
 
                 if (Input.ReadLine() != "y")
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Invalid input. Aborting.");
 
-                Session.Current.ConnectedServer = null;
-                Session.Current.UsedDatabase = null;
+                _session.ConnectedServer = null;
+                _session.UsedDatabase = null;
             }
 
             Connect();
@@ -74,7 +80,7 @@ namespace SQLUpdateManager.CLI.Application
 
             Output.PrintLine("");
 
-            Session.Current.ConnectedServer = server;
+            _session.ConnectedServer = server;
         }
     }
 }

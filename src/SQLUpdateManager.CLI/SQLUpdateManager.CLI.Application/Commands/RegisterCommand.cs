@@ -12,23 +12,25 @@ namespace SQLUpdateManager.CLI.Application
     {
         private readonly IDataRepository _repository;
         private readonly Register _register;
+        private readonly Session _session;
         private IParameter _listParameter
         {
-            get => _parameters.FirstOrDefault(p => p.Name == Constants.ListParameter);
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
 
         protected override string[] AllowedParameters
         {
-            get => new string[] { Constants.ListParameter };
+            get => new string[] { CLIConstants.ListParameter };
         }
 
-        public override string Name { get => Constants.RegisterCommand; }
+        public override string Name { get => CLIConstants.RegisterCommand; }
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
 
-        public RegisterCommand(Register register, IDataRepository repository)
+        public RegisterCommand(Register register, Session session, IDataRepository repository)
         {
             _register = register;
+            _session = session;
             _repository = repository;
         }
 
@@ -36,24 +38,25 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null)
             {
+                var theme = _session.Theme;
                 var servers = _register.GetAll();
 
                 if (servers != null && servers.Any())
                 {
                     foreach (var server in servers)
                     {
-                        Output.PrintLine(server.ToString());
+                        Output.PrintColoredLine(server.ToString(), theme.ServerColor);
 
                         if (server.Databases != null && server.Databases.Any())
                         {
                             foreach (var database in server.Databases)
                             {
-                                Output.PrintLine($"\t{database.ToString()}");
+                                Output.PrintColoredLine($"\t{database.ToString()}", theme.DatabaseColor);
 
                                 if (database.Procedures != null && database.Procedures.Any())
                                 {
                                     foreach (var procedure in database.Procedures)
-                                        Output.PrintLine($"\t\t{procedure.ToString()}");
+                                        Output.PrintColoredLine($"\t\t{procedure.ToString()}", theme.ProcedureColor);
                                 }
                             }
                         }
@@ -75,8 +78,8 @@ namespace SQLUpdateManager.CLI.Application
                 if (string.IsNullOrEmpty(procedure))
                     throw new InvalidArgumentException(ErrorCodes.InvalidArgument, $"{Argument} procedure contains no data. Cannot register empty files.");
 
-                var server = Session.Current.ConnectedServer;
-                var database = Session.Current.UsedDatabase;
+                var server = _session.ConnectedServer;
+                var database = _session.UsedDatabase;
 
                 if (server == null)
                     throw new InvalidStateException(ErrorCodes.ServerIsNotConnected, "You are not connected to any server.");
@@ -95,7 +98,7 @@ namespace SQLUpdateManager.CLI.Application
                         {
                             new Database
                             {
-                                Name = Session.Current.UsedDatabase.Name,
+                                Name = _session.UsedDatabase.Name,
                                 Procedures = new List<Procedure>
                                 {
                                     new Procedure { Name = procName, Location = Argument }

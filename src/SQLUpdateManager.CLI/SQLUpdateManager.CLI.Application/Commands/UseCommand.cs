@@ -5,18 +5,25 @@ namespace SQLUpdateManager.CLI.Application
 {
     public class UseCommand : BaseCommand
     {
+        private readonly Session _session;
+
         protected override string[] AllowedParameters
         {
             get => new string[] { };
         }
 
-        public override string Name { get => Constants.UseCommand; }
+        public override string Name { get => CLIConstants.UseCommand; }
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
 
+        public UseCommand(Session session)
+        {
+            _session = session;
+        }
+
         public override void Execute()
         {
-            if (Session.Current.ConnectedServer == null)
+            if (_session.ConnectedServer == null)
                 throw new InvalidStateException(ErrorCodes.ServerIsNotConnected, "To use database you must be connected to the server! Use 'connect --help' to get help.");
             if (string.IsNullOrEmpty(Argument))
                 throw new InvalidCommandException(ErrorCodes.InvalidArgument, $"{Name} command requires database name as an argument.");
@@ -26,7 +33,7 @@ namespace SQLUpdateManager.CLI.Application
             if (string.IsNullOrWhiteSpace(db.Name))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The database name cannot be whitespace or empty!");
 
-            Session.Current.UsedDatabase = db;
+            _session.UsedDatabase = db;
         }
     }
 }
