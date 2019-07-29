@@ -42,24 +42,18 @@ namespace SQLUpdateManager.CLI.Application
                 {
                     foreach (var server in servers)
                     {
-                        Output.PrintLine($"Server: {server.Name}");
+                        Output.PrintLine(server.ToString());
 
                         if (server.Databases != null && server.Databases.Any())
                         {
-                            Output.PrintEmptyLine();
-                            Output.PrintLine("Databases: ");
-
                             foreach (var database in server.Databases)
                             {
-                                Output.PrintLine($"\t{database.Name}");
+                                Output.PrintLine($"\t{database.ToString()}");
 
                                 if (database.Procedures != null && database.Procedures.Any())
                                 {
-                                    Output.PrintEmptyLine();
-                                    Output.PrintLine($"\tProcedures: ");
-
                                     foreach (var procedure in database.Procedures)
-                                        Output.PrintLine($"\t\t{procedure.Name}");
+                                        Output.PrintLine($"\t\t{procedure.ToString()}");
                                 }
                             }
                         }

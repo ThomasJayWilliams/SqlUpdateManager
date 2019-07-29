@@ -11,5 +11,8 @@ namespace SQLUpdateManager.Core.Domains
             get => Hasher.GetHash($"{Name}");
         }
         public IEnumerable<Procedure> Procedures { get; set; }
+
+        public override string ToString() =>
+            $"{Name}";
     }
 }

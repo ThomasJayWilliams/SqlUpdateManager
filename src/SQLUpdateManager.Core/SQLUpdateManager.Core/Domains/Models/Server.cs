@@ -12,5 +12,8 @@ namespace SQLUpdateManager.Core.Domains
         }
         public IEnumerable<Database> Databases { get; set; }
         public ServerType Type { get; set; }
+
+        public override string ToString() =>
+            $"{Name}";
     }
 }

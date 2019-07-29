@@ -23,6 +23,9 @@ namespace SQLUpdateManager.Core.Domains
 					throw new FileNotFoundException($"{value} procedure does not exist!");
 				_location = value;
 			}
-		}
-	}
+        }
+
+        public override string ToString() =>
+            $"{Name} {Location}";
+    }
 }
