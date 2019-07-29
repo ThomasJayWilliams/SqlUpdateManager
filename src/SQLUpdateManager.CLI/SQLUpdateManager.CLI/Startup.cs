@@ -1,11 +1,10 @@
 ﻿using Ninject;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SQLUpdateManager.CLI
 {
@@ -20,16 +19,31 @@ namespace SQLUpdateManager.CLI
 
         public void Configure()
         {
+            Configuration.ConfigureLogger();
+
+            SerilogLogger.LogInfo("Starting application...");
+
+            Output.PrintLine(Constants.ASCIIArt);
+
             SerilogLogger.LogInfo("Configuration...");
 
             if (!File.Exists(Constants.ConfigPath))
                 throw new FileNotFoundException(
                     $"{Constants.ConfigPath} is missing. Application cannot be ran without configuration file. Please, re-install program.");
 
+            if (!File.Exists(Constants.ConsoleThemesPath))
+            {
+                SerilogLogger.LogInfo("File with console themes is not found. Default theme will be loaded.");
+                ConfigureConsole(Constants.DefaultThemeName);
+            }
+
             else
             {
                 var dataManager = _serviceProvider.Get<IDataRepository>();
-                Session.Current.UpdateSession(dataManager.GetData<AppConfig>(Constants.ConfigPath));
+                var config = dataManager.GetData<AppConfig>(Constants.ConfigPath);
+
+                Session.Current.UpdateSession(config);
+                ConfigureConsole(config.Theme);
             }
 
             if (!Directory.Exists(Constants.DataDir))
@@ -47,6 +61,7 @@ namespace SQLUpdateManager.CLI
             }
 
             SerilogLogger.LogInfo("Configuration finished.");
+            Output.PrintEmptyLine();
         }
 
         public void RunApp()
@@ -55,15 +70,7 @@ namespace SQLUpdateManager.CLI
             {
                 var prefixLine = _serviceProvider.Get<IPrefixLine>();
 
-                Configuration.ConfigureLogger();
-
-                SerilogLogger.LogInfo("Starting application...");
-
-                Output.PrintLine(Constants.ASCIIArt);
-
                 Configure();
-
-                Output.PrintEmptyLine();
 
                 while (true)
                 {
@@ -81,6 +88,32 @@ namespace SQLUpdateManager.CLI
                 SerilogLogger.LogError(ex, $"Fatal error appeared! {ex.Message}");
                 Environment.Exit(1);
             }
+        }
+
+        private void ConfigureConsole(string currentThemeName)
+        {
+            if (currentThemeName != Constants.DefaultThemeName)
+            {
+                var dataRepo = _serviceProvider.Get<IDataRepository>();
+                var themes = dataRepo.GetData<IEnumerable<ConsoleTheme>>(Constants.ConsoleThemesPath);
+
+                var currentTheme = themes.FirstOrDefault(t => t.ThemeName == currentThemeName);
+
+                if (currentTheme == null)
+                {
+                    SerilogLogger.LogError($"{currentThemeName} theme is not found. Default theme will be loaded.");
+                    Session.Current.Theme = Configuration.GetDefaultTheme();
+                }
+
+                else
+                {
+                    Session.Current.Theme = currentTheme;
+                    SerilogLogger.LogInfo($"{currentThemeName} theme loaded.");
+                }
+            }
+
+            else
+                Session.Current.Theme = Configuration.GetDefaultTheme();
         }
 
         private IKernel ConfigureServices() =>

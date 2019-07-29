@@ -3,14 +3,17 @@
     public static class Constants
     {
         public const string AppName = "SQLUpdateManager";
+        public const string DefaultThemeName = "default";
+
         public const string ConfigPath = "config.cfg";
         public const string RegisterPath = DataDir + "/register.json";
         public const string ErrorLogPath = LogDir + "/errorLog.log";
         public const string InfoLogPath = LogDir + "/infoLog.log";
         public const string HelpPath = MetadataDir + "/helpdoc.dat";
+        public const string ConsoleThemesPath = MetadataDir + "/themes.json";
 
         public const string LogDir = "logs";
-        public const string MetadataDir = "meta";
+        public const string MetadataDir = "metadata";
         public const string DataDir = "data";
 
         public const string ConnectCommand = "connect";
@@ -28,8 +31,6 @@
 
         public const string HelpParameter = "help";
         public const string SHelpParameter = "h";
-
-
 
         public const string DParameterPrefix = "--";
         public const string SParameterPrefix = "-";

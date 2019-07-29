@@ -30,5 +30,25 @@ namespace SQLUpdateManager.CLI.IO
             Console.WriteLine(data);
             Console.ForegroundColor = defaultColor;
         }
+
+        public static void PrintError(string data)
+        {
+
+        }
+
+        public static void PrintError(Exception ex, string message)
+        {
+
+        }
+
+        public static void PrintError(Exception ex)
+        {
+
+        }
+
+        public static void PrintInfo(string message)
+        {
+
+        }
     }
 }

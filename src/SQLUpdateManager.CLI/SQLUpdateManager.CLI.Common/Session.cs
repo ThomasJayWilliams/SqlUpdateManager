@@ -16,6 +16,7 @@ namespace SQLUpdateManager.CLI.Common
         private DataServer _server;
         private Database _database;
         private Encoding _encoding;
+        private ConsoleTheme _colorTheme;
 
         private Dictionary<string, SessionEntry> _entries = new Dictionary<string, SessionEntry>();
 
@@ -59,6 +60,21 @@ namespace SQLUpdateManager.CLI.Common
                 else
                     _entries.Add("encoding",
                         new SessionEntry { Name = "Current encoding", Value = value.EncodingName });
+            }
+        }
+
+        public ConsoleTheme Theme
+        {
+            get => _colorTheme;
+            set
+            {
+                _colorTheme = value;
+
+                if (value == null)
+                    _entries.Remove("theme");
+                else
+                    _entries.Add("theme",
+                        new SessionEntry { Name = "Console color theme: ", Value = value.ThemeName });
             }
         }
 
