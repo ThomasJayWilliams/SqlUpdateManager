@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLUpdateManager.CLI.Common\SQLUpdateManager.CLI.Common.csproj" />
     <ProjectReference Include="..\SQLUpdateManager.CLI.IO\SQLUpdateManager.CLI.IO.csproj" />
   </ItemGroup>
 

@@ -20,7 +20,7 @@ namespace SQLUpdateManager.CLI
 
         public void Configure()
         {
-            Log.Information("Configuration...");
+            SerilogLogger.LogInfo("Configuration...");
 
             if (!File.Exists(Constants.ConfigPath))
                 throw new FileNotFoundException(
@@ -34,19 +34,19 @@ namespace SQLUpdateManager.CLI
 
             if (!Directory.Exists(Constants.DataDir))
             {
-                Log.Information($"{Constants.DataDir} directory not found.");
+                SerilogLogger.LogInfo($"{Constants.DataDir} directory not found.");
                 Directory.CreateDirectory(Constants.DataDir);
-                Log.Information($"{Constants.DataDir} directory created.");
+                SerilogLogger.LogInfo($"{Constants.DataDir} directory created.");
             }
 
             if (!File.Exists(Constants.RegisterPath))
             {
-                Log.Information($"{Constants.RegisterPath} file not found.");
+                SerilogLogger.LogInfo($"{Constants.RegisterPath} file not found.");
                 using (var file = File.Create(Constants.RegisterPath)) { }
-                Log.Information($"{Constants.RegisterPath} file created.");
+                SerilogLogger.LogInfo($"{Constants.RegisterPath} file created.");
             }
 
-            Log.Information("Configuration finished.");
+            SerilogLogger.LogInfo("Configuration finished.");
         }
 
         public void RunApp()
@@ -55,9 +55,9 @@ namespace SQLUpdateManager.CLI
             {
                 var prefixLine = _serviceProvider.Get<IPrefixLine>();
 
-                ConfigureLogger();
+                Configuration.ConfigureLogger();
 
-                Log.Information("Starting application...");
+                SerilogLogger.LogInfo("Starting application...");
 
                 Output.PrintLine(Constants.ASCIIArt);
 
@@ -78,7 +78,7 @@ namespace SQLUpdateManager.CLI
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, $"Fatal error appeared! {ex.Message}");
+                SerilogLogger.LogError(ex, $"Fatal error appeared! {ex.Message}");
                 Environment.Exit(1);
             }
         }
@@ -89,20 +89,6 @@ namespace SQLUpdateManager.CLI
                 new CommonModule(),
                 new CoreModule(),
                 new ApplicationModule());
-
-        private void ConfigureLogger()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Logger(log =>
-                    log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
-                        .WriteTo.File(Constants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: Session.Current.Encoding)
-                        .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
-                .WriteTo.Logger(log =>
-                    log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
-                        .WriteTo.File(Constants.InfoLogPath, shared: true, encoding: Session.Current.Encoding)
-                        .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code))
-                .CreateLogger();
-        }
 
         private RequestChain InitMiddlewares()
         {

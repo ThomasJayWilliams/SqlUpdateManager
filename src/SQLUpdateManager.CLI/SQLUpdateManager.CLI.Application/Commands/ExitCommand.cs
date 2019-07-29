@@ -1,4 +1,5 @@
 ﻿using SQLUpdateManager.CLI.Common;
+using SQLUpdateManager.CLI.IO;
 using System;
 
 namespace SQLUpdateManager.CLI.Application
@@ -14,7 +15,10 @@ namespace SQLUpdateManager.CLI.Application
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => false; }
 
-        public override void Execute() =>
+        public override void Execute()
+        {
+            SerilogLogger.LogInfo("Exiting with code 0.");
             Environment.Exit(0);
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Serilog;
-using SQLUpdateManager.CLI.Common;
+﻿using SQLUpdateManager.CLI.Common;
+using SQLUpdateManager.CLI.IO;
 using System;
 
 namespace SQLUpdateManager.CLI
@@ -14,11 +14,11 @@ namespace SQLUpdateManager.CLI
             }
             catch (CLIException ex)
             {
-                Log.Error($"{ex.Code}: {ex.Message}");
+                SerilogLogger.LogError(ex, $"{ex.Code}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, ex.Message);
+                SerilogLogger.LogError(ex, ex.Message);
             }
         }
     }
