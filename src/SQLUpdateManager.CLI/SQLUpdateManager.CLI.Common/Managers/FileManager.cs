@@ -1,5 +1,4 @@
 ﻿using SQLUpdateManager.Core.Internal;
-using System;
 using System.IO;
 
 namespace SQLUpdateManager.CLI.Common

@@ -12,9 +12,11 @@
         InvalidArgumentFormat,
 
         UnacceptableParameter,
+        DuplicateParameters,
         MissplacedArgument,
 
         CommandRequiresArgument,
+        CommandRequiresParameter,
 
         ProcedureIsAlreadyRegistered,
 

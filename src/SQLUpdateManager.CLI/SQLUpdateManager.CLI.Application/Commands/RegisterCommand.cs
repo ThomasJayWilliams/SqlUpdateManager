@@ -2,7 +2,6 @@
 using SQLUpdateManager.CLI.IO;
 using SQLUpdateManager.Core.Domains;
 using SQLUpdateManager.Core.Registration;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,9 +10,17 @@ namespace SQLUpdateManager.CLI.Application
 {
     public class RegisterCommand : BaseCommand
     {
-        private ListParameter _listParameter;
         private readonly IDataRepository _repository;
         private readonly Register _register;
+        private IParameter _listParameter
+        {
+            get => _parameters.FirstOrDefault(p => p.Name == Constants.ListParameter);
+        }
+
+        protected override string[] AllowedParameters
+        {
+            get => new string[] { Constants.ListParameter };
+        }
 
         public override string Name { get => Constants.RegisterCommand; }
         public override bool RequiresParameters { get => false; }
@@ -23,22 +30,6 @@ namespace SQLUpdateManager.CLI.Application
         {
             _register = register;
             _repository = repository;
-        }
-
-        public override void AddParameters(params IParameter[] parameters)
-        {
-            if (parameters == null || !parameters.Any())
-                throw new ArgumentNullException("Parameters cannot be null or empty!");
-
-            foreach (var param in parameters)
-            {
-                if (param.Name == Constants.ListParameter)
-                    _listParameter = param as ListParameter;
-                else
-                    throw new InvalidParameterException(ErrorCodes.UnacceptableParameter, $"{Name} command does not accept {param.Name} parameter.");
-            }
-
-            _parameters.AddRange(parameters);
         }
 
         public override void Execute()
@@ -74,6 +65,9 @@ namespace SQLUpdateManager.CLI.Application
                         }
                     }
                 }
+
+                else
+                    Output.PrintLine("Currently registry is empty.");
             }
 
             else

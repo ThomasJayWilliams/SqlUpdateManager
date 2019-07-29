@@ -1,23 +1,18 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.Core.Domains;
-using System;
-using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
 {
     public class UseCommand : BaseCommand
     {
+        protected override string[] AllowedParameters
+        {
+            get => new string[] { };
+        }
+
         public override string Name { get => Constants.UseCommand; }
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
-
-        public override void AddParameters(params IParameter[] parameters)
-        {
-            if (parameters == null || !parameters.Any())
-                throw new ArgumentNullException("Parameters cannot be null or empty!");
-
-            _parameters.AddRange(parameters);
-        }
 
         public override void Execute()
         {

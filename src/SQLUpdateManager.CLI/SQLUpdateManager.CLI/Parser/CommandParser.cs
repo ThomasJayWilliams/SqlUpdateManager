@@ -88,6 +88,9 @@ namespace SQLUpdateManager.CLI
                 if (list.Any())
                     _command.AddParameters(list);
             }
+
+            else if (_command.RequiresParameters)
+                throw new InvalidCommandException(ErrorCodes.CommandRequiresParameter, $"{_command.Name} command requires at least one parameter.");
         }
     }
 }

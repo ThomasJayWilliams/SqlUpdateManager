@@ -1,14 +1,24 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
-using System;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
 {
     public class ConfigCommand : BaseCommand
     {
-        private ListParameter _listParameter;
+        private IParameter _listParameter
+        {
+            get => _parameters.FirstOrDefault(p => p.Name == Constants.ListParameter);
+        }
         private readonly IConfigurationManager _configManager;
+
+        protected override string[] AllowedParameters
+        {
+            get => new string[]
+            {
+                Constants.ListParameter
+            };
+        }
 
         public override string Name { get => Constants.ConfigCommand; }
         public override bool RequiresParameters { get => false; }
@@ -17,22 +27,6 @@ namespace SQLUpdateManager.CLI.Application
         public ConfigCommand(IConfigurationManager configManager)
         {
             _configManager = configManager;
-        }
-
-        public override void AddParameters(params IParameter[] parameters)
-        {
-            if (parameters == null || !parameters.Any())
-                throw new ArgumentNullException("Parameters cannot be null or empty!");
-
-            foreach (var param in parameters)
-            {
-                if (param.Name == Constants.ListParameter)
-                    _listParameter = param as ListParameter;
-                else
-                    throw new InvalidParameterException(ErrorCodes.UnacceptableParameter, $"{Name} command does not accept {param.Name} parameter.");
-            }
-
-            _parameters.AddRange(parameters);
         }
 
         public override void Execute()
