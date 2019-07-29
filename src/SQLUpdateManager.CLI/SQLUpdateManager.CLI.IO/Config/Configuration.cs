@@ -18,7 +18,7 @@ namespace SQLUpdateManager.CLI.IO
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Error || logger.Level == LogEventLevel.Fatal)
-                        .WriteTo.File(CLIConstants.ErrorLogPath, outputTemplate: "{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: _session.Encoding))
+                        .WriteTo.File(CLIConstants.ErrorLogPath, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", shared: true, encoding: _session.Encoding))
                 .WriteTo.Logger(log =>
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
                         .WriteTo.File(CLIConstants.InfoLogPath, shared: true, encoding: _session.Encoding))
@@ -33,7 +33,10 @@ namespace SQLUpdateManager.CLI.IO
                 ErrorColor = new RGB(192, 57, 37),
                 DatabaseColor = new RGB(243, 156, 18),
                 ServerColor = new RGB(142, 68, 128),
-                ProcedureColor = new RGB(122, 140, 83)
+                ProcedureColor = new RGB(122, 140, 83),
+                TextColor = new RGB(236, 240, 241),
+                InfoColor = new RGB(34, 174, 96),
+                InputColor = new RGB(236, 240, 241)
             };
     }
 }

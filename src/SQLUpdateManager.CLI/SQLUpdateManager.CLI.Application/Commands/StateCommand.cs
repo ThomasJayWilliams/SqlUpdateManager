@@ -13,6 +13,7 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         private readonly Session _session;
+        private readonly IOutput _output;
 
         protected override string[] AllowedParameters
         {
@@ -26,8 +27,9 @@ namespace SQLUpdateManager.CLI.Application
         public override bool RequiresParameters { get => true; }
         public override bool RequiresArgument { get => false; }
 
-        public StateCommand(Session session)
+        public StateCommand(Session session, IOutput output)
         {
+            _output = output;
             _session = session;
         }
 
@@ -39,17 +41,17 @@ namespace SQLUpdateManager.CLI.Application
 
                 if (entries != null && entries.Any())
                 {
-                    Output.PrintLine("Current session values:");
+                    _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);
 
                     foreach (var entry in entries)
                     {
-                        Output.PrintColored($"{entry.Name}: ", Color.LightSkyBlue);
-                        Output.PrintLine(entry.Value);
+                        _output.PrintColored($"{entry.Name}: ", Color.LightSkyBlue);
+                        _output.PrintColoredLine(entry.Value, _session.Theme.TextColor);
                     }
                 }
 
                 else
-                    Output.PrintColoredLine("Current session is empty.", Color.LightCyan);
+                    _output.PrintColoredLine("Current session is empty.", Color.LightCyan);
             }
         }
     }

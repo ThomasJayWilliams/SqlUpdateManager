@@ -1,5 +1,6 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
+using System;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
@@ -10,14 +11,21 @@ namespace SQLUpdateManager.CLI.Application
         {
             get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
+        private IParameter _restartParameter
+        {
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.RestartParameter);
+        }
+
         private readonly IConfigurationManager _configManager;
+        private readonly IOutput _output;
         private readonly Session _session;
 
         protected override string[] AllowedParameters
         {
             get => new string[]
             {
-                CLIConstants.ListParameter
+                CLIConstants.ListParameter,
+                CLIConstants.RestartParameter
             };
         }
 
@@ -25,8 +33,9 @@ namespace SQLUpdateManager.CLI.Application
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
 
-        public ConfigCommand(IConfigurationManager configManager, Session session)
+        public ConfigCommand(IConfigurationManager configManager, Session session, IOutput output)
         {
+            _output = output;
             _session = session;
             _configManager = configManager;
         }
@@ -40,7 +49,7 @@ namespace SQLUpdateManager.CLI.Application
 
                 var config = _configManager.GetConfig(CLIConstants.ConfigPath);
                 foreach (var confValue in _configManager.GetStringConfig(CLIConstants.ConfigPath))
-                    Output.PrintLine(confValue);
+                    _output.PrintColoredLine(confValue, _session.Theme.TextColor);
             }
 
             else if (string.IsNullOrEmpty(Argument))
@@ -68,8 +77,14 @@ namespace SQLUpdateManager.CLI.Application
 
                 var updatedCondig = _configManager.UpdateConfig(category, property, value, CLIConstants.ConfigPath);
 
-                _session.UpdateSession(updatedCondig);
+                UpdateSession(updatedCondig);
             }
+        }
+
+        private void UpdateSession(AppConfig config)
+        {
+            if (!string.IsNullOrEmpty(config.Core.FileEncoding))
+                _session.Encoding = EncodingHelper.GetEncoding(config.Core.FileEncoding);
         }
 
         private string GetCategory() =>

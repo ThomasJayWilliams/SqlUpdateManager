@@ -11,7 +11,10 @@ namespace SQLUpdateManager.CLI.Application
         {
             get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.SaveParameter);
         }
+
         private readonly Session _session;
+        private readonly IOutput _output;
+        private readonly IInput _input;
 
         protected override string[] AllowedParameters
         {
@@ -25,8 +28,10 @@ namespace SQLUpdateManager.CLI.Application
         public override bool RequiresArgument { get => false; }
         public override string Name { get => CLIConstants.ConnectCommand; }
 
-        public ConnectCommand(Session session)
+        public ConnectCommand(Session session, IOutput output, IInput input)
         {
+            _input = input;
+            _output = output;
             _session = session;
         }
 
@@ -37,11 +42,12 @@ namespace SQLUpdateManager.CLI.Application
 
             if (_session.ConnectedServer != null)
             {
-                Output.Print(
+                _output.PrintColored(
                     $"You are currently connected to the {_session.ConnectedServer.Name} server." +
-                    $"Before execution of this command you will be disconnected from this server. Continue?(y/n)");
+                    $"Before execution of this command you will be disconnected from this server. Continue?(y/n)",
+                    _session.Theme.TextColor);
 
-                if (Input.ReadLine() != "y")
+                if (_input.ReadLine() != "y")
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Invalid input. Aborting.");
 
                 _session.ConnectedServer = null;
@@ -54,31 +60,29 @@ namespace SQLUpdateManager.CLI.Application
         private void Connect()
         {
             var server = new DataServer();
-            Output.Print("Server name: ");
-            server.Name = Input.ReadLine();
+            _output.PrintColored("Server name: ", _session.Theme.TextColor);
+            server.Name = _input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Name))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server name cannot be whitespace or empty!");
 
-            Output.Print("Server address: ");
-            server.Location = Input.ReadLine();
+            _output.PrintColored("Server address: ", _session.Theme.TextColor);
+            server.Location = _input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Location))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server address cannot be whitespace or empty!");
 
-            Output.Print("Server user name: ");
-            server.Username = Input.ReadLine();
+            _output.PrintColored("Server user name: ", _session.Theme.TextColor);
+            server.Username = _input.ReadLine();
 
             if (string.IsNullOrWhiteSpace(server.Username))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server user name cannot be whitespace or empty!");
 
-            Output.Print("Server user password: ");
-            server.Username = Input.ReadPassword();
+            _output.PrintColored("Server user password: ", _session.Theme.TextColor);
+            server.Username = _input.ReadPassword();
 
             if (string.IsNullOrWhiteSpace(server.Username))
                 throw new InvalidCommandException(ErrorCodes.InvalidData, "The server user password cannot be whitespace or empty!");
-
-            Output.PrintLine("");
 
             _session.ConnectedServer = server;
         }

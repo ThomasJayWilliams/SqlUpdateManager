@@ -11,6 +11,7 @@ namespace SQLUpdateManager.CLI.Application
     public class RegisterCommand : BaseCommand
     {
         private readonly IDataRepository _repository;
+        private readonly IOutput _output;
         private readonly Register _register;
         private readonly Session _session;
         private IParameter _listParameter
@@ -27,8 +28,13 @@ namespace SQLUpdateManager.CLI.Application
         public override bool RequiresParameters { get => false; }
         public override bool RequiresArgument { get => true; }
 
-        public RegisterCommand(Register register, Session session, IDataRepository repository)
+        public RegisterCommand(
+            Register register,
+            Session session,
+            IDataRepository repository,
+            IOutput output)
         {
+            _output = output;
             _register = register;
             _session = session;
             _repository = repository;
@@ -45,18 +51,18 @@ namespace SQLUpdateManager.CLI.Application
                 {
                     foreach (var server in servers)
                     {
-                        Output.PrintColoredLine(server.ToString(), theme.ServerColor);
+                        _output.PrintColoredLine(server.ToString(), theme.ServerColor);
 
                         if (server.Databases != null && server.Databases.Any())
                         {
                             foreach (var database in server.Databases)
                             {
-                                Output.PrintColoredLine($"\t{database.ToString()}", theme.DatabaseColor);
+                                _output.PrintColoredLine($"\t{database.ToString()}", theme.DatabaseColor);
 
                                 if (database.Procedures != null && database.Procedures.Any())
                                 {
                                     foreach (var procedure in database.Procedures)
-                                        Output.PrintColoredLine($"\t\t{procedure.ToString()}", theme.ProcedureColor);
+                                        _output.PrintColoredLine($"\t\t{procedure.ToString()}", theme.ProcedureColor);
                                 }
                             }
                         }
@@ -64,7 +70,7 @@ namespace SQLUpdateManager.CLI.Application
                 }
 
                 else
-                    Output.PrintLine("Currently registry is empty.");
+                    _output.PrintColoredLine("Currently registry is empty.", _session.Theme.TextColor);
             }
 
             else

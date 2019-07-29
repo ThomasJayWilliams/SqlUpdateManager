@@ -14,6 +14,9 @@ namespace SQLUpdateManager.CLI
         private readonly IConfiguration _configuration;
         private readonly IPrefix _prefixLine;
         private readonly ILogger _logger;
+        private readonly IDataRepository _dataRepo;
+        private readonly IOutput _output;
+        private readonly IInput _input;
 
         private readonly Session _session;
 
@@ -25,36 +28,34 @@ namespace SQLUpdateManager.CLI
             _configuration = _serviceProvider.Get<IConfiguration>();
             _prefixLine = _serviceProvider.Get<IPrefix>();
             _logger = _serviceProvider.Get<ILogger>();
+            _dataRepo = _serviceProvider.Get<IDataRepository>();
+            _output = _serviceProvider.Get<IOutput>();
+            _input = _serviceProvider.Get<IInput>();
         }
 
         public void Configure()
         {
             _configuration.ConfigureLogger();
 
+            if (!File.Exists(CLIConstants.ConsoleThemesPath))
+                ConfigureConsole(CLIConstants.DefaultThemeName);
+
+            else
+            {
+                var config = _dataRepo.GetData<AppConfig>(CLIConstants.ConfigPath);
+
+                ConfigureConsole(config.Core.Theme);
+            }
+
             _logger.LogInfo("Starting application...");
 
-            Output.PrintASCII(CLIConstants.ASCIIArt, CLIConstants.ASCIIColor);
+            _output.PrintASCII(CLIConstants.ASCIIArt, CLIConstants.ASCIIColor);
 
             _logger.LogInfo("Configuration...");
 
             if (!File.Exists(CLIConstants.ConfigPath))
                 throw new FileNotFoundException(
                     $"{CLIConstants.ConfigPath} is missing. Application cannot be ran without configuration file. Please, re-install program.");
-
-            if (!File.Exists(CLIConstants.ConsoleThemesPath))
-            {
-                _logger.LogInfo("File with console themes is not found. Default theme will be loaded.");
-                ConfigureConsole(CLIConstants.DefaultThemeName);
-            }
-
-            else
-            {
-                var dataManager = _serviceProvider.Get<IDataRepository>();
-                var config = dataManager.GetData<AppConfig>(CLIConstants.ConfigPath);
-
-                _session.UpdateSession(config);
-                ConfigureConsole(config.Core.Theme);
-            }
 
             if (!Directory.Exists(CLIConstants.DataDir))
             {
@@ -69,8 +70,8 @@ namespace SQLUpdateManager.CLI
                 using (var file = File.Create(CLIConstants.RegisterPath)) { }
                 _logger.LogInfo($"{CLIConstants.RegisterPath} file created.");
             }
-            
-            Output.PrintEmptyLine();
+
+            _output.PrintEmptyLine();
         }
 
         public void RunApp()
@@ -85,11 +86,11 @@ namespace SQLUpdateManager.CLI
 
                     _prefixLine.PrintPrefix();
 
-                    var input = Input.ReadLine();
+                    var input = _input.ReadLine();
 
                     chain.Begin(input);
 
-                    Output.PrintEmptyLine();
+                    _output.PrintEmptyLine();
                 }
             }
             catch (Exception ex)
@@ -101,13 +102,9 @@ namespace SQLUpdateManager.CLI
 
         private void ConfigureConsole(string currentThemeName)
         {
-            _logger.LogInfo("Console configuration...");
-
             if (currentThemeName != CLIConstants.DefaultThemeName)
             {
-                var dataRepo = _serviceProvider.Get<IDataRepository>();
-                var themes = dataRepo.GetData<IEnumerable<ConsoleTheme>>(CLIConstants.ConsoleThemesPath);
-
+                var themes = _dataRepo.GetData<IEnumerable<ConsoleTheme>>(CLIConstants.ConsoleThemesPath);
                 var currentTheme = themes.FirstOrDefault(t => t.ThemeName == currentThemeName);
 
                 if (currentTheme == null)

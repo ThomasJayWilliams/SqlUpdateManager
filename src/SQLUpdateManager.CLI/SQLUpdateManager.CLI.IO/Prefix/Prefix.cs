@@ -1,16 +1,15 @@
 ﻿using SQLUpdateManager.CLI.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SQLUpdateManager.CLI.IO
 {
     public class Prefix : IPrefix
     {
         private readonly Session _session;
+        private readonly IOutput _output;
 
-        public Prefix(Session session)
+        public Prefix(Session session, IOutput output)
         {
+            _output = output;
             _session = session;
         }
 
@@ -20,10 +19,10 @@ namespace SQLUpdateManager.CLI.IO
 
             if (_session.ConnectedServer != null)
             {
-                Output.PrintColored(CLIConstants.AppName, theme.AppColor);
+                _output.PrintColored(CLIConstants.AppName, theme.AppColor);
 
-                Output.Print(" ");
-                Output.PrintColored(
+                _output.PrintColored(" ", RGB.NoColor);
+                _output.PrintColored(
                     _session.ConnectedServer.Name.Length > 25 ?
                         $"{_session.ConnectedServer.Name.Substring(0, 25)}..." :
                         _session.ConnectedServer.Name,
@@ -31,8 +30,8 @@ namespace SQLUpdateManager.CLI.IO
 
                 if (_session.UsedDatabase != null)
                 {
-                    Output.PrintColored("/", theme.DatabaseColor);
-                    Output.PrintColoredLine(
+                    _output.PrintColored("/", theme.DatabaseColor);
+                    _output.PrintColoredLine(
                         _session.UsedDatabase.Name.Length > 25 ?
                             $"({_session.UsedDatabase.Name.Substring(0, 25)}...)" :
                             _session.UsedDatabase.Name,
@@ -40,13 +39,13 @@ namespace SQLUpdateManager.CLI.IO
                 }
 
                 else
-                    Output.PrintEmptyLine();
+                    _output.PrintEmptyLine();
             }
 
             else
-                Output.PrintColoredLine(CLIConstants.AppName, theme.AppColor);
+                _output.PrintColoredLine(CLIConstants.AppName, theme.AppColor);
 
-            Output.Print($"{CLIConstants.PrefixSymbol} ");
+            _output.PrintColored($"{CLIConstants.PrefixSymbol} ", _session.Theme.TextColor);
         }
     }
 }

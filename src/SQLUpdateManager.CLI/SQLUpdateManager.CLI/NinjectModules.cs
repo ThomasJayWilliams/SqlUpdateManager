@@ -23,6 +23,9 @@ namespace SQLUpdateManager.CLI
             Bind<IConfiguration>().To<Configuration>().InTransientScope();
             Bind<ILogger>().To<Logger>().InTransientScope();
 
+            Bind<IOutput>().To<Output>().InSingletonScope();
+            Bind<IInput>().To<Input>().InSingletonScope();
+
             Bind<Session>().ToSelf().InSingletonScope();
         }
     }
@@ -57,6 +60,10 @@ namespace SQLUpdateManager.CLI
             Bind<ICommand>().To<ConfigCommand>().InTransientScope();
             Bind<ICommand>().To<ExitCommand>().InTransientScope();
             Bind<ICommand>().To<StateCommand>().InTransientScope();
+
+            Bind<IParameter>().To<ListParameter>().InTransientScope();
+            Bind<IParameter>().To<RestartParameter>().InTransientScope();
+            Bind<IParameter>().To<SaveParameter>().InTransientScope();
         }
     }
 }
