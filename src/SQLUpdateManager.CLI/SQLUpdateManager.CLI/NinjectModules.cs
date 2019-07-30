@@ -20,7 +20,10 @@ namespace SQLUpdateManager.CLI
             Bind<IDataObjectsFactory>().To<DataObjectsFactory>().InTransientScope();
 
             Bind<IPrefix>().To<Prefix>().InTransientScope();
-            Bind<IConfiguration>().To<Configuration>().InTransientScope();
+
+            Bind<IIOConfiguration>().To<IOConfiguration>().InTransientScope();
+            Bind<ICommonConfiguration>().To<CommonConfiguration>().InTransientScope();
+
             Bind<ILogger>().To<Logger>().InTransientScope();
 
             Bind<IOutput>().To<Output>().InSingletonScope();

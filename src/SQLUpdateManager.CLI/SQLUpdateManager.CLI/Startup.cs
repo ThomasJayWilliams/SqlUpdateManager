@@ -11,7 +11,8 @@ namespace SQLUpdateManager.CLI
     public class Startup
     {
         private readonly IKernel _serviceProvider;
-        private readonly IConfiguration _configuration;
+        private readonly IIOConfiguration _ioConfig;
+        private readonly ICommonConfiguration _commonConfig;
         private readonly IPrefix _prefixLine;
         private readonly ILogger _logger;
         private readonly IDataRepository _dataRepo;
@@ -19,33 +20,29 @@ namespace SQLUpdateManager.CLI
         private readonly IInput _input;
 
         private readonly Session _session;
+        private readonly AppConfig _config;
 
         public Startup()
         {
             _serviceProvider = ConfigureServices();
 
             _session = _serviceProvider.Get<Session>();
-            _configuration = _serviceProvider.Get<IConfiguration>();
+
+            _ioConfig = _serviceProvider.Get<IIOConfiguration>();
             _prefixLine = _serviceProvider.Get<IPrefix>();
             _logger = _serviceProvider.Get<ILogger>();
             _dataRepo = _serviceProvider.Get<IDataRepository>();
             _output = _serviceProvider.Get<IOutput>();
             _input = _serviceProvider.Get<IInput>();
+            _commonConfig = _serviceProvider.Get<ICommonConfiguration>();
+
+            _config = _dataRepo.GetData<AppConfig>(CLIConstants.ConfigPath);
         }
 
         public void Configure()
         {
-            _configuration.ConfigureLogger();
-
-            if (!File.Exists(CLIConstants.ConsoleThemesPath))
-                ConfigureConsole(CLIConstants.DefaultThemeName);
-
-            else
-            {
-                var config = _dataRepo.GetData<AppConfig>(CLIConstants.ConfigPath);
-
-                ConfigureConsole(config.Core.Theme);
-            }
+            _commonConfig.ConfigureSession(_config);
+            _ioConfig.ConfigureLogger();
 
             _logger.LogInfo("Starting application...");
 
@@ -98,30 +95,6 @@ namespace SQLUpdateManager.CLI
                 _logger.LogError(ex, $"Fatal error appeared! {ex.Message}");
                 Environment.Exit(1);
             }
-        }
-
-        private void ConfigureConsole(string currentThemeName)
-        {
-            if (currentThemeName != CLIConstants.DefaultThemeName)
-            {
-                var themes = _dataRepo.GetData<IEnumerable<ConsoleTheme>>(CLIConstants.ConsoleThemesPath);
-                var currentTheme = themes.FirstOrDefault(t => t.ThemeName == currentThemeName);
-
-                if (currentTheme == null)
-                {
-                    _logger.LogInfo($"{currentThemeName} theme is not found. Default theme will be loaded.");
-                    _session.Theme = _configuration.GetDefaultTheme();
-                }
-
-                else
-                {
-                    _session.Theme = currentTheme;
-                    _logger.LogInfo($"{currentThemeName} theme loaded.");
-                }
-            }
-
-            else
-                _session.Theme = _configuration.GetDefaultTheme();
         }
 
         private IKernel ConfigureServices() =>

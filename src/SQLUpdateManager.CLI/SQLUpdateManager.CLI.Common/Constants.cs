@@ -51,5 +51,18 @@
                 @" |_____/  \____/ |_|  |_|"
             };
         public static RGB ASCIIColor = new RGB(255, 228, 117);
+
+        public static ConsoleTheme DefaultTheme = new ConsoleTheme
+        {
+            ThemeName = DefaultThemeName,
+            AppColor = new RGB(145, 255, 122),
+            ErrorColor = new RGB(192, 57, 37),
+            DatabaseColor = new RGB(243, 156, 18),
+            ServerColor = new RGB(142, 68, 128),
+            ProcedureColor = new RGB(122, 140, 83),
+            TextColor = new RGB(236, 240, 241),
+            InfoColor = new RGB(34, 174, 96),
+            InputColor = new RGB(236, 240, 241)
+        };
     }
 }

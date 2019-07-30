@@ -7,5 +7,7 @@
 
         void WriteData(string path, object data);
         void WriteRawData(string path, string data);
+
+        bool Exists(string path);
     }
 }

@@ -64,5 +64,8 @@ namespace SQLUpdateManager.CLI.Common
 
             _fileManager.Save(path, data);
         }
+
+        public bool Exists(string path) =>
+            _fileManager.Exists(path);
     }
 }
