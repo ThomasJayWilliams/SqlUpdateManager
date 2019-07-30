@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using Serilog.Events;
 using SQLUpdateManager.CLI.Common;
+using System;
 
 namespace SQLUpdateManager.CLI.IO
 {
@@ -23,6 +24,16 @@ namespace SQLUpdateManager.CLI.IO
                     log.Filter.ByIncludingOnly(logger => logger.Level == LogEventLevel.Information)
                         .WriteTo.File(CLIConstants.InfoLogPath, shared: true, encoding: _session.Encoding))
                 .CreateLogger();
+        }
+
+        public void ConfigureSession(AppConfig config)
+        {
+            if (config == null)
+                throw new ArgumentNullException("Config cannot be null.");
+
+            if (string.IsNullOrEmpty(config.Core.FileEncoding))
+                throw new ArgumentException("File encoding cannot be null or empty.");
+            _session.Encoding = EncodingHelper.GetEncoding(config.Core.FileEncoding);
         }
 
         public ConsoleTheme GetDefaultTheme() =>

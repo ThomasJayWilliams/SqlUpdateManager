@@ -27,8 +27,8 @@
 
         public const string SaveParameter = "save";
 
-        public const string RestartParameter = "restart";
-        public const string SRestartParameter = "r";
+        public const string DeleteParameter = "delete";
+        public const string SDeleteParameter = "d";
 
         public const string ListParameter = "list";
         public const string SListParameters = "l";

@@ -46,6 +46,11 @@ namespace SQLUpdateManager.CLI
                 case CLIConstants.SListParameters:
                     return _serviceProvider.Get<ListParameter>();
 
+                case CLIConstants.DeleteParameter:
+                    return _serviceProvider.Get<DeleteParameter>();
+                case CLIConstants.SDeleteParameter:
+                    return _serviceProvider.Get<DeleteParameter>();
+
                 default:
                     throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"Parameter {name} does not exist.");
             }

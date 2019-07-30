@@ -87,9 +87,6 @@ namespace SQLUpdateManager.Core.Registration
 
             var server = _servers.FirstOrDefault(serv => serv.Hash.SequenceEqual(hash));
 
-            if (server == null)
-                throw new ArgumentException("Server does not exist!");
-
             return server;
         }
 

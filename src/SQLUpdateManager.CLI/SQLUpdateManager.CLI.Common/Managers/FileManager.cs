@@ -27,10 +27,7 @@ namespace SQLUpdateManager.CLI.Common
         public void Save(string path, string content)
         {
             using (var file = new StreamWriter(path))
-            {
-                var bytes = _session.Encoding.GetBytes(content);
                 file.Write(content);
-            }
         }
     }
 }

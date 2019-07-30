@@ -21,6 +21,9 @@
         ProcedureIsAlreadyRegistered,
 
         ServerIsNotConnected,
-        NoDatabaseInUse
+        NoDatabaseInUse,
+
+        ServerIsNotRegistered,
+        DatabaseIsNotRegistered
     }
 }

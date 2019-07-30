@@ -11,10 +11,6 @@ namespace SQLUpdateManager.CLI.Application
         {
             get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
-        private IParameter _restartParameter
-        {
-            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.RestartParameter);
-        }
 
         private readonly IConfigurationManager _configManager;
         private readonly IOutput _output;
@@ -24,8 +20,7 @@ namespace SQLUpdateManager.CLI.Application
         {
             get => new string[]
             {
-                CLIConstants.ListParameter,
-                CLIConstants.RestartParameter
+                CLIConstants.ListParameter
             };
         }
 

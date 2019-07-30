@@ -14,14 +14,23 @@ namespace SQLUpdateManager.CLI.Application
         private readonly IOutput _output;
         private readonly Register _register;
         private readonly Session _session;
+
         private IParameter _listParameter
         {
             get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.ListParameter);
         }
+        private IParameter _deleteParameter
+        {
+            get => _parameters.FirstOrDefault(p => p.Name == CLIConstants.DeleteParameter);
+        }
 
         protected override string[] AllowedParameters
         {
-            get => new string[] { CLIConstants.ListParameter };
+            get => new string[]
+            {
+                CLIConstants.ListParameter,
+                CLIConstants.DeleteParameter
+            };
         }
 
         public override string Name { get => CLIConstants.RegisterCommand; }
@@ -71,6 +80,68 @@ namespace SQLUpdateManager.CLI.Application
 
                 else
                     _output.PrintColoredLine("Currently registry is empty.", _session.Theme.TextColor);
+            }
+
+            else if (_deleteParameter != null)
+            {
+                if (string.IsNullOrEmpty(Argument))
+                    throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} with {_deleteParameter.Name} parameter requires argument.");
+
+                if (Argument == "*")
+                {
+                    if (_session.ConnectedServer == null)
+                    {
+                        foreach (var server in _register.GetAll())
+                        {
+                            _output.PrintColoredLine($"Removing ${server.Name}...", _session.Theme.TextColor);
+                            _register.RemoveServer(server.Hash);
+                        }
+
+                        _register.SaveChanges();
+                    }
+
+                    else if (_session.ConnectedServer != null && _session.UsedDatabase == null)
+                    {
+                        var server = _register.GetServer(_session.ConnectedServer.Hash);
+
+                        if (server == null)
+                            throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
+                                $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
+
+                        if (server.Databases != null && server.Databases.Any())
+                            foreach (var database in server.Databases)
+                                _output.PrintColoredLine($"Removing {database.Name}...", _session.Theme.TextColor);
+
+                        server.Databases = null;
+
+                        _register.UpdateServer(server);
+                        _register.SaveChanges();
+                    }
+
+                    else if (_session.UsedDatabase != null)
+                    {
+                        var server = _register.GetServer(_session.ConnectedServer.Hash);
+
+                        if (server == null)
+                            throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
+                                $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
+
+                        if (server.Databases == null || !server.Databases.Any(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash)))
+                            throw new InvalidArgumentException(ErrorCodes.DatabaseIsNotRegistered,
+                                $"{_session.UsedDatabase.Name} database is not registered and cannot be removed.");
+
+                        var database = server.Databases.FirstOrDefault(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash));
+
+                        if (database.Procedures != null && database.Procedures.Any())
+                            foreach (var procedure in database.Procedures)
+                                _output.PrintColoredLine($"Removing {procedure.Name}...", _session.Theme.TextColor);
+
+                        database.Procedures = null;
+
+                        _register.UpdateServer(server);
+                        _register.SaveChanges();
+                    }
+                }
             }
 
             else
