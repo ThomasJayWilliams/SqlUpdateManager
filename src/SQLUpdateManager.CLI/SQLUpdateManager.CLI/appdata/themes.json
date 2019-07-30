@@ -1,0 +1,45 @@
+[
+    {
+        "name": "default",
+        "appColor": {
+            "r": 145,
+            "g": 255,
+            "b": 122            
+        },
+        "textColor": {
+            "r": 236,
+            "g": 240,
+            "b": 241
+        },
+        "inputColor": {
+            "r": 236,
+            "g": 240,
+            "b": 241
+        },
+        "errorColor": {
+            "r": 192,
+            "g": 57,
+            "b": 37
+        },
+        "infoColor": {
+            "r": 34,
+            "g": 174,
+            "b": 96
+        },
+        "serverColor": {
+            "r": 142,
+            "g": 68,
+            "b": 128            
+        },
+        "databaseColor": {
+            "r": 243,
+            "g": 156,
+            "b": 18            
+        },
+        "procedureColor": {
+            "r": 122,
+            "g": 140,
+            "b": 83            
+        }
+    }
+]
