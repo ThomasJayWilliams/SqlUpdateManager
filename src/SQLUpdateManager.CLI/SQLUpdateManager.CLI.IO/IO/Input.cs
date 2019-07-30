@@ -32,18 +32,22 @@ namespace SQLUpdateManager.CLI.IO
         public string ReadPassword()
         {
             var password = string.Empty;
+
             while (true)
             {
                 var key = Colorful.Console.ReadKey(true);
 
                 if (key.Key == ConsoleKey.Enter)
-                    return password;
+                    break;
                 if (key.Key == ConsoleKey.Backspace)
                     password = password.Substring(0, password.Length - 1);
 
                 else
                     password += key.KeyChar;
             }
+
+            Console.WriteLine();
+            return password;
         }
     }
 }

@@ -28,12 +28,18 @@ namespace SQLUpdateManager.CLI.Application
             if (string.IsNullOrEmpty(Argument))
                 throw new InvalidCommandException(ErrorCodes.InvalidArgument, $"{Name} command requires database name as an argument.");
 
-            var db = new DataDatabase { Name = Argument };
+            if (Argument == "/")
+                _session.UsedDatabase = null;
 
-            if (string.IsNullOrWhiteSpace(db.Name))
-                throw new InvalidCommandException(ErrorCodes.InvalidData, "The database name cannot be whitespace or empty!");
+            else
+            {
+                var db = new DataDatabase { Name = Argument };
 
-            _session.UsedDatabase = db;
+                if (string.IsNullOrWhiteSpace(db.Name))
+                    throw new InvalidCommandException(ErrorCodes.InvalidData, "The database name cannot be whitespace or empty!");
+
+                _session.UsedDatabase = db;
+            }
         }
     }
 }

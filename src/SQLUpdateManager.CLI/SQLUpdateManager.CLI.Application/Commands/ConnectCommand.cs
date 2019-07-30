@@ -38,23 +38,26 @@ namespace SQLUpdateManager.CLI.Application
         public override void Execute()
         {
             if (!string.IsNullOrEmpty(Argument))
-                throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{Name} does not expect argument.");
-
-            if (_session.ConnectedServer != null)
             {
-                _output.PrintColored(
-                    $"You are currently connected to the {_session.ConnectedServer.Name} server." +
-                    $"Before execution of this command you will be disconnected from this server. Continue?(y/n)",
-                    _session.Theme.TextColor);
+                if (Argument == "/")
+                {
+                    _session.ConnectedServer = null;
+                    _session.UsedDatabase = null;
+                }
 
-                if (_input.ReadLine() != "y")
-                    throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Invalid input. Aborting.");
-
-                _session.ConnectedServer = null;
-                _session.UsedDatabase = null;
+                else
+                    throw new InvalidArgumentException(ErrorCodes.InvalidArgument, $"Invalid argument.");
             }
 
-            Connect();
+            else
+            {
+                if (_session.ConnectedServer != null)
+                    throw new InvalidStateException(ErrorCodes.AlreadyConnectedToTheServer,
+                        $"Cannot connect. Already connected to {_session.ConnectedServer.Name} server.");
+
+                else
+                    Connect();
+            }
         }
 
         private void Connect()
