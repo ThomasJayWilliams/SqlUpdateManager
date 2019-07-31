@@ -37,21 +37,57 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null)
             {
-                var entries = _session.Entries;
+                _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);
 
-                if (entries != null && entries.Any())
+                if (_session.ApplicationStartTimeUtc != null)
                 {
-                    _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);
-
-                    foreach (var entry in entries)
-                    {
-                        _output.PrintColored($"{entry.Name}: ", Color.LightSkyBlue);
-                        _output.PrintColoredLine(entry.Value, _session.Theme.TextColor);
-                    }
+                    _output.PrintColored($"Application start time (UTC): ", Color.LightSkyBlue);
+                    _output.PrintColoredLine(_session.ApplicationStartTimeUtc.ToString(), _session.Theme.TextColor);
                 }
 
-                else
-                    _output.PrintColoredLine("Current session is empty.", Color.LightCyan);
+                if (_session.ApplicationStartTimeLocal != null)
+                {
+                    _output.PrintColored($"Application start time (local): ", Color.LightSkyBlue);
+                    _output.PrintColoredLine(_session.ApplicationStartTimeLocal.ToString(), _session.Theme.TextColor);
+                }
+
+                if (_session.ConnectedServer != null)
+                {
+                    _output.PrintColored($"Connected server: ", Color.LightSkyBlue);
+
+                    var serverName = _session.ConnectedServer.Name.Length > 20 ?
+                        $"{_session.ConnectedServer.Name.Substring(0, 19)}..." :
+                        _session.ConnectedServer.Name;
+                    var serverLocation = _session.ConnectedServer.Location.Length > 20 ?
+                        $"{_session.ConnectedServer.Location.Substring(0, 19)}..." :
+                        _session.ConnectedServer.Location;
+                    var serverUser = _session.ConnectedServer.Username.Length > 20 ?
+                        $"{_session.ConnectedServer.Username.Substring(0, 19)}..." :
+                        _session.ConnectedServer.Username;
+
+                    _output.PrintColoredLine($"{serverName} {serverLocation} {serverUser}",
+                        _session.Theme.TextColor);
+                }
+
+                if (_session.UsedDatabase != null)
+                {
+                    _output.PrintColored($"Database in use: ", Color.LightSkyBlue);
+                    _output.PrintColoredLine(_session.UsedDatabase.Name.Length > 20 ?
+                        $"{_session.UsedDatabase.Name.Substring(0, 19)}..." :
+                        _session.UsedDatabase.Name, _session.Theme.TextColor);
+                }
+
+                if (_session.Encoding != null)
+                {
+                    _output.PrintColored($"File encoding: ", Color.LightSkyBlue);
+                    _output.PrintColoredLine(_session.Encoding.EncodingName, _session.Theme.TextColor);
+                }
+
+                if (_session.Theme != null)
+                {
+                    _output.PrintColored($"Current color theme: ", Color.LightSkyBlue);
+                    _output.PrintColoredLine(_session.Theme.ThemeName, _session.Theme.TextColor);
+                }
             }
         }
     }

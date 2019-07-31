@@ -1,109 +1,23 @@
 ﻿using SQLUpdateManager.Core.Domains;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace SQLUpdateManager.CLI.Common
 {
-    public class SessionEntry
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
-
     public class Session
 	{
-        private DataServer _server;
-        private Database _database;
-        private Encoding _encoding;
-        private ConsoleTheme _colorTheme;
-
-        private Dictionary<string, SessionEntry> _entries = new Dictionary<string, SessionEntry>();
-
-        private readonly DateTime _appStartLocal;
-        private readonly DateTime _appStartUtc;
-
-        public IEnumerable<SessionEntry> Entries { get => _entries.Values; }
-
         public Session()
         {
-            _appStartUtc = DateTime.UtcNow;
-            _entries.Add("appUtcStart",
-                new SessionEntry { Name = "Application start UTC time", Value = _appStartUtc.ToString() });
-
-            _appStartLocal = DateTime.Now;
-            _entries.Add("appLocalStart",
-                new SessionEntry { Name = "Application start local time", Value = _appStartLocal.ToString() });
+            ApplicationStartTimeUtc = DateTime.UtcNow;
+            ApplicationStartTimeLocal = DateTime.Now;
         }
 
-        public DateTime ApplicationStartTimeLocal
-        {
-            get => _appStartLocal;
-        }
+        public DateTime ApplicationStartTimeLocal { get; }
+        public DateTime ApplicationStartTimeUtc { get; }
 
-        public DateTime ApplicationStartTimeUtc
-        {
-            get => _appStartUtc;
-        }
-
-        public Encoding Encoding
-        {
-            get => _encoding;
-            set
-            {
-                _encoding = value;
-
-                if (value == null)
-                    _entries.Remove("encoding");
-                else
-                    _entries.Add("encoding",
-                        new SessionEntry { Name = "Current encoding", Value = value.EncodingName });
-            }
-        }
-
-        public ConsoleTheme Theme
-        {
-            get => _colorTheme;
-            set
-            {
-                _colorTheme = value;
-
-                if (value == null)
-                    _entries.Remove("theme");
-                else
-                    _entries.Add("theme",
-                        new SessionEntry { Name = "Console color theme", Value = value.ThemeName });
-            }
-        }
-
-        public DataServer ConnectedServer
-        {
-            get => _server;
-            set
-            {
-                _server = value;
-
-                if (value == null)
-                    _entries.Remove("server");
-                else
-                    _entries.Add("server",
-                        new SessionEntry { Name = "Current connected DBMS server", Value = $"{value.Name} {value.Location} {value.Username}" });
-            }
-        }
-
-        public Database UsedDatabase
-        {
-            get => _database;
-            set
-            {
-                _database = value;
-
-                if (value == null)
-                    _entries.Remove("database");
-                else
-                    _entries.Add("database",
-                        new SessionEntry { Name = "Database in use", Value = value.Name });
-            }
-        }
-	}
+        public Encoding Encoding { get; set; }
+        public ConsoleTheme Theme { get; set; }
+        public DataServer ConnectedServer { get; set; }
+        public Database UsedDatabase { get; set; }
+    }
 }
