@@ -30,6 +30,7 @@ namespace SQLUpdateManager.CLI
             Bind<IInput>().To<Input>().InSingletonScope();
 
             Bind<Session>().ToSelf().InSingletonScope();
+            Bind<Startup>().ToSelf().InTransientScope();
         }
     }
 

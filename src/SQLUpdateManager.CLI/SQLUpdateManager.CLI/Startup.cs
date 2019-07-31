@@ -11,7 +11,7 @@ namespace SQLUpdateManager.CLI
         private readonly IKernel _serviceProvider;
         private readonly IIOConfiguration _ioConfig;
         private readonly ICommonConfiguration _commonConfig;
-        private readonly IPrefix _prefixLine;
+        private readonly IPrefix _prefix;
         private readonly ILogger _logger;
         private readonly IDataRepository _dataRepo;
         private readonly IOutput _output;
@@ -19,19 +19,27 @@ namespace SQLUpdateManager.CLI
 
         private readonly Session _session;
 
-        public Startup()
+        public Startup(
+            Session session,
+            IIOConfiguration ioConfig,
+            ICommonConfiguration commonConfig,
+            IInput input,
+            IOutput output,
+            IDataRepository dataRepo,
+            ILogger logger,
+            IPrefix prefix,
+            IKernel serviceProvider)
         {
-            _serviceProvider = ConfigureServices();
+            _session = session;
 
-            _session = _serviceProvider.Get<Session>();
-
-            _ioConfig = _serviceProvider.Get<IIOConfiguration>();
-            _prefixLine = _serviceProvider.Get<IPrefix>();
-            _logger = _serviceProvider.Get<ILogger>();
-            _dataRepo = _serviceProvider.Get<IDataRepository>();
-            _output = _serviceProvider.Get<IOutput>();
-            _input = _serviceProvider.Get<IInput>();
-            _commonConfig = _serviceProvider.Get<ICommonConfiguration>();
+            _ioConfig = ioConfig;
+            _prefix = prefix;
+            _logger = logger;
+            _dataRepo = dataRepo;
+            _output = output;
+            _input = input;
+            _commonConfig = commonConfig;
+            _serviceProvider = serviceProvider;
         }
 
         public void Configure()
@@ -79,7 +87,7 @@ namespace SQLUpdateManager.CLI
                 {
                     var chain = InitMiddlewares();
 
-                    _prefixLine.PrintPrefix();
+                    _prefix.PrintPrefix();
 
                     var input = _input.ReadLine();
 
@@ -90,17 +98,10 @@ namespace SQLUpdateManager.CLI
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Fatal error appeared! {ex.Message}");
+                _logger.LogError(ex, $"UNHANDLED EXCEPTION! {ex.Message}");
                 Environment.Exit(1);
             }
         }
-
-        private IKernel ConfigureServices() =>
-            new StandardKernel(
-                new CLIModule(),
-                new CommonModule(),
-                new CoreModule(),
-                new ApplicationModule());
 
         private RequestChain InitMiddlewares()
         {
