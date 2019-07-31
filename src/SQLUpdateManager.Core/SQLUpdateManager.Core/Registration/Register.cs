@@ -90,6 +90,17 @@ namespace SQLUpdateManager.Core.Registration
             return server;
         }
 
+        public Server GetServerByName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Server name cannot be null or empty.");
+
+            _servers = Load()
+                .ToList();
+
+            return _servers.FirstOrDefault(s => s.Name == name);
+        }
+
         public void SaveChanges() =>
             _fileManager.Save(_serializer.Path, _serializer.Serialize(_servers));
 

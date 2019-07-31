@@ -51,8 +51,16 @@ namespace SQLUpdateManager.CLI.Application
 
         public override void Execute()
         {
+            if (_listParameter != null && _deleteParameter != null)
+                throw new InvalidParameterException(ErrorCodes.ConflictParameters,
+                    $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
+
             if (_listParameter != null)
             {
+                if (!string.IsNullOrEmpty(Argument))
+                    throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
+                        $"The {_listParameter.Name} parameter excludes accepting argument.");
+
                 var theme = _session.Theme;
                 var servers = _register.GetAll();
 
@@ -62,13 +70,13 @@ namespace SQLUpdateManager.CLI.Application
                     {
                         _output.PrintColoredLine(server.ToString(), theme.ServerColor);
 
-                        if (server.Databases != null && server.Databases.Any())
+                        if (server.Databases != null)
                         {
                             foreach (var database in server.Databases)
                             {
                                 _output.PrintColoredLine($"\t{database.ToString()}", theme.DatabaseColor);
 
-                                if (database.Procedures != null && database.Procedures.Any())
+                                if (database.Procedures != null)
                                 {
                                     foreach (var procedure in database.Procedures)
                                         _output.PrintColoredLine($"\t\t{procedure.ToString()}", theme.ProcedureColor);
@@ -85,62 +93,142 @@ namespace SQLUpdateManager.CLI.Application
             else if (_deleteParameter != null)
             {
                 if (string.IsNullOrEmpty(Argument))
-                    throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} with {_deleteParameter.Name} parameter requires argument.");
+                    throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument,
+                        $"{Name} with {_deleteParameter.Name} parameter requires argument.");
 
-                if (Argument == "*")
+                if (_session.ConnectedServer == null)
                 {
-                    if (_session.ConnectedServer == null)
+                    if (Argument == "*")
                     {
-                        foreach (var server in _register.GetAll())
+                        var servers = _register.GetAll();
+
+                        if (!servers.Any())
+                            _output.PrintColoredLine("No registered servers.", _session.Theme.TextColor);
+
+                        else
                         {
-                            _output.PrintColoredLine($"Removing ${server.Name}...", _session.Theme.TextColor);
-                            _register.RemoveServer(server.Hash);
+                            foreach (var server in servers)
+                            {
+                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                                _output.PrintColored(server.Name, _session.Theme.ServerColor);
+                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                                _register.RemoveServer(server.Hash);
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        var server = _register.GetServerByName(Argument);
+
+                        if (server == null)
+                            throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
+                                $"{Argument} server is not registered.");
+
+                        _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                        _output.PrintColored(server.Name, _session.Theme.ServerColor);
+                        _output.PrintColoredLine("...", _session.Theme.TextColor);
+
+                        _register.RemoveServer(server.Hash);
+                    }
+
+                    _register.SaveChanges();
+                }
+
+                else if (_session.ConnectedServer != null && _session.UsedDatabase == null)
+                {
+                    var server = _register.GetServer(_session.ConnectedServer.Hash);
+
+                    if (server == null)
+                        throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
+                            $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
+
+                    if (server.Databases != null)
+                    {
+                        if (Argument == "*")
+                        {
+                            if (!server.Databases.Any())
+                                _output.PrintColoredLine("No registered databases.", _session.Theme.TextColor);
+
+                            foreach (var database in server.Databases)
+                            {
+                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                                _output.PrintColored(database.Name, _session.Theme.DatabaseColor);
+                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                            }
+
+                            server.Databases = null;
                         }
 
-                        _register.SaveChanges();
+                        else
+                        {
+                            var database = server.Databases.FirstOrDefault(db => db.Name == Argument);
+
+                            if (database == null)
+                                throw new InvalidArgumentException(ErrorCodes.DatabaseIsNotRegistered,
+                                    $"{Argument} database is not registered.");
+
+                            _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                            _output.PrintColored(database.Name, _session.Theme.DatabaseColor);
+                            _output.PrintColoredLine("...", _session.Theme.TextColor);
+
+                            server.Databases = server.Databases.Where(db => !db.Hash.SequenceEqual(database.Hash));
+                        }
                     }
 
-                    else if (_session.ConnectedServer != null && _session.UsedDatabase == null)
+                    _register.UpdateServer(server);
+                    _register.SaveChanges();
+                }
+
+                else if (_session.UsedDatabase != null)
+                {
+                    var server = _register.GetServer(_session.ConnectedServer.Hash);
+
+                    if (server == null)
+                        throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
+                            $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
+
+                    if (server.Databases == null || !server.Databases.Any(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash)))
+                        throw new InvalidArgumentException(ErrorCodes.DatabaseIsNotRegistered,
+                            $"{_session.UsedDatabase.Name} database is not registered and cannot be removed.");
+
+                    var database = server.Databases.FirstOrDefault(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash));
+
+                    if (database.Procedures != null)
                     {
-                        var server = _register.GetServer(_session.ConnectedServer.Hash);
+                        if (Argument == "*")
+                        {
+                            if (!database.Procedures.Any())
+                                _output.PrintColoredLine("No registered procedures.", _session.Theme.TextColor);
 
-                        if (server == null)
-                            throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
-                                $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
-
-                        if (server.Databases != null && server.Databases.Any())
-                            foreach (var database in server.Databases)
-                                _output.PrintColoredLine($"Removing {database.Name}...", _session.Theme.TextColor);
-
-                        server.Databases = null;
-
-                        _register.UpdateServer(server);
-                        _register.SaveChanges();
-                    }
-
-                    else if (_session.UsedDatabase != null)
-                    {
-                        var server = _register.GetServer(_session.ConnectedServer.Hash);
-
-                        if (server == null)
-                            throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
-                                $"{_session.ConnectedServer.Name} server is not registered and cannot be removed.");
-
-                        if (server.Databases == null || !server.Databases.Any(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash)))
-                            throw new InvalidArgumentException(ErrorCodes.DatabaseIsNotRegistered,
-                                $"{_session.UsedDatabase.Name} database is not registered and cannot be removed.");
-
-                        var database = server.Databases.FirstOrDefault(db => db.Hash.SequenceEqual(_session.UsedDatabase.Hash));
-
-                        if (database.Procedures != null && database.Procedures.Any())
                             foreach (var procedure in database.Procedures)
-                                _output.PrintColoredLine($"Removing {procedure.Name}...", _session.Theme.TextColor);
+                            {
+                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                                _output.PrintColored(procedure.Name, _session.Theme.ProcedureColor);
+                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                            }
 
-                        database.Procedures = null;
+                            database.Procedures = null;
+                        }
 
-                        _register.UpdateServer(server);
-                        _register.SaveChanges();
+                        else
+                        {
+                            var procedure = database.Procedures.FirstOrDefault(proc => proc.Name == Argument);
+
+                            if (procedure == null)
+                                throw new InvalidArgumentException(ErrorCodes.ProcedureIsNotRegistered,
+                                    $"{Argument} procedure is not registered.");
+
+                            _output.PrintColored($"Removing ", _session.Theme.TextColor);
+                            _output.PrintColored(procedure.Name, _session.Theme.ProcedureColor);
+                            _output.PrintColoredLine("...", _session.Theme.TextColor);
+
+                            database.Procedures = database.Procedures.Where(proc => !proc.Hash.SequenceEqual(procedure.Hash));
+                        }
                     }
+
+                    _register.UpdateServer(server);
+                    _register.SaveChanges();
                 }
             }
 
@@ -149,12 +237,7 @@ namespace SQLUpdateManager.CLI.Application
                 if (string.IsNullOrEmpty(Argument))
                     throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} command requires argument.");
 
-                var procedure = _repository.GetRawData(Argument);
                 var procName = Path.GetFileName(Argument);
-
-                if (string.IsNullOrEmpty(procedure))
-                    throw new InvalidArgumentException(ErrorCodes.InvalidArgument, $"{Argument} procedure contains no data. Cannot register empty files.");
-
                 var server = _session.ConnectedServer;
                 var database = _session.UsedDatabase;
 

@@ -13,7 +13,10 @@
 
         UnacceptableParameter,
         DuplicateParameters,
+        ConflictParameters,
         MissplacedArgument,
+
+        ProcedureFileIsNotFound,
 
         CommandRequiresArgument,
         CommandRequiresParameter,
@@ -25,6 +28,7 @@
         NoDatabaseInUse,
 
         ServerIsNotRegistered,
-        DatabaseIsNotRegistered
+        DatabaseIsNotRegistered,
+        ProcedureIsNotRegistered
     }
 }
