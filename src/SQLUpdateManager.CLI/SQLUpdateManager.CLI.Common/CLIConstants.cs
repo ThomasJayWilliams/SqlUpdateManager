@@ -64,7 +64,8 @@
             ProcedureColor = new RGB(122, 140, 83),
             TextColor = new RGB(236, 240, 241),
             InfoColor = new RGB(34, 174, 96),
-            InputColor = new RGB(236, 240, 241)
+            InputColor = new RGB(236, 240, 241),
+            PropertyColor = new RGB(135, 206, 250)
         };
     }
 }

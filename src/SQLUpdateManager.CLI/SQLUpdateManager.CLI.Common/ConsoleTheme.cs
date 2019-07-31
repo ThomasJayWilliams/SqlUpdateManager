@@ -22,5 +22,7 @@ namespace SQLUpdateManager.CLI.Common
         public RGB AppColor { get; set; }
         [JsonProperty("inputColor")]
         public RGB InputColor { get; set; }
+        [JsonProperty("propertyColor")]
+        public RGB PropertyColor { get; set; }
     }
 }

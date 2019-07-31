@@ -35,25 +35,29 @@ namespace SQLUpdateManager.CLI.Application
 
         public override void Execute()
         {
+            if (!string.IsNullOrEmpty(Argument))
+                throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
+                    $"The {Name} command does not accept arguments.");
+
             if (_listParameter != null)
             {
                 _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);
 
                 if (_session.ApplicationStartTimeUtc != null)
                 {
-                    _output.PrintColored($"Application start time (UTC): ", Color.LightSkyBlue);
+                    _output.PrintColored($"Application start time (UTC): ", _session.Theme.PropertyColor);
                     _output.PrintColoredLine(_session.ApplicationStartTimeUtc.ToString(), _session.Theme.TextColor);
                 }
 
                 if (_session.ApplicationStartTimeLocal != null)
                 {
-                    _output.PrintColored($"Application start time (local): ", Color.LightSkyBlue);
+                    _output.PrintColored($"Application start time (local): ", _session.Theme.PropertyColor);
                     _output.PrintColoredLine(_session.ApplicationStartTimeLocal.ToString(), _session.Theme.TextColor);
                 }
 
                 if (_session.ConnectedServer != null)
                 {
-                    _output.PrintColored($"Connected server: ", Color.LightSkyBlue);
+                    _output.PrintColored($"Connected server: ", _session.Theme.PropertyColor);
 
                     var serverName = _session.ConnectedServer.Name.Length > 20 ?
                         $"{_session.ConnectedServer.Name.Substring(0, 19)}..." :
@@ -71,7 +75,7 @@ namespace SQLUpdateManager.CLI.Application
 
                 if (_session.UsedDatabase != null)
                 {
-                    _output.PrintColored($"Database in use: ", Color.LightSkyBlue);
+                    _output.PrintColored($"Database in use: ", _session.Theme.PropertyColor);
                     _output.PrintColoredLine(_session.UsedDatabase.Name.Length > 20 ?
                         $"{_session.UsedDatabase.Name.Substring(0, 19)}..." :
                         _session.UsedDatabase.Name, _session.Theme.TextColor);
@@ -79,13 +83,13 @@ namespace SQLUpdateManager.CLI.Application
 
                 if (_session.Encoding != null)
                 {
-                    _output.PrintColored($"File encoding: ", Color.LightSkyBlue);
+                    _output.PrintColored($"File encoding: ", _session.Theme.PropertyColor);
                     _output.PrintColoredLine(_session.Encoding.EncodingName, _session.Theme.TextColor);
                 }
 
                 if (_session.Theme != null)
                 {
-                    _output.PrintColored($"Current color theme: ", Color.LightSkyBlue);
+                    _output.PrintColored($"Current color theme: ", _session.Theme.PropertyColor);
                     _output.PrintColoredLine(_session.Theme.ThemeName, _session.Theme.TextColor);
                 }
             }

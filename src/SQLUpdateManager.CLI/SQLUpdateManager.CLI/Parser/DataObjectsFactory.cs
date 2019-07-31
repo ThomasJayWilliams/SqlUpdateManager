@@ -29,6 +29,8 @@ namespace SQLUpdateManager.CLI
                     return _serviceProvider.Get<RegisterCommand>();
                 case CLIConstants.ExitCommand:
                     return _serviceProvider.Get<ExitCommand>();
+                case CLIConstants.StorageCommand:
+                    return _serviceProvider.Get<StorageCommand>();
                 default:
                     throw new InvalidCommandException(ErrorCodes.InvalidCommand, $"Command {name} does not exist.");
             }
