@@ -22,10 +22,13 @@
         CommandRequiresParameter,
 
         ProcedureIsAlreadyRegistered,
+        ServerIsAlreadyRegistered,
+        DatabaseIsAlreadyRegistered,
 
         ServerIsNotConnected,
         AlreadyConnectedToTheServer,
         NoDatabaseInUse,
+        AlreadyUsingDatabase,
 
         ServerIsNotRegistered,
         DatabaseIsNotRegistered,

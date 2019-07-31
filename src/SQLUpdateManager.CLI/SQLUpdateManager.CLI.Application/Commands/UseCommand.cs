@@ -33,6 +33,10 @@ namespace SQLUpdateManager.CLI.Application
 
             else
             {
+                if (_session.UsedDatabase != null)
+                    throw new InvalidStateException(ErrorCodes.AlreadyUsingDatabase,
+                        $"Cannot use. Already using to {_session.UsedDatabase.Name}.");
+
                 var db = new DataDatabase { Name = Argument };
 
                 if (string.IsNullOrWhiteSpace(db.Name))

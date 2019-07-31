@@ -53,7 +53,7 @@ namespace SQLUpdateManager.CLI.Application
             {
                 if (_session.ConnectedServer != null)
                     throw new InvalidStateException(ErrorCodes.AlreadyConnectedToTheServer,
-                        $"Cannot connect. Already connected to {_session.ConnectedServer.Name} server.");
+                        $"Cannot connect. Already connected to {_session.ConnectedServer.Name}.");
 
                 else
                     Connect();
