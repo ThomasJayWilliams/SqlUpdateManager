@@ -2,6 +2,6 @@
 {
     public interface ICommonConfiguration
     {
-        void ConfigureSession(AppConfig config);
+        void ConfigureSession(AppConfig config, Storage storage);
     }
 }

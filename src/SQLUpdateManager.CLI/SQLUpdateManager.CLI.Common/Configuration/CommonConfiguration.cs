@@ -15,14 +15,17 @@ namespace SQLUpdateManager.CLI.Common
             _dataRepo = dataRepo;
         }
 
-        public void ConfigureSession(AppConfig config)
+        public void ConfigureSession(AppConfig config, Storage storage)
         {
             if (config == null)
                 throw new ArgumentNullException("Config cannot be null.");
 
             if (string.IsNullOrEmpty(config.Core.FileEncoding))
                 throw new ArgumentException("File encoding cannot be null or empty.");
+
             _session.Encoding = EncodingHelper.GetEncoding(config.Core.FileEncoding);
+
+            _session.Storage = storage;
 
             if (!_dataRepo.Exists(CLIConstants.ConsoleThemesPath))
                 ConfigureConsole(CLIConstants.DefaultThemeName);

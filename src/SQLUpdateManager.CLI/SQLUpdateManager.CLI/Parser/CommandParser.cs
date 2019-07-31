@@ -60,7 +60,7 @@ namespace SQLUpdateManager.CLI
                             param = _objectsFactory.GetParameter(node.Substring(CLIConstants.DParameterPrefix.Length, node.IndexOf("=") - 2));
 
                             if (param.RequiresArgument)
-                                param.Argument = node.Substring(node.IndexOf("="));
+                                param.Argument = node.Substring(node.IndexOf("=") + 1);
 
                             else
                                 throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter does not accept arguments.");

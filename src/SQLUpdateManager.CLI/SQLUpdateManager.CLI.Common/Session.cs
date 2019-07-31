@@ -19,5 +19,6 @@ namespace SQLUpdateManager.CLI.Common
         public ConsoleTheme Theme { get; set; }
         public DataServer ConnectedServer { get; set; }
         public Database UsedDatabase { get; set; }
+        public Storage Storage { get; set; }
     }
 }

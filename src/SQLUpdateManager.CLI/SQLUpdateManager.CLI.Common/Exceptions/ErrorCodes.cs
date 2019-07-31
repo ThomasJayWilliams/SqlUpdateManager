@@ -32,6 +32,10 @@
 
         ServerIsNotRegistered,
         DatabaseIsNotRegistered,
-        ProcedureIsNotRegistered
+        ProcedureIsNotRegistered,
+
+        CannotReadStorage,
+        ServerIsAlreadyInStorage,
+        ServerIsNotStored
     }
 }

@@ -12,6 +12,7 @@
         public const string InfoLogPath = LogDir + "/infoLog.log";
         public const string HelpPath = AppDataDir + "/helpdoc.dat";
         public const string ConsoleThemesPath = AppDataDir + "/themes.json";
+        public const string StoragePath = AppDataDir + "/storage.json";
 
         public const string LogDir = "logs";
         public const string AppDataDir = "appdata";
@@ -24,6 +25,7 @@
         public const string HelpCommand = "help";
         public const string ConfigCommand = "config";
         public const string ExitCommand = "exit";
+        public const string StorageCommand = "storage";
 
         public const string SaveParameter = "save";
 

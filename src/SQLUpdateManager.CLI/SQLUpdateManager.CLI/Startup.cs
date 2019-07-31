@@ -2,9 +2,7 @@
 using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace SQLUpdateManager.CLI
 {
@@ -20,7 +18,6 @@ namespace SQLUpdateManager.CLI
         private readonly IInput _input;
 
         private readonly Session _session;
-        private readonly AppConfig _config;
 
         public Startup()
         {
@@ -35,13 +32,14 @@ namespace SQLUpdateManager.CLI
             _output = _serviceProvider.Get<IOutput>();
             _input = _serviceProvider.Get<IInput>();
             _commonConfig = _serviceProvider.Get<ICommonConfiguration>();
-
-            _config = _dataRepo.GetData<AppConfig>(CLIConstants.ConfigPath);
         }
 
         public void Configure()
         {
-            _commonConfig.ConfigureSession(_config);
+            var config = _dataRepo.GetData<AppConfig>(CLIConstants.ConfigPath);
+            var storage = _dataRepo.GetData<Storage>(CLIConstants.StoragePath);
+
+            _commonConfig.ConfigureSession(config, storage);
             _ioConfig.ConfigureLogger();
 
             _logger.LogInfo("Starting application...");

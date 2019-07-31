@@ -1,6 +1,5 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
-using System;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
