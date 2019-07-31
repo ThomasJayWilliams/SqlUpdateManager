@@ -16,7 +16,7 @@ namespace SQLUpdateManager.CLI
         public void Invoke(RequestContext context)
         {
             var command = _parser.Parse(context.InputCommand);
-            command.Execute();
+            command.ValidateAndRun();
             context.Next();
         }
     }

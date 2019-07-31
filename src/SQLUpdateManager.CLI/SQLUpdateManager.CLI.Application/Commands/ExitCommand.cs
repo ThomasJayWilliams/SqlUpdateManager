@@ -14,15 +14,15 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         public override string Name { get => CLIConstants.ExitCommand; }
-        public override bool RequiresParameters { get => false; }
-        public override bool RequiresArgument { get => false; }
 
         public ExitCommand(ILogger logger)
         {
             _logger = logger;
         }
 
-        public override void Execute()
+        protected override void Validation() { }
+
+        protected override void Execute()
         {
             _logger.LogInfo("Exiting with code 0.");
             Environment.Exit(0);

@@ -26,8 +26,6 @@ namespace SQLUpdateManager.CLI.Application
             };
         }
 
-        public override bool RequiresParameters { get => false; }
-        public override bool RequiresArgument { get => false; }
         public override string Name { get => CLIConstants.ConnectCommand; }
 
         public ConnectCommand(
@@ -42,12 +40,26 @@ namespace SQLUpdateManager.CLI.Application
             _dataRepo = dataRepo;
         }
 
-        public override void Execute()
+        protected override void Validation()
         {
             if (_session.ConnectedServer != null && Argument != "/")
                 throw new InvalidStateException(ErrorCodes.AlreadyConnectedToTheServer,
                     $"Cannot connect. Already connected to {_session.ConnectedServer.Name}.");
 
+            if (_saveParameter != null)
+            {
+                if (!string.IsNullOrEmpty(Argument))
+                    throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
+                        $"The {_saveParameter.Name} parameter excludes accepting argument.");
+
+                if (string.IsNullOrWhiteSpace(_saveParameter.Argument))
+                    throw new InvalidArgumentException(ErrorCodes.InvalidArgument,
+                        $"Invalid argument for {_saveParameter.Name} parameter.");
+            }
+        }
+
+        protected override void Execute()
+        {
             var server = new DataServer();
 
             if (!string.IsNullOrEmpty(Argument))
@@ -111,14 +123,6 @@ namespace SQLUpdateManager.CLI.Application
 
             if (_saveParameter != null)
             {
-                if (!string.IsNullOrEmpty(Argument))
-                    throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
-                        $"The {_saveParameter.Name} parameter excludes accepting argument.");
-
-                if (string.IsNullOrWhiteSpace(_saveParameter.Argument))
-                    throw new InvalidArgumentException(ErrorCodes.InvalidArgument,
-                        $"Invalid argument for {_saveParameter.Name} parameter.");
-
                 var storageServer = new StorageServer
                 {
                     Alias = _saveParameter.Argument,

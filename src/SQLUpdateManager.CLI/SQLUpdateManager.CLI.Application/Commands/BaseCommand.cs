@@ -8,13 +8,9 @@ namespace SQLUpdateManager.CLI.Application
     public abstract class BaseCommand : ICommand
     {
         protected List<IParameter> _parameters = new List<IParameter>();
-
-        public abstract string Name { get; }
-        public abstract bool RequiresParameters { get; }
-        public abstract bool RequiresArgument { get; }
-
         protected abstract string[] AllowedParameters { get; }
 
+        public abstract string Name { get; }
         public string Argument { get; set; }
         public IEnumerable<IParameter> Parameters { get => _parameters; }
 
@@ -24,11 +20,16 @@ namespace SQLUpdateManager.CLI.Application
                 throw new ArgumentNullException("Parameters cannot be null or empty!");
 
             _parameters.AddRange(parameters);
-
-            ValidateParameters();
         }
 
-        protected void ValidateParameters()
+        public void ValidateAndRun()
+        {
+            BaseValidation();
+            Validation();
+            Execute();
+        }
+
+        private void BaseValidation()
         {
             if (_parameters.Count() != _parameters.Distinct().Count())
                 throw new InvalidParameterException(ErrorCodes.DuplicateParameters, "Duplicate parameters.");
@@ -36,12 +37,14 @@ namespace SQLUpdateManager.CLI.Application
             foreach (var param in _parameters)
                 if (!AllowedParameters.Any(p => p == param.Name))
                     throw new InvalidParameterException(ErrorCodes.UnacceptableParameter,
-                        $"{Name} command does not accept {param.Name} parameter.");
+                        $"The {Name} command does not accept {param.Name} parameter.");
         }
 
         public void AddParameters(IEnumerable<IParameter> parameters) =>
             AddParameters(parameters.ToArray());
 
-        public abstract void Execute();
+        protected abstract void Execute();
+
+        protected abstract void Validation();
     }
 }

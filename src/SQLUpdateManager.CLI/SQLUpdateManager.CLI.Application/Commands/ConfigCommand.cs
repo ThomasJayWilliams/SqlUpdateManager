@@ -24,8 +24,6 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         public override string Name { get => CLIConstants.ConfigCommand; }
-        public override bool RequiresParameters { get => false; }
-        public override bool RequiresArgument { get => true; }
 
         public ConfigCommand(IConfigurationManager configManager, Session session, IOutput output)
         {
@@ -34,25 +32,32 @@ namespace SQLUpdateManager.CLI.Application
             _configManager = configManager;
         }
 
-        public override void Execute()
+        protected override void Validation()
         {
             if (_listParameter != null)
             {
                 if (!string.IsNullOrEmpty(Argument))
                     throw new InvalidCommandException(ErrorCodes.MissplacedArgument, $"{_listParameter.Name} parameter excludes argument input.");
+            }
 
+            else if (string.IsNullOrEmpty(Argument))
+                throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument,
+                    $"{Name} command requires argument.");
+
+            else if (!Argument.Contains(".") || !Argument.Contains("="))
+                throw new InvalidArgumentException(ErrorCodes.InvalidArgumentFormat,
+                    $"{Name} command expects [category].[property]=[value].");
+        }
+
+        protected override void Execute()
+        {
+            if (_listParameter != null)
+            {
                 var config = _configManager.GetConfig(CLIConstants.ConfigPath);
                 foreach (var confValue in _configManager.GetStringConfig(CLIConstants.ConfigPath))
                     _output.PrintColoredLine(confValue, _session.Theme.TextColor);
             }
-
-            else if (string.IsNullOrEmpty(Argument))
-                throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} command requires argument.");
-
-            else if (!Argument.Contains(".") || !Argument.Contains("="))
-                throw new InvalidArgumentException(ErrorCodes.InvalidArgumentFormat,
-                    $"{Name} command expects [category].[property]=[value]. Use {Name} command with {CLIConstants.HelpParameter} to get detailed help.");
-
+            
             else
             {
                 var config = _configManager.GetConfig(CLIConstants.ConfigPath);

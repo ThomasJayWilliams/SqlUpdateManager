@@ -24,8 +24,6 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         public override string Name { get => CLIConstants.StateCommand; }
-        public override bool RequiresParameters { get => true; }
-        public override bool RequiresArgument { get => false; }
 
         public StateCommand(Session session, IOutput output)
         {
@@ -33,12 +31,19 @@ namespace SQLUpdateManager.CLI.Application
             _session = session;
         }
 
-        public override void Execute()
+        protected override void Validation()
         {
             if (!string.IsNullOrEmpty(Argument))
                 throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
                     $"The {Name} command does not accept arguments.");
 
+            if (_parameters == null || !_parameters.Any())
+                throw new InvalidCommandException(ErrorCodes.CommandRequiresParameter,
+                    $"{Name} command requires at least one parameter.");
+        }
+
+        protected override void Execute()
+        {
             if (_listParameter != null)
             {
                 _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);

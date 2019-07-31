@@ -34,8 +34,6 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         public override string Name { get => CLIConstants.RegisterCommand; }
-        public override bool RequiresParameters { get => false; }
-        public override bool RequiresArgument { get => true; }
 
         public RegisterCommand(
             Register register,
@@ -49,18 +47,24 @@ namespace SQLUpdateManager.CLI.Application
             _repository = repository;
         }
 
-        public override void Execute()
+        protected override void Validation()
         {
             if (_listParameter != null && _deleteParameter != null)
                 throw new InvalidParameterException(ErrorCodes.ConflictParameters,
                     $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
 
+            if (!string.IsNullOrEmpty(Argument) && _listParameter != null || _deleteParameter != null)
+                throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
+                    $"The {_listParameter.Name} and {_deleteParameter.Name} parameters exclude argument.");
+
+            else if (string.IsNullOrEmpty(Argument))
+                throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} command requires argument.");
+        }
+
+        protected override void Execute()
+        {
             if (_listParameter != null)
             {
-                if (!string.IsNullOrEmpty(Argument))
-                    throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
-                        $"The {_listParameter.Name} parameter excludes accepting argument.");
-
                 var theme = _session.Theme;
                 var servers = _register.GetAll();
 
@@ -92,10 +96,6 @@ namespace SQLUpdateManager.CLI.Application
 
             else if (_deleteParameter != null)
             {
-                if (string.IsNullOrEmpty(Argument))
-                    throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument,
-                        $"{Name} with {_deleteParameter.Name} parameter requires argument.");
-
                 if (_session.ConnectedServer == null)
                 {
                     if (Argument == "*")
@@ -234,9 +234,6 @@ namespace SQLUpdateManager.CLI.Application
 
             else
             {
-                if (string.IsNullOrEmpty(Argument))
-                    throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} command requires argument.");
-
                 var procName = Path.GetFileName(Argument);
                 var server = _session.ConnectedServer;
                 var database = _session.UsedDatabase;

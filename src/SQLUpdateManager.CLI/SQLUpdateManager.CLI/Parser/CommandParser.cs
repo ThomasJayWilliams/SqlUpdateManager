@@ -23,11 +23,12 @@ namespace SQLUpdateManager.CLI
                 throw new InvalidCommandException(ErrorCodes.InvalidCommand, "Could not parse the command.");
 
             ParseCommand(nodes);
-            ParseParameters(nodes);
 
             if (_command == null)
                 throw new InvalidCommandException(ErrorCodes.InvalidCommand,
                     $"Error parsing command. Check {CLIConstants.ErrorLogPath} for error log.");
+
+            ParseParameters(nodes);
 
             if (nodes.Any())
                 _command.Argument = nodes.LastOrDefault();
@@ -41,7 +42,7 @@ namespace SQLUpdateManager.CLI
             _command = _objectsFactory.GetCommand(command);
             input.RemoveAt(0);
         }
-        
+
         private void ParseParameters(List<string> input)
         {
             if (input != null && input.Count > 0)
@@ -58,21 +59,11 @@ namespace SQLUpdateManager.CLI
                         if (node.Contains("="))
                         {
                             param = _objectsFactory.GetParameter(node.Substring(CLIConstants.DParameterPrefix.Length, node.IndexOf("=") - 2));
-
-                            if (param.RequiresArgument)
-                                param.Argument = node.Substring(node.IndexOf("=") + 1);
-
-                            else
-                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter does not accept arguments.");
+                            param.Argument = node.Substring(node.IndexOf("=") + 1);
                         }
 
                         else
-                        {
                             param = _objectsFactory.GetParameter(node.Substring(CLIConstants.DParameterPrefix.Length));
-
-                            if (param.RequiresArgument)
-                                throw new InvalidCommandException(ErrorCodes.InvalidParameter, $"The {param.Name} parameter requires argument.");
-                        }
 
                         list.Add(param);
                         input.Remove(node);
@@ -88,9 +79,6 @@ namespace SQLUpdateManager.CLI
                 if (list.Any())
                     _command.AddParameters(list);
             }
-
-            else if (_command.RequiresParameters)
-                throw new InvalidCommandException(ErrorCodes.CommandRequiresParameter, $"{_command.Name} command requires at least one parameter.");
         }
     }
 }

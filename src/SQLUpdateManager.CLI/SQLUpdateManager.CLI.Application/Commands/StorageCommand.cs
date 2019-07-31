@@ -1,7 +1,5 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
-using System;
-using System.Drawing;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
@@ -22,8 +20,6 @@ namespace SQLUpdateManager.CLI.Application
         private readonly IDataRepository _dataRepo;
 
         public override string Name { get => CLIConstants.StorageCommand; }
-        public override bool RequiresParameters { get => true; }
-        public override bool RequiresArgument { get => false; }
 
         public StorageCommand(Session session, IDataRepository dataRepo, IOutput output)
         {
@@ -41,18 +37,21 @@ namespace SQLUpdateManager.CLI.Application
             };
         }
 
-        public override void Execute()
+        protected override void Validation()
         {
             if (!string.IsNullOrEmpty(Argument))
                 throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
                     $"The {Name} command does not accept arguments.");
 
+            if (_listParameter != null && _deleteParameter != null)
+                throw new InvalidParameterException(ErrorCodes.ConflictParameters,
+                    $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
+        }
+
+        protected override void Execute()
+        {
             if (_listParameter != null)
             {
-                if (_deleteParameter != null)
-                    throw new InvalidParameterException(ErrorCodes.ConflictParameters,
-                        $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
-
                 var servers = _session.Storage.Servers;
 
                 if (servers != null && servers.Any())
@@ -72,10 +71,6 @@ namespace SQLUpdateManager.CLI.Application
 
             else if (_deleteParameter != null)
             {
-                if (_listParameter != null)
-                    throw new InvalidParameterException(ErrorCodes.ConflictParameters,
-                        $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
-
                 _session.Storage.Servers = Enumerable.Empty<StorageServer>();
                 _dataRepo.WriteData(CLIConstants.StoragePath, _session.Storage);
 

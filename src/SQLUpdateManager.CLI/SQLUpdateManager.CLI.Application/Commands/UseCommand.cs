@@ -13,20 +13,22 @@ namespace SQLUpdateManager.CLI.Application
         }
 
         public override string Name { get => CLIConstants.UseCommand; }
-        public override bool RequiresParameters { get => false; }
-        public override bool RequiresArgument { get => true; }
 
         public UseCommand(Session session)
         {
             _session = session;
         }
 
-        public override void Execute()
+        protected override void Validation()
+        {
+            if (string.IsNullOrEmpty(Argument))
+                throw new InvalidCommandException(ErrorCodes.InvalidArgument, $"{Name} command requires database name as an argument.");
+        }
+
+        protected override void Execute()
         {
             if (_session.ConnectedServer == null)
                 throw new InvalidStateException(ErrorCodes.ServerIsNotConnected, "To use database you must be connected to the server! Use 'connect --help' to get help.");
-            if (string.IsNullOrEmpty(Argument))
-                throw new InvalidCommandException(ErrorCodes.InvalidArgument, $"{Name} command requires database name as an argument.");
 
             if (Argument == "/")
                 _session.UsedDatabase = null;
