@@ -51,13 +51,17 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null && _deleteParameter != null)
                 throw new InvalidParameterException(ErrorCodes.ConflictParameters,
-                    $"The {_listParameter.Name} and {_deleteParameter.Name} parameters cannot be used at the same time.");
+                    $"The {CLIConstants.ListParameter} and {CLIConstants.DeleteParameter} parameters cannot be used at the same time.");
 
-            if (!string.IsNullOrEmpty(Argument) && _listParameter != null || _deleteParameter != null)
+            if (!string.IsNullOrEmpty(Argument) && _listParameter != null)
                 throw new InvalidArgumentException(ErrorCodes.MissplacedArgument,
-                    $"The {_listParameter.Name} and {_deleteParameter.Name} parameters exclude argument.");
+                    $"The {CLIConstants.ListParameter} parameter excludes argument.");
 
-            else if (string.IsNullOrEmpty(Argument))
+            if (string.IsNullOrEmpty(Argument) && _deleteParameter != null)
+                throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument,
+                    $"The {CLIConstants.DeleteParameter} parameters requires command argument to be specified.");
+
+            else if (string.IsNullOrEmpty(Argument) && _listParameter == null && _deleteParameter == null)
                 throw new InvalidArgumentException(ErrorCodes.CommandRequiresArgument, $"{Name} command requires argument.");
         }
 
