@@ -16,8 +16,6 @@
         public const string AppDataDir = "appdata";
         public const string DataDir = "data";
 
-        public const string ConnectCommand = "connect";
-        public const string UseCommand = "use";
         public const string RegisterCommand = "register";
         public const string StateCommand = "state";
         public const string HelpCommand = "help";

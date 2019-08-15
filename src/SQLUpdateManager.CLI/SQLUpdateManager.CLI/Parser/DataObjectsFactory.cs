@@ -17,10 +17,6 @@ namespace SQLUpdateManager.CLI
         {
             switch (name)
             {
-                case CLIConstants.UseCommand:
-                    return _serviceProvider.Get<UseCommand>();
-                case CLIConstants.ConnectCommand:
-                    return _serviceProvider.Get<ConnectCommand>();
                 case CLIConstants.StateCommand:
                     return _serviceProvider.Get<StateCommand>();
                 case CLIConstants.ConfigCommand:

@@ -56,8 +56,6 @@ namespace SQLUpdateManager.CLI
     {
         public override void Load()
         {
-            Bind<ICommand>().To<ConnectCommand>().InTransientScope();
-            Bind<ICommand>().To<UseCommand>().InTransientScope();
             Bind<ICommand>().To<RegisterCommand>().InTransientScope();
             Bind<ICommand>().To<ConfigCommand>().InTransientScope();
             Bind<ICommand>().To<ExitCommand>().InTransientScope();
