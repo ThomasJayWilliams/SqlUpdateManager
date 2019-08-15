@@ -82,7 +82,7 @@ namespace SQLUpdateManager.CLI.Application
                     server.Location = storageServer.Location;
                     server.Username = storageServer.Username;
 
-                    _output.PrintColored("Server user password: ", _session.Theme.TextColor);
+                    _output.Print("Server user password: ");
                     server.Password = _input.ReadPassword();
 
                     if (string.IsNullOrWhiteSpace(server.Password))
@@ -94,25 +94,25 @@ namespace SQLUpdateManager.CLI.Application
 
             else
             {
-                _output.PrintColored("Server name: ", _session.Theme.TextColor);
+                _output.Print("Server name: ");
                 server.Name = _input.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(server.Name))
                     throw new InvalidCommandException(ErrorCodes.InvalidData, "The server name cannot be whitespace or empty!");
 
-                _output.PrintColored("Server address: ", _session.Theme.TextColor);
+                _output.Print("Server address: ");
                 server.Location = _input.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(server.Location))
                     throw new InvalidCommandException(ErrorCodes.InvalidData, "The server address cannot be whitespace or empty!");
 
-                _output.PrintColored("Server user name: ", _session.Theme.TextColor);
+                _output.Print("Server user name: ");
                 server.Username = _input.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(server.Username))
                     throw new InvalidCommandException(ErrorCodes.InvalidData, "The server user name cannot be whitespace or empty!");
 
-                _output.PrintColored("Server user password: ", _session.Theme.TextColor);
+                _output.Print("Server user password: ");
                 server.Password = _input.ReadPassword();
 
                 if (string.IsNullOrWhiteSpace(server.Password))

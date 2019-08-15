@@ -61,8 +61,7 @@ namespace SQLUpdateManager.CLI.Common
 
             return new List<string>
             {
-                $"{GetAttributeValue<AppConfig, CoreConfig>(c => c.Core)}.{GetAttributeValue<CoreConfig, string>(c => c.FileEncoding)}={config.Core.FileEncoding}",
-                $"{GetAttributeValue<AppConfig, CoreConfig>(c => c.Core)}.{GetAttributeValue<CoreConfig, string>(c => c.Theme)}={config.Core.Theme}",
+                $"{GetAttributeValue<AppConfig, CoreConfig>(c => c.Core)}.{GetAttributeValue<CoreConfig, string>(c => c.FileEncoding)}={config.Core.FileEncoding}"
             };
         }
 
@@ -75,8 +74,7 @@ namespace SQLUpdateManager.CLI.Common
         private IEnumerable<string> GetPropertyNames() =>
             new List<string>
             {
-                GetAttributeValue<CoreConfig, string>(c => c.FileEncoding),
-                GetAttributeValue<CoreConfig, string>(c => c.Theme)
+                GetAttributeValue<CoreConfig, string>(c => c.FileEncoding)
             };
 
         private string GetAttributeValue<TObj, TProperty>(Expression<Func<TObj, TProperty>> value)
@@ -92,8 +90,6 @@ namespace SQLUpdateManager.CLI.Common
             {
                 if (property == GetAttributeValue<CoreConfig, string>(c => c.FileEncoding) && EncodingHelper.GetEncoding(value) != null)
                     config.Core.FileEncoding = value;
-                if (property == GetAttributeValue<CoreConfig, string>(c => c.Theme))
-                    config.Core.Theme = value;
             }
         }
     }

@@ -11,7 +11,6 @@ namespace SQLUpdateManager.CLI
         private readonly IKernel _serviceProvider;
         private readonly IIOConfiguration _ioConfig;
         private readonly ICommonConfiguration _commonConfig;
-        private readonly IPrefix _prefix;
         private readonly ILogger _logger;
         private readonly IDataRepository _dataRepo;
         private readonly IOutput _output;
@@ -27,13 +26,11 @@ namespace SQLUpdateManager.CLI
             IOutput output,
             IDataRepository dataRepo,
             ILogger logger,
-            IPrefix prefix,
             IKernel serviceProvider)
         {
             _session = session;
 
             _ioConfig = ioConfig;
-            _prefix = prefix;
             _logger = logger;
             _dataRepo = dataRepo;
             _output = output;
@@ -52,7 +49,7 @@ namespace SQLUpdateManager.CLI
 
             _logger.LogInfo("Starting application...");
 
-            _output.PrintASCII(CLIConstants.ASCIIArt, CLIConstants.ASCIIColor);
+            _output.PrintASCII(CLIConstants.ASCIIArt);
 
             _logger.LogInfo("Configuration...");
 
@@ -86,8 +83,6 @@ namespace SQLUpdateManager.CLI
                 while (true)
                 {
                     var chain = InitMiddlewares();
-
-                    _prefix.PrintPrefix();
 
                     var input = _input.ReadLine();
 

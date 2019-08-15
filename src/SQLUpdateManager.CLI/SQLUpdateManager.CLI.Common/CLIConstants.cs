@@ -4,14 +4,12 @@
     {
         public const string AppName = "SQLUpdateManager";
         public const string AppNameShort = "sum";
-        public const string DefaultThemeName = "default";
 
         public const string ConfigPath = "config.cfg";
         public const string RegisterPath = DataDir + "/register.json";
         public const string ErrorLogPath = LogDir + "/errorLog.log";
         public const string InfoLogPath = LogDir + "/infoLog.log";
         public const string HelpPath = AppDataDir + "/helpdoc.dat";
-        public const string ConsoleThemesPath = AppDataDir + "/themes.json";
         public const string StoragePath = AppDataDir + "/storage.json";
 
         public const string LogDir = "logs";
@@ -52,20 +50,5 @@
                 @"  ____) || |__| || |  | |",
                 @" |_____/  \____/ |_|  |_|"
             };
-        public static RGB ASCIIColor = new RGB(255, 228, 117);
-
-        public static ConsoleTheme DefaultTheme = new ConsoleTheme
-        {
-            ThemeName = DefaultThemeName,
-            AppColor = new RGB(145, 255, 122),
-            ErrorColor = new RGB(192, 57, 37),
-            DatabaseColor = new RGB(243, 156, 18),
-            ServerColor = new RGB(142, 68, 128),
-            ProcedureColor = new RGB(122, 140, 83),
-            TextColor = new RGB(236, 240, 241),
-            InfoColor = new RGB(34, 174, 96),
-            InputColor = new RGB(236, 240, 241),
-            PropertyColor = new RGB(135, 206, 250)
-        };
     }
 }

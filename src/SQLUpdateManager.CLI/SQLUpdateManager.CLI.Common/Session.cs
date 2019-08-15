@@ -16,7 +16,6 @@ namespace SQLUpdateManager.CLI.Common
         public DateTime ApplicationStartTimeUtc { get; }
 
         public Encoding Encoding { get; set; }
-        public ConsoleTheme Theme { get; set; }
         public DataServer ConnectedServer { get; set; }
         public Database UsedDatabase { get; set; }
         public Storage Storage { get; set; }

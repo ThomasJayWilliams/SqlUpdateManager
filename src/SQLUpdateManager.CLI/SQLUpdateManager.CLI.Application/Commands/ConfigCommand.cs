@@ -55,7 +55,7 @@ namespace SQLUpdateManager.CLI.Application
             {
                 var config = _configManager.GetConfig(CLIConstants.ConfigPath);
                 foreach (var confValue in _configManager.GetStringConfig(CLIConstants.ConfigPath))
-                    _output.PrintColoredLine(confValue, _session.Theme.TextColor);
+                    _output.PrintLine(confValue);
             }
             
             else

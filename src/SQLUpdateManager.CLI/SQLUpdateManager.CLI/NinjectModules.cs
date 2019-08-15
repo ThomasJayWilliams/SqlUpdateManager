@@ -19,8 +19,6 @@ namespace SQLUpdateManager.CLI
 
             Bind<IDataObjectsFactory>().To<DataObjectsFactory>().InTransientScope();
 
-            Bind<IPrefix>().To<Prefix>().InTransientScope();
-
             Bind<IIOConfiguration>().To<IOConfiguration>().InTransientScope();
             Bind<ICommonConfiguration>().To<CommonConfiguration>().InTransientScope();
 

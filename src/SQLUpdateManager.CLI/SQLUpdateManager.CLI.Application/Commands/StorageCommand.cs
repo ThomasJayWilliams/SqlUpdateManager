@@ -56,26 +56,26 @@ namespace SQLUpdateManager.CLI.Application
 
                 if (servers != null && servers.Any())
                 {
-                    _output.PrintColoredLine("Stored servers:", _session.Theme.TextColor);
+                    _output.PrintLine("Stored servers:");
 
-                    foreach (var server in servers)
+					foreach (var server in servers)
                     {
-                        _output.PrintColored($"{server.Alias}: ", _session.Theme.PropertyColor);
-                        _output.PrintColoredLine($"{server.Name} {server.Location} {server.Username}", _session.Theme.TextColor);
-                    }
+                        _output.Print($"{server.Alias}: ");
+						_output.PrintLine($"{server.Name} {server.Location} {server.Username}");
+					}
                 }
 
                 else
-                    _output.PrintColoredLine("Storage is empty.", _session.Theme.TextColor);
-            }
+                    _output.PrintLine("Storage is empty.");
+			}
 
             else if (_deleteParameter != null)
             {
                 _session.Storage.Servers = Enumerable.Empty<StorageServer>();
                 _dataRepo.WriteData(CLIConstants.StoragePath, _session.Storage);
 
-                _output.PrintColoredLine("Storage is cleared.", _session.Theme.TextColor);
-            }
+                _output.PrintLine("Storage is cleared.");
+			}
         }
     }
 }

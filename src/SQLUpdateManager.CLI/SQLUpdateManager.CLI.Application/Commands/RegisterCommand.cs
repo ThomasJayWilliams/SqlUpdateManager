@@ -69,25 +69,24 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null)
             {
-                var theme = _session.Theme;
                 var servers = _register.GetAll();
 
                 if (servers != null && servers.Any())
                 {
                     foreach (var server in servers)
                     {
-                        _output.PrintColoredLine(server.ToString(), theme.ServerColor);
+                        _output.PrintLine(server.ToString());
 
                         if (server.Databases != null)
                         {
                             foreach (var database in server.Databases)
                             {
-                                _output.PrintColoredLine($"\t{database.ToString()}", theme.DatabaseColor);
+                                _output.PrintLine($"\t{database.ToString()}");
 
                                 if (database.Procedures != null)
                                 {
                                     foreach (var procedure in database.Procedures)
-                                        _output.PrintColoredLine($"\t\t{procedure.ToString()}", theme.ProcedureColor);
+                                        _output.PrintLine($"\t\t{procedure.ToString()}");
                                 }
                             }
                         }
@@ -95,7 +94,7 @@ namespace SQLUpdateManager.CLI.Application
                 }
 
                 else
-                    _output.PrintColoredLine("Currently registry is empty.", _session.Theme.TextColor);
+                    _output.PrintLine("Currently registry is empty.");
             }
 
             else if (_deleteParameter != null)
@@ -107,15 +106,15 @@ namespace SQLUpdateManager.CLI.Application
                         var servers = _register.GetAll();
 
                         if (!servers.Any())
-                            _output.PrintColoredLine("No registered servers.", _session.Theme.TextColor);
+                            _output.PrintLine("No registered servers.");
 
                         else
                         {
                             foreach (var server in servers)
                             {
-                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                                _output.PrintColored(server.Name, _session.Theme.ServerColor);
-                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                                _output.Print($"Removing ");
+                                _output.Print(server.Name);
+                                _output.PrintLine("...");
                                 _register.RemoveServer(server.Hash);
                             }
                         }
@@ -129,9 +128,9 @@ namespace SQLUpdateManager.CLI.Application
                             throw new InvalidArgumentException(ErrorCodes.ServerIsNotRegistered,
                                 $"{Argument} server is not registered.");
 
-                        _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                        _output.PrintColored(server.Name, _session.Theme.ServerColor);
-                        _output.PrintColoredLine("...", _session.Theme.TextColor);
+                        _output.Print($"Removing ");
+                        _output.Print(server.Name);
+                        _output.PrintLine("...");
 
                         _register.RemoveServer(server.Hash);
                     }
@@ -152,13 +151,13 @@ namespace SQLUpdateManager.CLI.Application
                         if (Argument == "*")
                         {
                             if (!server.Databases.Any())
-                                _output.PrintColoredLine("No registered databases.", _session.Theme.TextColor);
+                                _output.PrintLine("No registered databases.");
 
                             foreach (var database in server.Databases)
                             {
-                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                                _output.PrintColored(database.Name, _session.Theme.DatabaseColor);
-                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                                _output.Print($"Removing ");
+                                _output.Print(database.Name);
+                                _output.PrintLine("...");
                             }
 
                             server.Databases = null;
@@ -172,9 +171,9 @@ namespace SQLUpdateManager.CLI.Application
                                 throw new InvalidArgumentException(ErrorCodes.DatabaseIsNotRegistered,
                                     $"{Argument} database is not registered.");
 
-                            _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                            _output.PrintColored(database.Name, _session.Theme.DatabaseColor);
-                            _output.PrintColoredLine("...", _session.Theme.TextColor);
+                            _output.Print($"Removing ");
+                            _output.Print(database.Name);
+                            _output.PrintLine("...");
 
                             server.Databases = server.Databases.Where(db => !db.Hash.SequenceEqual(database.Hash));
                         }
@@ -203,13 +202,13 @@ namespace SQLUpdateManager.CLI.Application
                         if (Argument == "*")
                         {
                             if (!database.Procedures.Any())
-                                _output.PrintColoredLine("No registered procedures.", _session.Theme.TextColor);
+                                _output.PrintLine("No registered procedures.");
 
                             foreach (var procedure in database.Procedures)
                             {
-                                _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                                _output.PrintColored(procedure.Name, _session.Theme.ProcedureColor);
-                                _output.PrintColoredLine("...", _session.Theme.TextColor);
+                                _output.Print($"Removing ");
+                                _output.Print(procedure.Name);
+                                _output.PrintLine("...");
                             }
 
                             database.Procedures = null;
@@ -223,9 +222,9 @@ namespace SQLUpdateManager.CLI.Application
                                 throw new InvalidArgumentException(ErrorCodes.ProcedureIsNotRegistered,
                                     $"{Argument} procedure is not registered.");
 
-                            _output.PrintColored($"Removing ", _session.Theme.TextColor);
-                            _output.PrintColored(procedure.Name, _session.Theme.ProcedureColor);
-                            _output.PrintColoredLine("...", _session.Theme.TextColor);
+                            _output.Print($"Removing ");
+                            _output.Print(procedure.Name);
+                            _output.PrintLine("...");
 
                             database.Procedures = database.Procedures.Where(proc => !proc.Hash.SequenceEqual(procedure.Hash));
                         }

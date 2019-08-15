@@ -12,8 +12,5 @@ namespace SQLUpdateManager.CLI.Common
     {
         [JsonProperty("fileEncoding")]
         public string FileEncoding { get; set; }
-
-        [JsonProperty("colorTheme")]
-        public string Theme { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using SQLUpdateManager.CLI.IO;
-using System.Drawing;
 using System.Linq;
 
 namespace SQLUpdateManager.CLI.Application
 {
-    public class StateCommand : BaseCommand
+	public class StateCommand : BaseCommand
     {
         private IParameter _listParameter
         {
@@ -46,25 +45,25 @@ namespace SQLUpdateManager.CLI.Application
         {
             if (_listParameter != null)
             {
-                _output.PrintColoredLine("Current session values:", _session.Theme.TextColor);
+                _output.PrintLine("Current session values:");
 
                 if (_session.ApplicationStartTimeUtc != null)
                 {
-                    _output.PrintColored($"Application start time (UTC): ", _session.Theme.PropertyColor);
-                    _output.PrintColoredLine(_session.ApplicationStartTimeUtc.ToString(), _session.Theme.TextColor);
-                }
+                    _output.Print($"Application start time (UTC): ");
+					_output.PrintLine(_session.ApplicationStartTimeUtc.ToString());
+				}
 
                 if (_session.ApplicationStartTimeLocal != null)
                 {
-                    _output.PrintColored($"Application start time (local): ", _session.Theme.PropertyColor);
-                    _output.PrintColoredLine(_session.ApplicationStartTimeLocal.ToString(), _session.Theme.TextColor);
-                }
+                    _output.Print($"Application start time (local): ");
+					_output.PrintLine(_session.ApplicationStartTimeLocal.ToString());
+				}
 
                 if (_session.ConnectedServer != null)
                 {
-                    _output.PrintColored($"Connected server: ", _session.Theme.PropertyColor);
+                    _output.Print($"Connected server: ");
 
-                    var serverName = _session.ConnectedServer.Name.Length > 20 ?
+					var serverName = _session.ConnectedServer.Name.Length > 20 ?
                         $"{_session.ConnectedServer.Name.Substring(0, 19)}..." :
                         _session.ConnectedServer.Name;
                     var serverLocation = _session.ConnectedServer.Location.Length > 20 ?
@@ -74,29 +73,22 @@ namespace SQLUpdateManager.CLI.Application
                         $"{_session.ConnectedServer.Username.Substring(0, 19)}..." :
                         _session.ConnectedServer.Username;
 
-                    _output.PrintColoredLine($"{serverName} {serverLocation} {serverUser}",
-                        _session.Theme.TextColor);
-                }
+                    _output.PrintLine($"{serverName} {serverLocation} {serverUser}");
+				}
 
                 if (_session.UsedDatabase != null)
                 {
-                    _output.PrintColored($"Database in use: ", _session.Theme.PropertyColor);
-                    _output.PrintColoredLine(_session.UsedDatabase.Name.Length > 20 ?
+                    _output.Print($"Database in use: ");
+					_output.PrintLine(_session.UsedDatabase.Name.Length > 20 ?
                         $"{_session.UsedDatabase.Name.Substring(0, 19)}..." :
-                        _session.UsedDatabase.Name, _session.Theme.TextColor);
-                }
+                        _session.UsedDatabase.Name);
+				}
 
                 if (_session.Encoding != null)
                 {
-                    _output.PrintColored($"File encoding: ", _session.Theme.PropertyColor);
-                    _output.PrintColoredLine(_session.Encoding.EncodingName, _session.Theme.TextColor);
-                }
-
-                if (_session.Theme != null)
-                {
-                    _output.PrintColored($"Current color theme: ", _session.Theme.PropertyColor);
-                    _output.PrintColoredLine(_session.Theme.ThemeName, _session.Theme.TextColor);
-                }
+                    _output.Print($"File encoding: ");
+					_output.PrintLine(_session.Encoding.EncodingName);
+				}
             }
         }
     }

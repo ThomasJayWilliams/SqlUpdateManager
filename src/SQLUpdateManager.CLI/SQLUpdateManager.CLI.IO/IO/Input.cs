@@ -1,6 +1,5 @@
 ﻿using SQLUpdateManager.CLI.Common;
 using System;
-using System.Drawing;
 
 namespace SQLUpdateManager.CLI.IO
 {
@@ -13,21 +12,14 @@ namespace SQLUpdateManager.CLI.IO
             _session = session;
         }
 
-        public string ReadLine()
-        {
-            Colorful.Console.ForegroundColor = Color.FromArgb(
-                _session.Theme.InputColor.R,
-                _session.Theme.InputColor.G,
-                _session.Theme.InputColor.B);
-
-            return Colorful.Console.ReadLine();
-        }
+		public string ReadLine() =>
+			Console.ReadLine();
 
         public ConsoleKeyInfo ReadKey() =>
-            Colorful.Console.ReadKey();
+            Console.ReadKey();
 
         public int ReadChar() =>
-            Colorful.Console.Read();
+            Console.Read();
 
         public string ReadPassword()
         {
@@ -35,7 +27,7 @@ namespace SQLUpdateManager.CLI.IO
 
             while (true)
             {
-                var key = Colorful.Console.ReadKey(true);
+                var key = Console.ReadKey(true);
 
                 if (key.Key == ConsoleKey.Enter)
                     break;

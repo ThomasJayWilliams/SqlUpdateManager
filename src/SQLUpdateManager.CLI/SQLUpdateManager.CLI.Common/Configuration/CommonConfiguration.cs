@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SQLUpdateManager.CLI.Common
 {
-    public class CommonConfiguration : ICommonConfiguration
+	public class CommonConfiguration : ICommonConfiguration
     {
         private readonly Session _session;
         private readonly IDataRepository _dataRepo;
@@ -26,30 +24,6 @@ namespace SQLUpdateManager.CLI.Common
             _session.Encoding = EncodingHelper.GetEncoding(config.Core.FileEncoding);
 
             _session.Storage = storage;
-
-            if (!_dataRepo.Exists(CLIConstants.ConsoleThemesPath))
-                ConfigureConsole(CLIConstants.DefaultThemeName);
-
-            else
-                ConfigureConsole(config.Core.Theme);
-        }
-
-        private void ConfigureConsole(string currentThemeName)
-        {
-            if (currentThemeName != CLIConstants.DefaultThemeName)
-            {
-                var themes = _dataRepo.GetData<IEnumerable<ConsoleTheme>>(CLIConstants.ConsoleThemesPath);
-                var currentTheme = themes.FirstOrDefault(t => t.ThemeName == currentThemeName);
-
-                if (currentTheme == null)
-                    _session.Theme = CLIConstants.DefaultTheme;
-
-                else
-                    _session.Theme = currentTheme;
-            }
-
-            else
-                _session.Theme = CLIConstants.DefaultTheme;
         }
     }
 }
