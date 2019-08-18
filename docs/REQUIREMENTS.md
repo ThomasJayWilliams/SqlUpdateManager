@@ -1,4 +1,4 @@
-# SQL Update Manager Requirements
+# Sql Update Manager Requirements
 This file contains all of the requirements for the final version of the application.
 Not all of these requirements will be satisfied with the first stable build.  
 The following requirements **MAY** be changed during the developing process.  
@@ -19,7 +19,7 @@ The following document contains different pointing words, such as **SHOULD**, **
 
 ## Input/Output
 ### Input
-The final version of the SQL Update Manager (SUM) **MUST** provide the following interfaces:
+The final version of the Sql Update Manager (SUM) **MUST** provide the following interfaces:
 1. **Command Line Interface (CLI)**
     * Text commands
     * Command arguments
@@ -68,13 +68,13 @@ The final version of SUM **MUST** be able to run on the following operation syst
 * **Fedora 21**
 
 The final version of SUM **MUST** be able to run with the following database servers:
-* **SQL Server 2008**
-* **SQL Server 2008 R2**
-* **SQL Server 2012**
-* **SQL Server 2012 R2**
-* **SQL Server 2014**
-* **SQL Server 2016**
-* **SQL Server 2017**
+* **Sql Server 2008**
+* **Sql Server 2008 R2**
+* **Sql Server 2012**
+* **Sql Server 2012 R2**
+* **Sql Server 2014**
+* **Sql Server 2016**
+* **Sql Server 2017**
 
 ## Failures
 The final version of SUM **MUST** has at least a minimal level of failure tolerance with error logs provided.

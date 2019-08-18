@@ -1,9 +1,9 @@
-# SQL Update Manager 1.0.0, CLI Documentation
-SQL Update Manager CLI is a Command Line interface to SUM.Core. It uses the commands approach to manage SUM (SQL Update Manager).
+# Sql Update Manager 1.0.0, CLI Documentation
+Sql Update Manager CLI is a Command Line interface to SUM.Core. It uses the commands approach to manage SUM (Sql Update Manager).
 ## Contents
 * **[Intro](#intro)**
 * **[Getting started](#getting-started)**
-* **[SUM Commands](#sql-update-manager-commands)**
+* **[SUM Commands](#Sql-update-manager-commands)**
   * **[sum help](#sum-help)**
   * **[sum connect](#sum-connect)**
   * **[sum use](#sum-use)**
@@ -83,7 +83,7 @@ sum status
 sum update
 ```
 The commands above added server to SUM, connected to it, added database, moved the scope to the specified database, registered directory with procedures files, shown status and executed procedures update for the current database.
-## SQL Update Manager commands
+## Sql Update Manager commands
 ## Global parameters
 #### -h, --help
 Shows help information about specified commands.
