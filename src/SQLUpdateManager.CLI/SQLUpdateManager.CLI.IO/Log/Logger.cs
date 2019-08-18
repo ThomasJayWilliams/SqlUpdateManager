@@ -1,8 +1,8 @@
 ﻿using Serilog;
-using SQLUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.Common;
 using System;
 
-namespace SQLUpdateManager.CLI.IO
+namespace SqlUpdateManager.CLI.IO
 {
     public class Logger : ILogger
     {

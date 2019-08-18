@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class ConfigurationManager : IConfigurationManager
     {

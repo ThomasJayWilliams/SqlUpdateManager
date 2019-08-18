@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQLUpdateManager.CLI.Application
+namespace SqlUpdateManager.CLI.Application
 {
 	public interface ICommand
 	{

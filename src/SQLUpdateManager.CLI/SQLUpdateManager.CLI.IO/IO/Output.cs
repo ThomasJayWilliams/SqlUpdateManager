@@ -1,7 +1,7 @@
 ﻿using System;
 using static System.Console;
 
-namespace SQLUpdateManager.CLI.IO
+namespace SqlUpdateManager.CLI.IO
 {
 	public class Output : IOutput
     {

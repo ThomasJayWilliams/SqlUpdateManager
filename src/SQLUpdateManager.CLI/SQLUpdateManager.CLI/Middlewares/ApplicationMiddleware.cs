@@ -1,6 +1,6 @@
-﻿using SQLUpdateManager.Core.Common;
+﻿using SqlUpdateManager.Core.Common;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class ApplicationMiddleware : IMiddleware
     {

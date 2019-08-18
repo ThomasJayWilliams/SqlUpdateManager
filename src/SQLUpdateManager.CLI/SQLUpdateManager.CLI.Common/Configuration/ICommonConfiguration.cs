@@ -1,4 +1,4 @@
-﻿namespace SQLUpdateManager.CLI.Common
+﻿namespace SqlUpdateManager.CLI.Common
 {
     public interface ICommonConfiguration
     {

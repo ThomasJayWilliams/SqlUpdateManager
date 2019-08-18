@@ -1,6 +1,6 @@
 ﻿using Ninject;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class Program
 	{

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class AppConfig
     {

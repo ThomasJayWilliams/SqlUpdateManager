@@ -1,4 +1,4 @@
-﻿namespace SQLUpdateManager.CLI.Application
+﻿namespace SqlUpdateManager.CLI.Application
 {
 	public interface IParameter
 	{

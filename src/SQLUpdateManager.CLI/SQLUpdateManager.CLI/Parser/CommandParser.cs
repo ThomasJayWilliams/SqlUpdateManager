@@ -1,9 +1,9 @@
-﻿using SQLUpdateManager.CLI.Application;
-using SQLUpdateManager.CLI.Common;
+﻿using SqlUpdateManager.CLI.Application;
+using SqlUpdateManager.CLI.Common;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class CommandParser : ICommandParser
     {

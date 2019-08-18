@@ -1,8 +1,8 @@
-﻿namespace SQLUpdateManager.CLI.Common
+﻿namespace SqlUpdateManager.CLI.Common
 {
     public static class CLIConstants
     {
-        public const string AppName = "SQLUpdateManager";
+        public const string AppName = "SqlUpdateManager";
         public const string AppNameShort = "sum";
 
         public const string ConfigPath = "config.cfg";

@@ -12,17 +12,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLUpdateManager.CLI.Application\SQLUpdateManager.CLI.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="SQLUpdateManager.Core">
-      <HintPath>..\libs\SQLUpdateManager.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="data\" />   
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SQLUpdateManager.CLI.Application\SqlUpdateManager.CLI.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SqlUpdateManager.Core.Common">
+      <HintPath>..\libs\netstandard2.0\SqlUpdateManager.Core.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlUpdateManager.Core.Data">
+      <HintPath>..\libs\netstandard2.0\SqlUpdateManager.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlUpdateManager.Core.Registry">
+      <HintPath>..\libs\netstandard2.0\SqlUpdateManager.Core.Registry.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlUpdateManager.Core.Tracking">
+      <HintPath>..\libs\netstandard2.0\SqlUpdateManager.Core.Tracking.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

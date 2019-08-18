@@ -1,8 +1,8 @@
-﻿using SQLUpdateManager.Core.Domains;
+﻿using SqlUpdateManager.Core.Common;
 using System;
 using System.Text;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class Session
 	{

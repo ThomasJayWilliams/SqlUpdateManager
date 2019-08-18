@@ -1,7 +1,7 @@
-﻿using SQLUpdateManager.Core.Internal;
+﻿using SqlUpdateManager.Core.Common;
 using System.IO;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class FileManager : IFileManager
     {

@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLUpdateManager.Core", "SQLUpdateManager.Core\SQLUpdateManager.Core.csproj", "{8356F073-40B5-416B-8F48-8066A9B4220A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlUpdateManager.Core.Registry", "SqlUpdateManager.Core.Registry\SqlUpdateManager.Core.Registry.csproj", "{8356F073-40B5-416B-8F48-8066A9B4220A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlUpdateManager.Core.Common", "SqlUpdateManager.Core.Common\SqlUpdateManager.Core.Common.csproj", "{71B1314C-157C-4DAE-9CA4-5C5AFD5120D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlUpdateManager.Core.Data", "SqlUpdateManager.Core.Data\SqlUpdateManager.Core.Data.csproj", "{DEA24F76-8CE5-48E7-86E7-529B327C1CFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlUpdateManager.Core.Tracking", "SqlUpdateManager.Core.Tracking\SqlUpdateManager.Core.Tracking.csproj", "{C07E9E4C-3F78-4675-8941-F7F47C2F46DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{8356F073-40B5-416B-8F48-8066A9B4220A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8356F073-40B5-416B-8F48-8066A9B4220A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8356F073-40B5-416B-8F48-8066A9B4220A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B1314C-157C-4DAE-9CA4-5C5AFD5120D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B1314C-157C-4DAE-9CA4-5C5AFD5120D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B1314C-157C-4DAE-9CA4-5C5AFD5120D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B1314C-157C-4DAE-9CA4-5C5AFD5120D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA24F76-8CE5-48E7-86E7-529B327C1CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA24F76-8CE5-48E7-86E7-529B327C1CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA24F76-8CE5-48E7-86E7-529B327C1CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA24F76-8CE5-48E7-86E7-529B327C1CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C07E9E4C-3F78-4675-8941-F7F47C2F46DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C07E9E4C-3F78-4675-8941-F7F47C2F46DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C07E9E4C-3F78-4675-8941-F7F47C2F46DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C07E9E4C-3F78-4675-8941-F7F47C2F46DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

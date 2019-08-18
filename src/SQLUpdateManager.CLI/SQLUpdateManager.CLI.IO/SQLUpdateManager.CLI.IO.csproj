@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLUpdateManager.CLI.Common\SQLUpdateManager.CLI.Common.csproj" />
+    <ProjectReference Include="..\SQLUpdateManager.CLI.Common\SqlUpdateManager.CLI.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

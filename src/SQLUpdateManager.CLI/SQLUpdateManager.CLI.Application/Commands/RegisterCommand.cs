@@ -1,12 +1,12 @@
-﻿using SQLUpdateManager.CLI.Common;
-using SQLUpdateManager.CLI.IO;
-using SQLUpdateManager.Core.Domains;
-using SQLUpdateManager.Core.Registration;
+﻿using SqlUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.IO;
+using SqlUpdateManager.Core.Common;
+using SqlUpdateManager.Core.Registry;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SQLUpdateManager.CLI.Application
+namespace SqlUpdateManager.CLI.Application
 {
     public class RegisterCommand : BaseCommand
     {

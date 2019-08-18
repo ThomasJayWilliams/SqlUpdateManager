@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\SqlUpdateManager.CLI\libs</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SqlUpdateManager.Core.Common\SqlUpdateManager.Core.Common.csproj" />
+    <ProjectReference Include="..\SqlUpdateManager.Core.Data\SqlUpdateManager.Core.Data.csproj" />
+    <ProjectReference Include="..\SqlUpdateManager.Core.Tracking\SqlUpdateManager.Core.Tracking.csproj" />
+  </ItemGroup>
+
+</Project>

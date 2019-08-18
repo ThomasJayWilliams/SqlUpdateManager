@@ -1,4 +1,4 @@
-﻿namespace SQLUpdateManager.CLI
+﻿namespace SqlUpdateManager.CLI
 {
     public interface IMiddleware
     {

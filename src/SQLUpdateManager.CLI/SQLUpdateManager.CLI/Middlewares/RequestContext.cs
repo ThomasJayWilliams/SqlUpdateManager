@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class RequestContext
     {

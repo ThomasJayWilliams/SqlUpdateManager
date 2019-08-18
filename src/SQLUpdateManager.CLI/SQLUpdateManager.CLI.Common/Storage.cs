@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class Storage
     {

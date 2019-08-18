@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SQLUpdateManager.Core.Common;
+using SqlUpdateManager.Core.Common;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class JsonSerializer : ISerializer
     {

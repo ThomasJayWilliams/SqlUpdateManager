@@ -1,9 +1,8 @@
-﻿using SQLUpdateManager.Core.Common;
-using SQLUpdateManager.Core.Internal;
+﻿using SqlUpdateManager.Core.Common;
 using System;
 using System.IO;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public class DataRepository : IDataRepository
     {

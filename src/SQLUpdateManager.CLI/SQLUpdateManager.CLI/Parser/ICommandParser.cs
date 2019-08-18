@@ -1,6 +1,6 @@
-﻿using SQLUpdateManager.CLI.Application;
+﻿using SqlUpdateManager.CLI.Application;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public interface ICommandParser
     {

@@ -1,12 +1,11 @@
 ﻿using Ninject.Modules;
-using SQLUpdateManager.CLI.Application;
-using SQLUpdateManager.CLI.Common;
-using SQLUpdateManager.CLI.IO;
-using SQLUpdateManager.Core.Common;
-using SQLUpdateManager.Core.Internal;
-using SQLUpdateManager.Core.Registration;
+using SqlUpdateManager.CLI.Application;
+using SqlUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.IO;
+using SqlUpdateManager.Core.Common;
+using SqlUpdateManager.Core.Registry;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class CLIModule : NinjectModule
     {

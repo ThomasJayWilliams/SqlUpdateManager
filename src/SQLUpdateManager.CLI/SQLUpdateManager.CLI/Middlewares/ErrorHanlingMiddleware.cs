@@ -1,8 +1,8 @@
-﻿using SQLUpdateManager.CLI.Common;
-using SQLUpdateManager.CLI.IO;
+﻿using SqlUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.IO;
 using System;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     public class ErrorHanlingMiddleware : IMiddleware
     {

@@ -1,8 +1,8 @@
 ﻿using Ninject;
-using SQLUpdateManager.CLI.Application;
-using SQLUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.Application;
+using SqlUpdateManager.CLI.Common;
 
-namespace SQLUpdateManager.CLI
+namespace SqlUpdateManager.CLI
 {
     class DataObjectsFactory : IDataObjectsFactory
     {

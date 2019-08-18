@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SQLUpdateManager.CLI.IO
+namespace SqlUpdateManager.CLI.IO
 {
     public interface IInput
     {

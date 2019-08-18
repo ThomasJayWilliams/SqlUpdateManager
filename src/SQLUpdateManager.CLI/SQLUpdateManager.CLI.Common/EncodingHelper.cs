@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
     public static class EncodingHelper
     {

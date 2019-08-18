@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SQLUpdateManager.CLI.Common
+namespace SqlUpdateManager.CLI.Common
 {
 	public class CommonConfiguration : ICommonConfiguration
     {

@@ -1,8 +1,8 @@
-﻿using SQLUpdateManager.CLI.Common;
-using SQLUpdateManager.CLI.IO;
+﻿using SqlUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.IO;
 using System.Linq;
 
-namespace SQLUpdateManager.CLI.Application
+namespace SqlUpdateManager.CLI.Application
 {
     public class StorageCommand : BaseCommand
     {

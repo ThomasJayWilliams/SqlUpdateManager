@@ -1,9 +1,9 @@
-﻿using SQLUpdateManager.CLI.Common;
+﻿using SqlUpdateManager.CLI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SQLUpdateManager.CLI.Application
+namespace SqlUpdateManager.CLI.Application
 {
     public abstract class BaseCommand : ICommand
     {

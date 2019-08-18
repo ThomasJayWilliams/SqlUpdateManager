@@ -1,8 +1,8 @@
 ﻿using Serilog;
 using Serilog.Events;
-using SQLUpdateManager.CLI.Common;
+using SqlUpdateManager.CLI.Common;
 
-namespace SQLUpdateManager.CLI.IO
+namespace SqlUpdateManager.CLI.IO
 {
     public class IOConfiguration : IIOConfiguration
     {

@@ -1,6 +1,6 @@
-﻿using SQLUpdateManager.CLI.Common;
+﻿using SqlUpdateManager.CLI.Common;
 
-namespace SQLUpdateManager.CLI.Application
+namespace SqlUpdateManager.CLI.Application
 {
     public class DeleteParameter : IParameter
     {

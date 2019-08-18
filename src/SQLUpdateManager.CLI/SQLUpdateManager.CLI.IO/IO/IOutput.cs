@@ -1,4 +1,4 @@
-﻿namespace SQLUpdateManager.CLI.IO
+﻿namespace SqlUpdateManager.CLI.IO
 {
 	public interface IOutput
     {
