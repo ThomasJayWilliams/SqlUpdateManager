@@ -38,6 +38,7 @@ namespace SqlUpdateManager.Core.Data
 			if (entity == null)
 				throw new ArgumentNullException("Entity cannot be null.");
 
+			entity.Hash = Hasher.GetHash(entity.HashPattern);
 			_entities.Add(entity);
 		}
 
@@ -46,30 +47,40 @@ namespace SqlUpdateManager.Core.Data
 			if (collection == null)
 				throw new ArgumentNullException("Collection cannot be null.");
 
-			_entities.AddRange(collection);
+			foreach (var item in collection)
+				Add(item);
 		}
 
-		public IEnumerable<TEntity> AsNoTracking(Func<TEntity, bool> predicate)
+		public IEnumerable<TEntity> AsNoTracking()
 		{
-			if (predicate == null)
-				throw new ArgumentNullException("Predicate cannot be null.");
-
-			var result = _entities.Where(e => predicate(e));
 			var noTracking = new List<TEntity>();
 
-			foreach (var entity in result)
+			foreach (var entity in _entities)
 				noTracking.Add((TEntity)entity.Clone());
 
 			return noTracking;
 		}
 
-		public IEnumerable<TEntity> AsNoTracking() =>
-			AsNoTracking(e => true);
-
-		internal void SaveChanges()
+		public void SaveChanges()
 		{
 			if (_entities != null && _entities.Any())
 			{
+				foreach (var item in _entities)
+				{
+					item.Hash = Hasher.GetHash(item.HashPattern);
+
+					if (_entities.Any(e =>
+						{
+							if (ReferenceEquals(e, item))
+								return false;
+
+							return e.Hash.SequenceEqual(item.Hash);
+						}))
+					{
+						throw new DuplicateException("Entity with the same data already exists.");
+					}
+				}
+
 				var content = _serailizer.Serialize(_entities);
 				FileManager.Save(content, _storagePath);
 			}

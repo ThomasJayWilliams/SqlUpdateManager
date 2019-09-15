@@ -1,23 +1,17 @@
-﻿using Newtonsoft.Json;
-
-namespace SqlUpdateManager.Core.Data
+﻿namespace SqlUpdateManager.Core.Data
 {
-	public class ProcedureEntity : IEntity
+	public class ProcedureEntity : AbstractEntity
 	{
-		public string Name { get; set; }
+		public override string HashPattern => $"{Name}{Path}";
 		public string Path { get; set; }
-		public byte[] Hash
-		{
-			get => Hasher.GetHash($"{Name}{Path}");
-			set => Hash = value;
-		}
-		public string Content { get; set; }
+		public byte[] ContentHash { get; set; }
 
-		public IEntity Clone() =>
+		public override IEntity Clone() =>
 			new ProcedureEntity
 			{
-				Path = (string)Path.Clone(),
-				Name = (string)Name.Clone()
+				Path = string.IsNullOrEmpty(Path) ? null : (string)Path.Clone(),
+				Name = string.IsNullOrEmpty(Name) ? null : (string)Name.Clone(),
+				Hash = Hash == null ? null : (byte[])Hash.Clone()
 			};
 	}
 }

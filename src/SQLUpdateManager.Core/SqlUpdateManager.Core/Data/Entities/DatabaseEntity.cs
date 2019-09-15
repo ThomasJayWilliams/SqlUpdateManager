@@ -1,24 +1,20 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SqlUpdateManager.Core.Data
 {
-	public class DatabaseEntity : IEntity
+	public class DatabaseEntity : AbstractEntity
 	{
-		public string Name { get; set; }
-		public byte[] Hash
-		{
-			get => Hasher.GetHash($"{Name}");
-			set => Hash = value;
-		}
+		public override string HashPattern => $"{Name}";
+
 		public IEnumerable<ProcedureEntity> Procedures { get; set; }
 
-		public IEntity Clone() =>
+		public override IEntity Clone() =>
 			new DatabaseEntity
 			{
-				Name = (string)Name.Clone(),
-				Procedures = Procedures.Select(p => (ProcedureEntity)p.Clone())
+				Name = string.IsNullOrEmpty(Name) ? null : (string)Name.Clone(),
+				Procedures = Procedures == null ? null : Procedures.Select(p => (ProcedureEntity)p.Clone()),
+				Hash = Hash == null ? null : (byte[])Hash.Clone()
 			};
 	}
 }

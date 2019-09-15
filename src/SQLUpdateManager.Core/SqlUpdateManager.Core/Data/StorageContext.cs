@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SqlUpdateManager.Core.Data
 {
 	public class StorageContext
 	{
-		public Lazy<StorageCollection<ServerEntity>> Servers { get; }
-		public Lazy<StorageCollection<DatabaseEntity>> Databases { get; }
-		public Lazy<StorageCollection<ProcedureEntity>> Procedures { get; }
+		private readonly Lazy<StorageCollection<ServerEntity>> _servers;
+		private readonly Lazy<StorageCollection<DatabaseEntity>> _databases;
+		private readonly Lazy<StorageCollection<ProcedureEntity>> _procedures;
+
+		public StorageCollection<ServerEntity> Servers => _servers.Value;
+		public StorageCollection<DatabaseEntity> Databases => _databases.Value;
+		public StorageCollection<ProcedureEntity> Procedures => _procedures.Value;
 
 		internal StorageContext(string path)
 		{
-			Servers = new Lazy<StorageCollection<ServerEntity>>(() =>
+			_servers = new Lazy<StorageCollection<ServerEntity>>(() =>
 				new StorageCollection<ServerEntity>(path));
-			Procedures = new Lazy<StorageCollection<ProcedureEntity>>(() =>
-				new StorageCollection<ProcedureEntity>(path));
-			Databases = new Lazy<StorageCollection<DatabaseEntity>>(() =>
+			_databases = new Lazy<StorageCollection<DatabaseEntity>>(() =>
 				new StorageCollection<DatabaseEntity>(path));
-		}
-
-		public void SaveChanges()
-		{
-			Servers.Value.SaveChanges();
-			Databases.Value.SaveChanges();
-			Procedures.Value.SaveChanges();
+			_procedures = new Lazy<StorageCollection<ProcedureEntity>>(() =>
+				new StorageCollection<ProcedureEntity>(path));
 		}
 	}
 }

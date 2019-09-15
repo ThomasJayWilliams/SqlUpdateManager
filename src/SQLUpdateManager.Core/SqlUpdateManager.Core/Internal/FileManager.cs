@@ -30,18 +30,15 @@ namespace SqlUpdateManager.Core
 			if (data == null || !data.Any())
 				return new byte[0];
 
-			for (int i = 0; i < 8; i++)
-			{
-				if (data[i] != CoreConstants.StorageMarker[i])
-					throw new FileLoadException("Invalid file data.");
-			}
+			if (!data.Take(8).SequenceEqual(CoreConstants.StorageMarker))
+				throw new FileLoadException("Invalid file type.");
 
 			var content = data.Skip(8).ToArray();
 
 			if (content == null || !content.Any())
 				return new byte[0];
 
-			var decompressed = Compressor.Decompress(Encoding.UTF8.GetString(content));
+			var decompressed = Compressor.Decompress(content);
 
 			return decompressed;
 		}
@@ -57,11 +54,17 @@ namespace SqlUpdateManager.Core
 			if (!Exists(path))
 				throw new FileNotFoundException($"{path} file does not exist.");
 
-			var existing = Load(path);
-			var compressed = Compressor.Compress(existing + content);
-			var marked = CoreConstants.StorageMarker.Concat(compressed).ToArray();
+			var existing = LoadBytes(path);
+			var contentBytes = Encoding.UTF8.GetBytes(content);
+			var compressed = Compressor.Compress(existing.Concat(contentBytes).ToArray());
 
-			File.WriteAllBytes(path, marked);
+			if (compressed == null || !compressed.Any())
+				throw new InvalidOperationException("Error compressing content.");
+
+			var result = CoreConstants.StorageMarker.Concat(compressed).ToArray();
+
+			using (var stream = new FileStream(path, FileMode.Append))
+				stream.Write(result, 0, result.Length);
 		}
 
 		internal static bool Exists(string path) =>

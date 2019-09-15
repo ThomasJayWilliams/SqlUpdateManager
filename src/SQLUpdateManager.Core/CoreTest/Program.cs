@@ -12,17 +12,22 @@ namespace CoreTest
 			var path = "test.storage";
 			var context = Core.GetContext(path);
 
-			context.Servers.Value.Add(new ServerEntity
+			if (!File.Exists(path))
+				File.Create(path).Dispose();
+
+			context.Servers.Add(new ServerEntity
 			{
 				Address = "test",
 				Name = "name",
 				Password = "pass"
 			});
 
-			context.SaveChanges();
+			context.Servers.SaveChanges();
 
-			foreach (var server in context.Servers.Value.AsNoTracking())
+			foreach (var server in context.Servers.AsNoTracking())
 				Console.WriteLine($"{server.Name}, {server.Password}");
+
+			Console.ReadLine();
 		}
 	}
 }
