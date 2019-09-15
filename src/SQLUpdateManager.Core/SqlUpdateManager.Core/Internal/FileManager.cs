@@ -9,7 +9,7 @@ namespace SqlUpdateManager.Core
     {
 		internal static string Load(string path)
 		{
-			var data = LoadBytes(path);
+			var data = LoadDecompressedBytes(path);
 
 			if (data == null || !data.Any())
 				return string.Empty;
@@ -17,26 +17,12 @@ namespace SqlUpdateManager.Core
 			return Encoding.UTF8.GetString(data);
 		}
 
-		internal static byte[] LoadBytes(string path)
+		internal static byte[] LoadDecompressedBytes(string path)
 		{
-			if (string.IsNullOrEmpty(path))
-				throw new ArgumentException("File path cannot be null or empty.");
-
-			if (Path.GetExtension(path) != CoreConstants.StorageExtension)
-				throw new InvalidDataException("Invalid file extensions.");
-
-			var data = File.ReadAllBytes(path);
-
-			if (data == null || !data.Any())
-				return new byte[0];
-
-			if (!data.Take(8).SequenceEqual(CoreConstants.StorageMarker))
-				throw new FileLoadException("Invalid file type.");
-
-			var content = data.Skip(8).ToArray();
+			var content = Read(path);
 
 			if (content == null || !content.Any())
-				return new byte[0];
+				return null;
 
 			var decompressed = Compressor.Decompress(content);
 
@@ -54,14 +40,46 @@ namespace SqlUpdateManager.Core
 			if (!Exists(path))
 				throw new FileNotFoundException($"{path} file does not exist.");
 
-			var existing = LoadBytes(path);
+			var existingData = LoadDecompressedBytes(path);
+
+			if (existingData == null)
+				existingData = new byte[0];
+
 			var contentBytes = Encoding.UTF8.GetBytes(content);
-			var compressed = Compressor.Compress(existing.Concat(contentBytes).ToArray());
+			var concatenated = existingData.Concat(contentBytes).ToArray();
+			var compressed = Compressor.Compress(concatenated);
 
-			if (compressed == null || !compressed.Any())
-				throw new InvalidOperationException("Error compressing content.");
+			Write(path, compressed);
+		}
 
-			var result = CoreConstants.StorageMarker.Concat(compressed).ToArray();
+		private static byte[] Read(string path)
+		{
+			if (string.IsNullOrEmpty(path))
+				throw new ArgumentException("File path cannot be null or empty.");
+
+			if (Path.GetExtension(path) != CoreConstants.StorageExtension)
+				throw new InvalidDataException("Invalid file extensions.");
+
+			var data = File.ReadAllBytes(path);
+
+			if (data == null || !data.Any())
+				return null;
+
+			if (!data.Take(8).SequenceEqual(CoreConstants.StorageMarker))
+				throw new FileLoadException("Invalid file type.");
+
+			return data.Skip(8).ToArray();
+		}
+
+		private static void Write(string path, byte[] content)
+		{
+			if (string.IsNullOrEmpty(path))
+				throw new ArgumentException("File path cannot be null or empty.");
+
+			if (content == null || !content.Any())
+				throw new ArgumentException("Content cannot be null or empty.");
+
+			var result = CoreConstants.StorageMarker.Concat(content).ToArray();
 
 			using (var stream = new FileStream(path, FileMode.Append))
 				stream.Write(result, 0, result.Length);

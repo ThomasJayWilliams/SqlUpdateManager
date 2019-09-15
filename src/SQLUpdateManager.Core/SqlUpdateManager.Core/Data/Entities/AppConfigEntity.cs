@@ -1,0 +1,17 @@
+﻿using SqlUpdateManager.Core.Common;
+
+namespace SqlUpdateManager.Core.Data
+{
+	public class AppConfigEntity : AbstractEntity
+	{
+		public override string HashPattern => $"{Name}{Type.ToString()}";
+		public ConfigTypes Type { get; set; }
+		public AppConfig Config { get; set; }
+		public override IEntity Clone() =>
+			new AppConfigEntity
+			{
+				Hash = Hash == null ? null : (byte[])Hash.Clone(),
+				Name = string.IsNullOrEmpty(Name) ? null : (string)Name.Clone()
+			};
+	}
+}

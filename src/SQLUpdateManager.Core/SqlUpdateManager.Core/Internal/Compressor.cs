@@ -9,7 +9,7 @@ namespace SqlUpdateManager.Core
 		{
 			var output = new MemoryStream();
 
-			using (DeflateStream dstream = new DeflateStream(output, CompressionLevel.Optimal))
+			using (var dstream = new GZipStream(output, CompressionLevel.Optimal))
 				dstream.Write(data, 0, data.Length);
 
 			return output.ToArray();
@@ -19,7 +19,7 @@ namespace SqlUpdateManager.Core
 		{
 			var output = new MemoryStream();
 
-			using (var dStream = new DeflateStream(new MemoryStream(data), CompressionMode.Decompress))
+			using (var dStream = new GZipStream(new MemoryStream(data), CompressionMode.Decompress))
 				dStream.CopyTo(output);
 
 			return output.ToArray();
