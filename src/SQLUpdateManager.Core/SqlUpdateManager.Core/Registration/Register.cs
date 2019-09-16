@@ -97,20 +97,17 @@ namespace SqlUpdateManager.Core.Registry
         }
 
         public void SaveChanges() =>
-            FileManager.Save(_serializer.Path, _serializer.Serialize(_servers));
+            FileProvider.Save(_serializer.Path, _serializer.Serialize(_servers));
 
         private IEnumerable<Server> Load()
         {
-            if (!FileManager.Exists(_serializer.Path))
+            if (!FileProvider.Exists(_serializer.Path))
                 return Enumerable.Empty<Server>();
 
-			var str = FileManager.Load(_serializer.Path);
+			var data = FileProvider.Load<IEnumerable<Server>>(_serializer.Path);
 
-			if (string.IsNullOrEmpty(str))
+			if (data == null)
 				return Enumerable.Empty<Server>();
-
-            var data = _serializer
-                .Deserialize<IEnumerable<Server>>(str);
 
             return data;
         }

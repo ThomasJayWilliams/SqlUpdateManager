@@ -4,8 +4,7 @@ namespace SqlUpdateManager.Core.Data
 {
 	public class AppConfigEntity : AbstractEntity
 	{
-		public override string HashPattern => $"{Name}{Type.ToString()}";
-		public ConfigTypes Type { get; set; }
+		public override string HashPattern => $"{Name}";
 		public AppConfig Config { get; set; }
 		public override IEntity Clone() =>
 			new AppConfigEntity

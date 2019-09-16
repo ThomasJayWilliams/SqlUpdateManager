@@ -1,55 +1,49 @@
-﻿using System;
+﻿using SqlUpdateManager.Core.Data;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace SqlUpdateManager.Core
 {
-    internal static class FileManager
+	internal static class FileProvider
     {
-		internal static string Load(string path)
+		internal static T Load<T>(string path)
 		{
-			var data = LoadDecompressedBytes(path);
+			var data = LoadBytes(path);
 
 			if (data == null || !data.Any())
-				return string.Empty;
+				return default(T);
 
-			return Encoding.UTF8.GetString(data);
+			var serializer = new BsonSerializer();
+
+			return serializer.Deserialize<T>(data);
 		}
 
-		internal static byte[] LoadDecompressedBytes(string path)
+		internal static byte[] LoadBytes(string path)
 		{
 			var content = Read(path);
 
 			if (content == null || !content.Any())
 				return null;
 
-			var decompressed = Compressor.Decompress(content);
-
-			return decompressed;
+			return content;
 		}
 
-		internal static void Save(string content, string path)
+		internal static void Save(object content, string path)
 		{
 			if (string.IsNullOrEmpty(path))
 				throw new ArgumentException("File path cannot be null or empty.");
 
-			if (string.IsNullOrEmpty(content))
-				throw new ArgumentException("Content cannot be null or empty.");
+			if (content == null)
+				throw new ArgumentException("Content cannot be null.");
 
 			if (!Exists(path))
 				throw new FileNotFoundException($"{path} file does not exist.");
 
-			var existingData = LoadDecompressedBytes(path);
+			var serializer = new BsonSerializer();
+			var contentBytes = serializer.Serialize(content);
 
-			if (existingData == null)
-				existingData = new byte[0];
-
-			var contentBytes = Encoding.UTF8.GetBytes(content);
-			var concatenated = existingData.Concat(contentBytes).ToArray();
-			var compressed = Compressor.Compress(concatenated);
-
-			Write(path, compressed);
+			Write(path, contentBytes);
 		}
 
 		private static byte[] Read(string path)
@@ -79,7 +73,11 @@ namespace SqlUpdateManager.Core
 			if (content == null || !content.Any())
 				throw new ArgumentException("Content cannot be null or empty.");
 
-			var result = CoreConstants.StorageMarker.Concat(content).ToArray();
+			var result = content;
+			var fileInfo = new FileInfo(path);
+
+			if (fileInfo.Length == 0)
+				result = CoreConstants.StorageMarker.Concat(result).ToArray();
 
 			using (var stream = new FileStream(path, FileMode.Append))
 				stream.Write(result, 0, result.Length);

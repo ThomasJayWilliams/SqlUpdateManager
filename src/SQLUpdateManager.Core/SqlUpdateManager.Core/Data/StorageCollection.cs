@@ -9,7 +9,7 @@ namespace SqlUpdateManager.Core.Data
 		where TEntity : IEntity
 	{
 		private List<TEntity> _entities;
-		private readonly JsonSerializer _serailizer;
+		private readonly BsonSerializer _serailizer;
 		private readonly string _storagePath;
 
 		public TEntity this[int index] =>
@@ -21,7 +21,7 @@ namespace SqlUpdateManager.Core.Data
 				throw new ArgumentException("Collection path cannot be null or empty.");
 
 			_storagePath = path;
-			_serailizer = new JsonSerializer();
+			_serailizer = new BsonSerializer();
 			_entities = new List<TEntity>();
 
 			LoadData();
@@ -81,22 +81,16 @@ namespace SqlUpdateManager.Core.Data
 					}
 				}
 
-				var content = _serailizer.Serialize(_entities);
-				FileManager.Save(content, _storagePath);
+				FileProvider.Save(_entities, _storagePath);
 			}
 		}
 
 		private void LoadData()
 		{
-			var data = FileManager.Load(_storagePath);
+			var data = FileProvider.Load<IEnumerable<TEntity>>(_storagePath);
 
-			if (!string.IsNullOrEmpty(data))
-			{
-				var content = _serailizer.Deserialize<List<TEntity>>(data);
-
-				if (content != null)
-					_entities = content;
-			}
+			if (data != null)
+				_entities = data.ToList();
 		}
 	}
 }

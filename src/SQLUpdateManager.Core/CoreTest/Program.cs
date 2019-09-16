@@ -8,6 +8,24 @@ namespace CoreTest
 {
 	public class Program
 	{
+		public static void Main(string[] args)
+		{
+			Test();
+		}
+
+		public static void ReadTest()
+		{
+			var path = "test.storage";
+			var context = Core.GetContext(path);
+
+			foreach (var server in context.Servers)
+				Console.WriteLine($"{server.Name} {server.Address}");
+
+			Console.WriteLine();
+			Console.WriteLine(context.Servers.Count());
+			Console.ReadLine();
+		}
+
 		private static Random random = new Random();
 		public static string RandomString(int length)
 		{
@@ -17,7 +35,7 @@ namespace CoreTest
 			  .Select(s => s[random.Next(s.Length)]).ToArray());
 		}
 
-		public static void Main(string[] args)
+		public static void Test()
 		{
 			var path = "test.storage";
 			var context = Core.GetContext(path);
